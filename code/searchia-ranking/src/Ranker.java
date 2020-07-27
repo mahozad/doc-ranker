@@ -27,10 +27,20 @@ public class Ranker {
 
 class RankConfiguration {
 
-    private Attribute sort;
+    private String sortAttribute;
     private double[] geoLocation;
     private boolean shouldRemoveDuplicates;
-    private List<Attribute> customRankingAttrs;
+    private List<String> customRankingAttrs;
+
+    public RankConfiguration(String sortAttribute,
+                             double[] geoLocation,
+                             boolean shouldRemoveDuplicates,
+                             List<String> customRankingAttrs) {
+        this.sortAttribute = sortAttribute;
+        this.geoLocation = geoLocation;
+        this.shouldRemoveDuplicates = shouldRemoveDuplicates;
+        this.customRankingAttrs = customRankingAttrs;
+    }
 }
 
 class Doc {
