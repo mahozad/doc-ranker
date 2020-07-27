@@ -20,21 +20,21 @@ class RankerTest {
     void rank() {
         String query = "charger";
         List<Doc> matches = List.of(
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc(),
-                new Doc()
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2),
+                new Doc(2)
         );
         List<Promotion> promotions = List.of(
                 new Promotion(),
