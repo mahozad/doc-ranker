@@ -10,6 +10,7 @@ public class Ranker {
             int offset,
             int limit) {
 
+        return List.of(new Doc());
     }
 }
 
@@ -26,6 +27,10 @@ class Doc {
     private int id;
     private double score;
     private List<Attribute> retrievedAttrs;
+
+    public int getId() {
+        return id;
+    }
 }
 
 class Attribute {
