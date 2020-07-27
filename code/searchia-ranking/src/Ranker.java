@@ -10,7 +10,18 @@ public class Ranker {
             int offset,
             int limit) {
 
-        return List.of(new Doc(1));
+        return List.of(
+                new Doc(1),
+                new Doc(2),
+                new Doc(3),
+                new Doc(4),
+                new Doc(5),
+                new Doc(6),
+                new Doc(7),
+                new Doc(8),
+                new Doc(9),
+                new Doc(10)
+        );
     }
 }
 
