@@ -16,7 +16,7 @@ class RankerTest {
     Path samplesPath = Path.of("src/sample-docs.txt");
 
     String query;
-    List<Doc> matches;
+    List<Doc> docs;
     List<Promotion> promotions;
     RankConfiguration configuration;
 
@@ -24,7 +24,7 @@ class RankerTest {
     void setUp() throws IOException {
         query = "charger";
 
-        matches = Files
+        docs = Files
                 .lines(samplesPath)
                 .skip(1)
                 .map(line -> {
@@ -60,14 +60,14 @@ class RankerTest {
 
     @Test
     void rank() {
-        List<Doc> result = Ranker.rank(query, matches, promotions, configuration, 0, 10);
+        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
 
         assertEquals(1, result.get(0).getId());
     }
 
     @Test
     void rank_resultSize() {
-        List<Doc> result = Ranker.rank(query, matches, promotions, configuration, 0, 10);
+        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
 
         assertEquals(10, result.size());
     }

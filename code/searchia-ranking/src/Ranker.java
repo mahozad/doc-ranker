@@ -6,7 +6,7 @@ public class Ranker {
 
     public static List<Doc> rank(
             String query,
-            List<Doc> matches,
+            List<Doc> docs,
             List<Promotion> promotions,
             RankConfiguration configuration,
             int offset,
