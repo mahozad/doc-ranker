@@ -26,7 +26,7 @@ class Doc {
 
     private int id;
     private double score;
-    private List<Attribute> retrievedAttrs;
+    private List<Attribute> attrs;
 
     public int getId() {
         return id;
