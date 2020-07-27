@@ -11,6 +11,7 @@ class RankerTest {
     String query;
     List<Doc> matches;
     List<Promotion> promotions;
+    RankConfiguration configuration;
 
     @BeforeEach
     void setUp() {
@@ -36,6 +37,12 @@ class RankerTest {
                 new Promotion(),
                 new Promotion()
         );
+        configuration = new RankConfiguration(
+                "price",
+                null,
+                false,
+                List.of("views", "clicks")
+        );
     }
 
     @AfterEach
@@ -44,8 +51,6 @@ class RankerTest {
 
     @Test
     void rank() {
-        RankConfiguration configuration = new RankConfiguration();
-
         List<Doc> result = Ranker.rank(query, matches, promotions, configuration, 0, 10);
 
         assertEquals(1, result.get(0).getId());
@@ -53,8 +58,6 @@ class RankerTest {
 
     @Test
     void rank_resultSize() {
-        RankConfiguration configuration = new RankConfiguration();
-
         List<Doc> result = Ranker.rank(query, matches, promotions, configuration, 0, 10);
 
         assertEquals(10, result.size());
