@@ -1,8 +1,6 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,9 +11,9 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TypoRankerTest {
+class RankerTest {
 
-    Path samplesPath = Path.of("src/sample-docs.txt");
+    Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
 
     String query;
     List<Doc> docs;
@@ -61,52 +59,16 @@ class TypoRankerTest {
     }
 
     @Test
-    void rankByTypo() {
-        int typoThreshold = 2;
-        List<Doc> result = TypoRanker.rankByTypo(query, docs, typoThreshold);
+    void rank() {
+        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
 
         assertEquals(1, result.get(0).getId());
     }
 
     @Test
-    void rankDocsByWordTypo() {
-        String word = "charter";
+    void rank_resultSize() {
+        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
 
-        List<Doc> result = TypoRanker.sortDocsByWordTypo(word, docs);
-
-        assertEquals(1, result.get(0).getId());
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2})
-    void measureWordsDistance_sameWords(int maxTypos) {
-        String word1 = "charger";
-        String word2 = "charger";
-
-        int distance = TypoRanker.measureWordsDistance(word1, word2, maxTypos);
-
-        assertEquals(0, distance);
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {1, 2})
-    void measureWordsDistance_1Typo(int maxTypos) {
-        String word1 = "charger";
-        String word2 = "charter";
-
-        int distance = TypoRanker.measureWordsDistance(word1, word2, maxTypos);
-
-        assertEquals(1, distance);
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {2})
-    void measureWordsDistance_2Typo(int maxTypos) {
-        String word1 = "charger";
-        String word2 = "sharper";
-
-        int distance = TypoRanker.measureWordsDistance(word1, word2, maxTypos);
-
-        assertEquals(2, distance);
+        assertEquals(10, result.size());
     }
 }
