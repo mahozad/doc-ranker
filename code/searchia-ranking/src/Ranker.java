@@ -17,6 +17,7 @@ class RankConfiguration {
 
     private Attribute sort;
     private double[] geoLocation;
+    private List<Attribute> customRankingAttrs;
 }
 
 class Doc {
@@ -24,7 +25,6 @@ class Doc {
     private int id;
     private double score;
     private List<Attribute> retrievedAttrs;
-    private List<Attribute> customRankingAttrs;
 }
 
 class Attribute {
