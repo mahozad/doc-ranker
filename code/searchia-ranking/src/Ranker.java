@@ -47,7 +47,7 @@ class Doc {
 
     private int id;
     private double score;
-    private List<Attribute> attrs;
+    private List<Attribute<String>> searchableAttrs;
 
     public Doc(int id) {
         this.id = id;
@@ -58,10 +58,10 @@ class Doc {
     }
 }
 
-class Attribute {
+class Attribute<T> {
 
     private String name;
-    private Object value;
+    private T value;
 }
 
 class Promotion {
