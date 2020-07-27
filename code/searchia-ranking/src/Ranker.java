@@ -17,6 +17,7 @@ class RankConfiguration {
 
     private Attribute sort;
     private double[] geoLocation;
+    private boolean removeDuplicates;
     private List<Attribute> customRankingAttrs;
 }
 
