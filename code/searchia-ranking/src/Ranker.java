@@ -29,7 +29,7 @@ class RankConfiguration {
 
     private Attribute sort;
     private double[] geoLocation;
-    private boolean removeDuplicates;
+    private boolean shouldRemoveDuplicates;
     private List<Attribute> customRankingAttrs;
 }
 
@@ -57,5 +57,5 @@ class Attribute {
 class Promotion {
 
     private Doc doc;
-    private int indexInResult;
+    private int positionInResult;
 }
