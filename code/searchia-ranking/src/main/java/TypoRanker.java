@@ -1,19 +1,50 @@
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TypoRanker {
 
     public static List<Doc> rankByTypo(String query, List<Doc> docs, int typoThreshold) {
-        String[] words = query.split("\\w");
-        for (String word : words) {
-            docs = sortDocsByWordTypo(word, docs);
-        }
-        return null;
-    }
+        String[] qWords = tokenizeText(query);
 
-    public static List<Doc> sortDocsByWordTypo(String word, List<Doc> docs) {
+        docs.forEach(doc -> doc.getSearchableAttrs().stream()
+                .flatMap(attribute -> Arrays.stream(tokenizeText(attribute.getValue()))) // all words of doc
+                .forEach(word -> {
+                    if (word.length() < 4 && Arrays.asList(qWords).contains(word)) {
+                        // we do not tolerate typo for words with length less than 4
+                        doc.setPhaseScore(doc.getPhaseScore() + 2);
+                    } else if (word.length() < 8 && typoThreshold > 0) {
+                        // we tolerate up to 1 typo for words with 4<=length<8
+                        int docWordSimilarityScore = 0;
+                        for (String qWord : qWords) {
+                            int distance = measureWordsDistance(qWord, word, 1);
+                            if (distance == 0) {
+                                docWordSimilarityScore = 2 - distance; // 2 = max typos allowed
+                                break; // The best distance found; no need to compare other words of query
+                            } else if (distance > 0) {
+                                docWordSimilarityScore = Math.max(2 - distance, docWordSimilarityScore);
+                            }
+                        }
+                        doc.setPhaseScore(doc.getPhaseScore() + docWordSimilarityScore);
+                    } else if (typoThreshold > 1) {
+                        // we tolerate up to 2 typos for words with 4<=length<8
+                        int docWordSimilarityScore = 0;
+                        for (String qWord : qWords) {
+                            int distance = measureWordsDistance(qWord, word, 2);
+                            if (distance == 0) {
+                                docWordSimilarityScore = 2 - distance; // 2 = max typos allowed
+                                break; // The best distance found; no need to compare other words of query
+                            } else if (distance > 0){
+                                docWordSimilarityScore = Math.max(2 - distance, docWordSimilarityScore);
+                            }
+                        }
+                        doc.setPhaseScore(doc.getPhaseScore() + docWordSimilarityScore);
+                    }
+                })
+        );
 
-        return null;
+        return docs.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
     }
 
     /**
