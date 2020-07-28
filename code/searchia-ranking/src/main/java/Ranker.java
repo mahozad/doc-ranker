@@ -45,22 +45,40 @@ class RankConfiguration {
     }
 }
 
-class Doc {
+class Doc implements Comparable<Doc> {
 
     private int id;
-    private double score;
+    private int phaseScore;
+    private double elasticScore;
     private Map<String, ?> customAttrs;
     private List<Attribute<String>> searchableAttrs;
 
-    public Doc(int id, Map<String, ?> customAttrs, double score, List<Attribute<String>> searchableAttrs) {
+    public Doc(int id, Map<String, ?> customAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
         this.id = id;
         this.customAttrs = customAttrs;
-        this.score = score;
+        this.elasticScore = elasticScore;
         this.searchableAttrs = searchableAttrs;
     }
 
     public int getId() {
         return id;
+    }
+
+    public List<Attribute<String>> getSearchableAttrs() {
+        return searchableAttrs;
+    }
+
+    public int getPhaseScore() {
+        return phaseScore;
+    }
+
+    public void setPhaseScore(int phaseScore) {
+        this.phaseScore = phaseScore;
+    }
+
+    @Override
+    public int compareTo(Doc other) {
+        return phaseScore - other.phaseScore;
     }
 }
 

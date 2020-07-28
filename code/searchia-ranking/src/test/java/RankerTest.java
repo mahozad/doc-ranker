@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ class RankerTest {
     List<Promotion> promotions;
     RankConfiguration configuration;
 
+    // @formatter:off
     @BeforeEach
     void setUp() throws IOException {
         query = "charger";
@@ -53,9 +55,26 @@ class RankerTest {
                 List.of("viewCount", "creationDate")
         );
     }
+    // @formatter:on
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void sortDocs() {
+        docs.get(0).setPhaseScore(5);
+        docs.get(2).setPhaseScore(3);
+        docs.get(10).setPhaseScore(7);
+        docs.get(12).setPhaseScore(4);
+
+        docs = docs.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+
+        assertEquals(7, docs.get(0).getPhaseScore());
+        assertEquals(5, docs.get(1).getPhaseScore());
+        assertEquals(4, docs.get(2).getPhaseScore());
+        assertEquals(3, docs.get(3).getPhaseScore());
+        assertEquals(0, docs.get(4).getPhaseScore());
     }
 
     @Test
