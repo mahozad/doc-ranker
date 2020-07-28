@@ -60,6 +60,26 @@ class TypoRankerTest {
     void tearDown() {
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"hello world", "hello.world", "hello world.", "hello,world."})
+    void tokenizeText_english(String text) {
+        String[] tokens = TypoRanker.tokenizeText(text);
+
+        assertEquals(2, tokens.length);
+        assertEquals("hello", tokens[0]);
+        assertEquals("world", tokens[1]);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"سلام دنیا", "سلام‌دنیا", "سلام، دنیا", "سلام، دنیا."})
+    void tokenizeText_farsi(String text) {
+        String[] tokens = TypoRanker.tokenizeText(text);
+
+        assertEquals(2, tokens.length);
+        assertEquals("سلام", tokens[0]);
+        assertEquals("دنیا", tokens[1]);
+    }
+
     @Test
     void rankByTypo() {
         int typoThreshold = 2;

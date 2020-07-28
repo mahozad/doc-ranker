@@ -163,4 +163,11 @@ public class TypoRanker {
         }
         return -1;
     }
+
+    public static String[] tokenizeText(String text) {
+        return Arrays.stream(text
+                .split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space
+                .flatMap(token -> Arrays.stream(token.split("[.,;:\"،؛']")))
+                .toArray(String[]::new);
+    }
 }
