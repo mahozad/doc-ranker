@@ -1,8 +1,8 @@
 ﻿#format: attr1Name=attr1Value|attr2Name=attr2Value[|attrNName=attrNValue]newLine
-id=1|creationDate=10|views=50|title=Dodge charger|description=Performance is the power that comes from within. As the roaring engine grips the streets from mile to mile, there is no course the Dodge Charger can’t conquer.
+id=1|creationDate=10|views=50|title=dodge charger|description=Performance is the power that comes from within. As the roaring engine grips the streets from mile to mile, there is no course the Dodge Charger can’t conquer.
 id=2|creationDate=8|views=100|title=mobile charger|description=Best Mobile Charger ever.
 id=3|creationDate=11|views=40|title=Mobile Charger|description=You can charge your mobile phone.
-id=4|creationDate=12|views=50|title=Two chargers|description=
+id=4|creationDate=12|views=50|title=Two chargers|description=!
 id=5|creationDate=1|views=50|title=BMW m3|description=Has turbo charger.
 id=6|creationDate=5|views=1|title=About charter grants|description=In the charter the ship's owner agreed to transport specified cargo to a specified port.
 id=7|creationDate=4|views=14|title=Dodge charger|description=The description contains dodge charger as well.
@@ -10,7 +10,7 @@ id=8|creationDate=9|views=15|title=Lamborghini Aventador|description=Has turbo c
 id=9|creationDate=17|views=99|title=BMW M4|description=Has turbo charger and competes with dodge charger.
 id=10|creationDate=3|views=200|title=Dodge charger|description= Dodge Charger Performance is the power that comes from within. As the roaring engine grips the streets from mile to mile, there is no course that can’t be conquered.
 id=11|creationDate=6|views=1000|title=Dodge Challenger|description=Performance is the power that comes from within. As the roaring engine grips the streets from mile to mile, there is no course the Dodge challenger can’t conquer.
-id=12|creationDate=18|views=90|title=|description=Performance is the power that comes from within. As the roaring engine grips the streets from mile to mile, there is no course the Dodge Charger can’t conquer.
-id=13|creationDate=19|views=101|title=|description=
+id=12|creationDate=18|views=90|title=!|description=Performance is the power that comes from within. As the roaring engine grips the streets from mile to mile, there is no course the Dodge Charger can’t conquer.
+id=13|creationDate=19|views=101|title=!|description=!
 id=14|creationDate=20|views=50|title=charter and charger|description=dodge red charger
 id=15|creationDate=2|views=14|title=Dodge new charger|description=dodge new red charger.

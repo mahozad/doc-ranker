@@ -24,7 +24,7 @@ class TypoRankerTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        query = "charger";
+        query = "dodge charger";
 
         docs = Files
                 .lines(samplesPath)
@@ -35,8 +35,8 @@ class TypoRankerTest {
                     long creationDate = Long.parseLong(attrs[1].split("=")[1]);
                     long viewCount = Long.parseLong(attrs[2].split("=")[1]);
                     double score = Math.random();
-                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[0]);
-                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[0]);
+                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[1]);
+                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[1]);
                     List<Attribute<String>> searchableAttrs = List.of(title, description);
                     Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
