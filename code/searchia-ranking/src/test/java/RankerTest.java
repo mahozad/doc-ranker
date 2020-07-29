@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +86,17 @@ class RankerTest {
         List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
 
         assertEquals(1, result.get(0).getId());
+    }
+
+    @Test
+    void rank_time() {
+        long timeThreshold = 200/*ms*/;
+
+        Instant startTime = Instant.now();
+        Ranker.rank(query, docs, promotions, configuration, 0, 10);
+        long duration = Duration.between(startTime, Instant.now()).toMillis();
+
+        assertTrue(() -> duration < timeThreshold);
     }
 
     @Test
