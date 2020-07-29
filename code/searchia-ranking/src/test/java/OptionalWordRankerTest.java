@@ -107,7 +107,7 @@ class OptionalWordRankerTest {
     void getAllDocWords() {
         Doc doc = docs.get(13);
 
-        Set<String> words = OptionalWordRanker.getAllDocWords(doc);
+        List<String> words = OptionalWordRanker.getAllDocWords(doc);
 
         assertEquals(6, words.size());
     }

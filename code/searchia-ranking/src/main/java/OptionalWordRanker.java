@@ -36,7 +36,7 @@ public class OptionalWordRanker {
     }
 
     public static boolean isWordInDoc(String word, Doc doc) {
-        Set<String> docWords = getAllDocWords(doc);
+        List<String> docWords = getAllDocWords(doc);
         for (String docWord : docWords) {
             int distance = TypoRanker.measureWordsDistance(word, docWord, 2);
             if (distance >= 0 && distance <= 2) {
@@ -46,10 +46,10 @@ public class OptionalWordRanker {
         return false;
     }
 
-    public static Set<String> getAllDocWords(Doc doc) {
+    public static List<String> getAllDocWords(Doc doc) {
         return doc.getSearchableAttrs()
                 .stream()
                 .flatMap(attribute -> Arrays.stream(TypoRanker.tokenizeText(attribute.getValue())))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

@@ -8,9 +8,7 @@ public class TypoRanker {
     public static List<Doc> rankByTypo(String query, List<Doc> docs, int typoThreshold) {
         String[] qWords = tokenizeText(query);
 
-        docs.forEach(doc -> doc.getSearchableAttrs().stream()
-                .flatMap(attribute -> Arrays.stream(tokenizeText(attribute.getValue()))) // all words of doc
-                .forEach(word -> {
+        docs.forEach(doc -> OptionalWordRanker.getAllDocWords(doc).forEach(word -> {
                     if (word.length() < 4 && Arrays.asList(qWords).contains(word)) {
                         // we do not tolerate typo for words with length less than 4
                         doc.setPhaseScore(doc.getPhaseScore() + 2);
@@ -35,7 +33,7 @@ public class TypoRanker {
                             if (distance == 0) {
                                 docWordSimilarityScore = 2 - distance; // 2 = max typos allowed
                                 break; // The best distance found; no need to compare other words of query
-                            } else if (distance > 0){
+                            } else if (distance > 0) {
                                 docWordSimilarityScore = Math.max(2 - distance, docWordSimilarityScore);
                             }
                         }
@@ -49,7 +47,10 @@ public class TypoRanker {
 
     /**
      * Compute distance of words using Levenshtein algorithm.
-     * Adopted from https://github.com/apache/commons-text/blob/master/src/main/java/org/apache/commons/text/similarity/LevenshteinDistance.java
+     * <p>
+     * Adopted from https://github.com/apache/commons-text/blob/master/src/main/java/org/apache
+     * /commons/text/similarity/LevenshteinDistance.java
+     * <p>
      * Consider using Damerau-Levenshtein algorithm which allows transposition of adjacent symbols.
      *
      * @param word1
