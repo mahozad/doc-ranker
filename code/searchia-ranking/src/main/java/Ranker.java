@@ -1,6 +1,7 @@
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Ranker {
 
@@ -33,15 +34,22 @@ class RankConfiguration {
     private double[] geoLocation;
     private boolean shouldRemoveDuplicates;
     private List<String> customRankingAttrs;
+    private Set<String> queryOptionalWords;
 
     public RankConfiguration(String sortAttribute,
                              double[] geoLocation,
                              boolean shouldRemoveDuplicates,
-                             List<String> customRankingAttrs) {
+                             List<String> customRankingAttrs,
+                             Set<String> queryOptionalWords) {
         this.sortAttribute = sortAttribute;
         this.geoLocation = geoLocation;
         this.shouldRemoveDuplicates = shouldRemoveDuplicates;
         this.customRankingAttrs = customRankingAttrs;
+        this.queryOptionalWords = queryOptionalWords;
+    }
+
+    public Set<String> getQueryOptionalWords() {
+        return queryOptionalWords;
     }
 }
 

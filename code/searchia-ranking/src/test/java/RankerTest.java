@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,7 +53,8 @@ class RankerTest {
                 "price",
                 null,
                 false,
-                List.of("viewCount", "creationDate")
+                List.of("viewCount", "creationDate"),
+                Set.of()
         );
     }
     // @formatter:on

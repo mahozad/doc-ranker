@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,7 +53,8 @@ class TypoRankerTest {
                 "price",
                 null,
                 false,
-                List.of("viewCount", "creationDate")
+                List.of("viewCount", "creationDate"),
+                Set.of()
         );
     }
 
