@@ -63,24 +63,9 @@ class OptionalWordRankerTest {
 
     @Test
     void rankByOptionalWords() {
-        List<Doc> result = OptionalWordRanker.rankByOptionalWords(docs, configuration);
+        List<Doc> result = OptionalWordRanker.rankByOptionalWords(docs, query);
 
         assertEquals(1, result.get(0).getId());
-    }
-
-    @Test
-    void rankByOptionalWords_noOptionalWord() {
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of()
-        );
-
-        List<Doc> result = OptionalWordRanker.rankByOptionalWords(docs, configuration);
-
-        assertEquals(docs, result);
     }
 
     @Test

@@ -3,11 +3,15 @@ import java.util.stream.Collectors;
 
 public class OptionalWordRanker {
 
-    public static List<Doc> rankByOptionalWords(List<Doc> docs, RankConfiguration configuration) {
-        if (configuration.getQueryOptionalWords().isEmpty()) {
-            return docs;
-        }
-
+    /**
+     * If a word is repeated multiple times, it is has no effect on doc score.
+     *
+     * @param docs
+     * @param query
+     * @return
+     */
+    public static List<Doc> rankByOptionalWords(List<Doc> docs, String query) {
+        String[] qWords = TypoRanker.tokenizeText(query);
         docs = docs.subList(0, 10); // only top 10 docs
         docs.forEach(doc -> doc.setPhaseScore(0)); // reset scores
         SortedMap<Integer, List<Doc>> docsByPhaseScore = groupDocsByPhaseScore(docs);
@@ -16,8 +20,8 @@ public class OptionalWordRanker {
         docsByPhaseScore.keySet().forEach(key -> {
             List<Doc> group = docsByPhaseScore.get(key);
             for (Doc doc : group) {
-                for (String optionalWord : configuration.getQueryOptionalWords()) {
-                    if (isWordInDoc(optionalWord, doc)) {
+                for (String qWord : qWords) {
+                    if (isWordInDoc(qWord, doc)) {
                         doc.setPhaseScore(doc.getPhaseScore() + 1);
                     }
                 }
