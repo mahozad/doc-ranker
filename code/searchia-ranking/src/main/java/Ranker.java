@@ -35,6 +35,7 @@ class RankConfiguration {
     private boolean shouldRemoveDuplicates;
     private List<String> customRankingAttrs;
     private Set<String> queryOptionalWords;
+    private Set<Filter<?>> selectedFilters;
 
     public RankConfiguration(String sortAttribute,
                              double[] geoLocation,
@@ -51,6 +52,14 @@ class RankConfiguration {
     public Set<String> getQueryOptionalWords() {
         return queryOptionalWords;
     }
+
+    public Set<Filter<?>> getSelectedFilters() {
+        return selectedFilters;
+    }
+
+    public void setSelectedFilters(Set<Filter<?>> selectedFilters) {
+        this.selectedFilters = selectedFilters;
+    }
 }
 
 class Doc implements Comparable<Doc> {
@@ -59,6 +68,7 @@ class Doc implements Comparable<Doc> {
     private int phaseScore;
     private double elasticScore;
     private Map<String, ?> customAttrs;
+    private Map<String, ?> filterableAttrs;
     private List<Attribute<String>> searchableAttrs;
 
     public Doc(int id, Map<String, ?> customAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
@@ -66,6 +76,7 @@ class Doc implements Comparable<Doc> {
         this.customAttrs = customAttrs;
         this.elasticScore = elasticScore;
         this.searchableAttrs = searchableAttrs;
+        this.filterableAttrs = Map.of();
     }
 
     public int getId() {
@@ -82,6 +93,14 @@ class Doc implements Comparable<Doc> {
 
     public void setPhaseScore(int phaseScore) {
         this.phaseScore = phaseScore;
+    }
+
+    public Map<String, ?> getFilterableAttrs() {
+        return filterableAttrs;
+    }
+
+    public void setFilterableAttrs(Map<String, ?> filterableAttrs) {
+        this.filterableAttrs = filterableAttrs;
     }
 
     @Override
