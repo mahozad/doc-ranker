@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TypoRankerTest {
@@ -62,15 +63,31 @@ class TypoRankerTest {
     void tearDown() {
     }
 
-    @Test
-    void rankByTypo() {
-        int typoThreshold = 2;
-        List<Integer> expectedDocIds = List.of(1, 2, 3);
+    // @Test
+    // void rankByTypo_allQueryTypes() {
+    //     Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+    //     Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+    //     Query query3 = new Query("dodge charger", QueryType.CORRECTED);
+    //     Query query4 = new Query("dodge challenger", QueryType.SUGGESTED);
+    //     Query query5 = new Query("dodge challenger", QueryType.OPTIONAL);
+    //     List<Query> queries = List.of(query1, query2, query3, query4, query5);
+    //
+    //     List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+    // }
 
-        List<Doc> result = TypoRanker.rankByTypo(query, docs, typoThreshold);
-
-        assertTrue(expectedDocIds.contains(result.get(0).getId()));
-    }
+    // @Test
+    // void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe1Group() {
+    //     Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+    //     Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+    //     Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
+    //     List<Query> queries = List.of(query1, query2, query3);
+    //
+    //     List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+    //     List<Integer> resultIds = result.stream().map(Doc::getId).collect(Collectors.toList());
+    //
+    //     // The set contains only one number; in other words all doc phaseScores are equal (0)
+    //     assertEquals(1, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
+    // }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
