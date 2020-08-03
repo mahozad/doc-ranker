@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class TypoRanker {
 
     public static List<Doc> rankByTypo(String query, List<Doc> docs, int typoThreshold) {
-        String[] qWords = tokenizeText(query);
+        List<String> qWords = DocumentProcessor.tokenizeText(query);
 
         docs.forEach(doc -> OptionalWordRanker.getAllDocWords(doc).forEach(word -> {
                     if (word.length() < 4 && Arrays.asList(qWords).contains(word)) {
@@ -194,12 +194,5 @@ public class TypoRanker {
             return p[n];
         }
         return -1;
-    }
-
-    public static String[] tokenizeText(String text) {
-        return Arrays.stream(text
-                .split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space
-                .flatMap(token -> Arrays.stream(token.split("[.,;:\"،؛']")))
-                .toArray(String[]::new);
     }
 }

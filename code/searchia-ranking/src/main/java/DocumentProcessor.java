@@ -1,84 +1,35 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DocumentProcessor {
 
-    public static Set<Token> extractQueryTokensFromText(String query, String text) {
-        Set<Token> tokens = new HashSet<>();
-        // Map<String, Set<Token>> tokens = new HashMap<>();
-        String[] queryTokens = TypoRanker.tokenizeText(query);
-        String[] textTokens = TypoRanker.tokenizeText(text);
+    public static List<String> tokenizeText(String text) {
+        return Arrays.stream(text
+                .split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space
+                .flatMap(token -> Arrays.stream(token.split("[.,;:\"،؛']")))
+                .collect(Collectors.toList());
+    }
 
-        int position = 0;
-        for (String textToken : textTokens) {
-            for (String queryToken : queryTokens) {
-                int distance = TypoRanker.measureWordsDistance(textToken, queryToken, 2);
-                if (distance >= 0 && distance <= 2) {
-                    Token token = new Token();
-                    token.setValue(textToken);
-                    token.setCorrespondingQueryToken(queryToken);
-                    token.setNumberOfTypos(distance);
-                    token.setPosition(position);
-                    tokens.add(token);
-                }
-            }
-            position++;
+    public static Map<String, TokenInfo> populateTokenInfo(List<String> tokens) {
+        Map<String, TokenInfo> tokensMap = new HashMap<>();
+        for (int i = 0; i < tokens.size(); i++) {
+            String token = tokens.get(i);
+            TokenInfo tokenInfo = new TokenInfo();
+            tokenInfo.getPositions().add(i);
+            tokensMap.merge(token, tokenInfo, (oldInfo, newInfo) -> {
+                oldInfo.getPositions().addAll(newInfo.getPositions());
+                return oldInfo;
+            });
         }
-
-        return tokens;
+        return tokensMap;
     }
 }
 
-class Token {
+class TokenInfo {
 
-    private String value;
-    private String correspondingQueryToken;
-    private int numberOfTypos;
-    private int position;
+    private final List<Integer> positions = new ArrayList<>();
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getCorrespondingQueryToken() {
-        return correspondingQueryToken;
-    }
-
-    public void setCorrespondingQueryToken(String correspondingQueryToken) {
-        this.correspondingQueryToken = correspondingQueryToken;
-    }
-
-    public int getNumberOfTypos() {
-        return numberOfTypos;
-    }
-
-    public void setNumberOfTypos(int numberOfTypos) {
-        this.numberOfTypos = numberOfTypos;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Token token = (Token) o;
-        return numberOfTypos == token.numberOfTypos &&
-                value.equals(token.value) &&
-                correspondingQueryToken.equals(token.correspondingQueryToken);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value, correspondingQueryToken, numberOfTypos);
+    public List<Integer> getPositions() {
+        return positions;
     }
 }

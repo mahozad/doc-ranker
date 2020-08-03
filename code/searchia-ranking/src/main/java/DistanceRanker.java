@@ -3,8 +3,8 @@ import java.util.List;
 public class DistanceRanker {
 
     public static List<Doc> rankByWordsDistance(String query, List<Doc> docs) {
-        String[] qWords = TypoRanker.tokenizeText(query);
-        if (qWords.length < 2) {
+        List<String> qWords = DocumentProcessor.tokenizeText(query);
+        if (qWords.size() < 2) {
             return docs;
         }
 

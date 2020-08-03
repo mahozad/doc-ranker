@@ -11,7 +11,7 @@ public class OptionalWordRanker {
      * @return
      */
     public static List<Doc> rankByOptionalWords(List<Doc> docs, String query) {
-        String[] qWords = TypoRanker.tokenizeText(query);
+        List<String> qWords = DocumentProcessor.tokenizeText(query);
         docs = docs.subList(0, 10); // only top 10 docs
         docs.forEach(doc -> doc.setPhaseScore(0)); // reset scores
         SortedMap<Integer, List<Doc>> docsByPhaseScore = groupDocsByPhaseScore(docs);
@@ -53,7 +53,7 @@ public class OptionalWordRanker {
     public static List<String> getAllDocWords(Doc doc) {
         return doc.getSearchableAttrs()
                 .stream()
-                .flatMap(attribute -> Arrays.stream(TypoRanker.tokenizeText(attribute.getValue())))
+                .flatMap(attribute -> DocumentProcessor.tokenizeText(attribute.getValue()).stream())
                 .collect(Collectors.toList());
     }
 }

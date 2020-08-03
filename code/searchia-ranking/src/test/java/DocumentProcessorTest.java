@@ -1,9 +1,17 @@
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DocumentProcessorTest {
@@ -16,17 +24,54 @@ class DocumentProcessorTest {
     void tearDown() {
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"hello world", "hello.world", "hello world.", "hello,world."})
+    void tokenizeText_english(String text) {
+        List<String> tokens = DocumentProcessor.tokenizeText(text);
+
+        assertEquals(2, tokens.size());
+        assertEquals("hello", tokens.get(0));
+        assertEquals("world", tokens.get(1));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"سلام دنیا", "سلام‌دنیا", "سلام، دنیا", "سلام، دنیا."})
+    void tokenizeText_farsi(String text) {
+        List<String> tokens = DocumentProcessor.tokenizeText(text);
+
+        assertEquals(2, tokens.size());
+        assertEquals("سلام", tokens.get(0));
+        assertEquals("دنیا", tokens.get(1));
+    }
+
     @Test
-    void extractQueryTokensFromText() {
-        String query = "dodge charger";
-        String text = "dodge new red charger";
-        Token expectedToken = new Token();
-        expectedToken.setValue("dodge");
-        expectedToken.setNumberOfTypos(0);
-        expectedToken.setCorrespondingQueryToken("dodge");
+    void populateTokenInfo_resultSize() {
+        List<String> strings = List.of("dodge", "new", "dodge", "red", "charger");
 
-        Set<Token> tokens = DocumentProcessor.extractQueryTokensFromText(query, text);
+        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings);
 
-        assertTrue(tokens.contains(expectedToken));
+        assertEquals(4, tokens.size());
+    }
+
+    @Test
+    void populateTokenInfo_tokenPositions() {
+        List<String> strings = List.of("dodge", "new", "red", "dodge", "charger");
+        String targetToken = "dodge";
+        List<Integer> expectedPositions = List.of(0, 3);
+
+        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings);
+
+        assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
+    }
+
+    @Test
+    void populateTokenInfo_tokenRepeated3Times() {
+        List<String> strings = List.of("dodge", "new", "red", "dodge", "charger", "dodge");
+        String targetToken = "dodge";
+        List<Integer> expectedPositions = List.of(0, 3, 5);
+
+        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings);
+
+        assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
     }
 }
