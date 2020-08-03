@@ -1,3 +1,5 @@
+package searchia;
+
 public class Query {
 
     enum QueryType {

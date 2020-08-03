@@ -1,3 +1,5 @@
+package searchia;
+
 import java.util.List;
 
 public class DistanceRanker {

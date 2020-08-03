@@ -1,21 +1,24 @@
+package searchia;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import searchia.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class RankerTest {
+class DistanceRankerTest {
 
     Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
 
@@ -24,10 +27,9 @@ class RankerTest {
     List<Promotion> promotions;
     RankConfiguration configuration;
 
-    // @formatter:off
     @BeforeEach
     void setUp() throws IOException {
-        query = "charger";
+        query = "dodge charger";
 
         docs = Files
                 .lines(samplesPath)
@@ -38,8 +40,8 @@ class RankerTest {
                     long creationDate = Long.parseLong(attrs[1].split("=")[1]);
                     long viewCount = Long.parseLong(attrs[2].split("=")[1]);
                     double score = Math.random();
-                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[0]);
-                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[0]);
+                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[1]);
+                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[1]);
                     List<Attribute<String>> searchableAttrs = List.of(title, description);
                     Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
@@ -56,53 +58,36 @@ class RankerTest {
                 null,
                 false,
                 List.of("viewCount", "creationDate"),
-                Set.of()
+                Set.of("dodge")
         );
     }
-    // @formatter:on
 
     @AfterEach
     void tearDown() {
     }
 
     @Test
-    void sortDocs() {
-        docs.get(0).setPhaseScore(5);
-        docs.get(2).setPhaseScore(3);
-        docs.get(10).setPhaseScore(7);
-        docs.get(12).setPhaseScore(4);
-
-        docs = docs.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-
-        assertEquals(7, docs.get(0).getPhaseScore());
-        assertEquals(5, docs.get(1).getPhaseScore());
-        assertEquals(4, docs.get(2).getPhaseScore());
-        assertEquals(3, docs.get(3).getPhaseScore());
-        assertEquals(0, docs.get(4).getPhaseScore());
-    }
-
-    @Test
-    void rank() {
-        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
+    void rankByWordsDistance() {
+        List<Doc> result = DistanceRanker.rankByWordsDistance(query, docs);
 
         assertEquals(1, result.get(0).getId());
     }
 
     @Test
-    void rank_time() {
-        long timeThreshold = 200/*ms*/;
+    void rankByWordsDistance_oneWordQuery() {
+        List<Doc> result = DistanceRanker.rankByWordsDistance("oneWordQuery", docs);
 
-        Instant startTime = Instant.now();
-        Ranker.rank(query, docs, promotions, configuration, 0, 10);
-        long duration = Duration.between(startTime, Instant.now()).toMillis();
-
-        assertTrue(() -> duration < timeThreshold);
+        assertThat(result, is(equalTo(docs)));
     }
 
+    @Disabled
     @Test
-    void rank_resultSize() {
-        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
+    void getWordPositions() {
+        Attribute<String> attribute = new Attribute<>("title", "dodge new and dodge red charger");
+        String word = "dodge";
 
-        assertEquals(10, result.size());
+        int[] positions = DistanceRanker.getWordPositions(word, attribute);
+
+        assertThat(positions, is(equalTo(new int[]{0, 3})));
     }
 }

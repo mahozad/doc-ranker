@@ -1,8 +1,9 @@
-import org.hamcrest.core.Is;
+package searchia;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import searchia.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,11 +13,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class DistanceRankerTest {
+class FilterRankerTest {
 
     Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
 
@@ -65,27 +64,51 @@ class DistanceRankerTest {
     }
 
     @Test
-    void rankByWordsDistance() {
-        List<Doc> result = DistanceRanker.rankByWordsDistance(query, docs);
+    void rankByFilters_1filter() {
+        Filter<Double> filter = new Filter<>();
+        filter.setValue(50.0);
+        filter.setAttributeName("views");
+        filter.setOperator(Operator.LT);
+        configuration.setSelectedFilters(Set.of(filter));
+        List<Doc> result = FilterRanker.rankByFilters(docs, configuration.getSelectedFilters());
 
         assertEquals(1, result.get(0).getId());
     }
 
     @Test
-    void rankByWordsDistance_oneWordQuery() {
-        List<Doc> result = DistanceRanker.rankByWordsDistance("oneWordQuery", docs);
+    void setDocScoreByNumericFilter() {
+        Doc doc = docs.get(0);
+        doc.setFilterableAttrs(Map.of("views", 10.0));
+        Filter<Double> filter = new Filter<>();
+        filter.setAttributeName("views");
+        filter.setOperator(Operator.LT);
+        filter.setWeight(1);
+        filter.setValue(50.0);
 
-        assertThat(result, is(equalTo(docs)));
+        int score = FilterRanker.setDocScoreByNumericFilter(doc, filter);
+
+        assertEquals(1, score);
     }
 
-    @Disabled
     @Test
-    void getWordPositions() {
-        Attribute<String> attribute = new Attribute<>("title", "dodge new and dodge red charger");
-        String word = "dodge";
+    void isFilterSatisfied_numericFilter() {
+        Filter<Double> filter = new Filter<>();
+        filter.setOperator(Operator.LT);
+        filter.setValue(50.0);
 
-        int[] positions = DistanceRanker.getWordPositions(word, attribute);
+        boolean satisfied = filter.isFilterSatisfied(40.0);
 
-        assertThat(positions, is(equalTo(new int[]{0, 3})));
+        assertTrue(satisfied);
+    }
+
+    @Test
+    void isFilterSatisfied_textFilter() {
+        Filter<String> filter = new Filter<>();
+        filter.setOperator(Operator.EQ);
+        filter.setValue("new");
+
+        boolean satisfied = filter.isFilterSatisfied("new");
+
+        assertTrue(satisfied);
     }
 }
