@@ -158,7 +158,7 @@ class TypoRankerTest {
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
 
-        boolean isMatching = TypoRanker.isDocMatchingWithQuery(doc, query);
+        boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
 
         assertTrue(isMatching);
     }
@@ -169,7 +169,7 @@ class TypoRankerTest {
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
 
-        boolean isMatching = TypoRanker.isDocMatchingWithQuery(doc, query);
+        boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
 
         assertTrue(isMatching);
     }
@@ -180,7 +180,7 @@ class TypoRankerTest {
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
 
-        boolean isMatching = TypoRanker.isDocMatchingWithQuery(doc, query);
+        boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
 
         assertTrue(isMatching);
     }

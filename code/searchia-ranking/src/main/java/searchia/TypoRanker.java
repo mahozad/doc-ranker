@@ -20,7 +20,7 @@ public class TypoRanker {
                 .filter(query -> query.getType() == ORIGINAL || query.getType() == WILDCARD)
                 .forEach(query -> {
                     for (Doc doc : docs) {
-                        boolean isDocMatching = isDocMatchingWithQuery(doc, query);
+                        boolean isDocMatching = isDocMatchedWithQuery(doc, query);
                         if (isDocMatching) {
                             doc.setPhaseScore(1);
                         } else {
@@ -37,7 +37,7 @@ public class TypoRanker {
         }
     }
 
-    public static boolean isDocMatchingWithQuery(Doc doc, Query query) {
+    public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
         List<String> tokens = DocumentProcessor.tokenizeText(query.getText());
         for (String token : tokens) {
             if (query.getType() == WILDCARD && token.endsWith("*")) {
