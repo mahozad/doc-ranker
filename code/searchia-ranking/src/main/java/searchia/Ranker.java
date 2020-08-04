@@ -71,6 +71,7 @@ class Doc implements Comparable<Doc> {
     private Map<String, TokenInfo> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
     private int numberOfMatches;
+    private long rank = 0;
 
     public Doc(int id, Map<String, ?> customAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
         this.id = id;
@@ -118,6 +119,14 @@ class Doc implements Comparable<Doc> {
 
     public void setNumberOfMatches(int numberOfMatches) {
         this.numberOfMatches = numberOfMatches;
+    }
+
+    public long getRank() {
+        return rank;
+    }
+
+    public void setRank(long rank) {
+        this.rank = rank;
     }
 
     @Override
