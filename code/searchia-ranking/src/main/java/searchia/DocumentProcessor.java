@@ -5,6 +5,12 @@ import java.util.stream.Collectors;
 
 public class DocumentProcessor {
 
+    public static void processDocs(List<Doc> docs) {
+        for (Doc doc : docs) {
+            processDoc(doc);
+        }
+    }
+
     public static Doc processDoc(Doc doc) {
         for (Attribute<String> searchableAttr : doc.getSearchableAttrs()) {
             List<String> tokens = tokenizeText(searchableAttr.getValue());
