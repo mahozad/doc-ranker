@@ -85,13 +85,17 @@ class TypoRankerTest {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
-        List<Query> queries = List.of(query1, query2, query3);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.OPTIONAL, query3
+        );
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
 
-        // The set contains one number; in other words all the docs have the same score
-        assertEquals(1, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
+        // The set contains one number; in other words all the docs have the same rank
+        assertEquals(1, result.stream().map(Doc::getRank).collect(toSet()).size());
     }
 
     @Test
@@ -99,7 +103,11 @@ class TypoRankerTest {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
-        List<Query> queries = List.of(query1, query2, query3);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.OPTIONAL, query3
+        );
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedIds = Set.of(2, 16, 17);
 
@@ -114,13 +122,17 @@ class TypoRankerTest {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
-        List<Query> queries = List.of(query1, query2, query3);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
+        );
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
 
         // The set contains two numbers; in other words there are 2 different scores
-        assertEquals(2, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
+        assertEquals(2, result.stream().map(Doc::getRank).collect(toSet()).size());
     }
 
     @Test
@@ -128,15 +140,19 @@ class TypoRankerTest {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
-        List<Query> queries = List.of(query1, query2, query3);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
+        );
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
-        Set<Integer> group1Scores = result.subList(0, 3).stream().map(Doc::getPhaseScore).collect(toSet());
-        Set<Integer> group2Scores = result.subList(3, result.size()).stream().map(Doc::getPhaseScore).collect(toSet());
+        Set<Long> group1Ranks = result.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
+        Set<Long> group2Ranks = result.subList(3, result.size()).stream().map(Doc::getRank).collect(toSet());
 
-        assertEquals(1, group1Scores.size());
-        assertEquals(1, group2Scores.size());
+        assertEquals(1, group1Ranks.size());
+        assertEquals(1, group2Ranks.size());
     }
 
     @Test
@@ -144,10 +160,13 @@ class TypoRankerTest {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
-        List<Query> queries = List.of(query1, query2, query3);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.OPTIONAL, query3
+        );
 
-        boolean containsCorrectedOrSuggested =
-                TypoRanker.queriesContainCorrectedOrSuggested(queries);
+        boolean containsCorrectedOrSuggested = TypoRanker.queriesContainCorrectedOrSuggested(queries);
 
         assertFalse(containsCorrectedOrSuggested);
     }

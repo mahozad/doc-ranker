@@ -4,37 +4,44 @@ import searchia.Query.QueryType;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static searchia.Query.QueryType.*;
 
 public class TypoRanker {
 
-    public static List<Doc> rankByTypo(List<Query> queries, List<Doc> docs) {
+    public static List<Doc> rankByTypo(Map<QueryType, Query> queries, List<Doc> docs) {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
+        long topGroupCount = 0;
 
-        queries.stream()
-                .filter(query -> query.getType() == ORIGINAL || query.getType() == WILDCARD)
-                .forEach(query -> {
-                    for (Doc doc : docs) {
-                        boolean isDocMatching = isDocMatchedWithQuery(doc, query);
-                        if (isDocMatching) {
-                            doc.setPhaseScore(1);
-                        } else {
-                            doc.setPhaseScore(Math.max(0, doc.getPhaseScore()));
-                        }
-                    }
-                });
+        List<Query> rankQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
+        for (Doc doc : docs) {
+            for (Query query : rankQueries) {
+                boolean isDocMatching = isDocMatchedWithQuery(doc, query);
+                if (isDocMatching) {
+                    doc.setPhaseScore(1);
+                    topGroupCount++;
+                    break;
+                } else {
+                    int score = Math.max(0, doc.getPhaseScore());
+                    doc.setPhaseScore(score);
+                }
+            }
+        }
 
         if (queriesContainCorrectedOrSuggested) {
-            return docs.stream().sorted(reverseOrder()).collect(toList());
-        } else {
-            // Reset the scores (all docs should be considered equal in next phase)
-            return docs.stream().sorted(reverseOrder()).peek(doc -> doc.setPhaseScore(0)).collect(toList());
+            // Example: if the top group has 7 members, all its members should be ranked 0 and
+            // all members of second group should be ranked 7
+            for (Doc doc : docs) {
+                if (doc.getPhaseScore() == 0) {
+                    doc.setRank(topGroupCount);
+                }
+            }
         }
+
+        return docs.stream().sorted(reverseOrder()).collect(toList());
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
@@ -53,9 +60,8 @@ public class TypoRanker {
         return true;
     }
 
-    public static boolean queriesContainCorrectedOrSuggested(List<Query> queries) {
-        Set<QueryType> queryTypes = queries.stream().map(Query::getType).collect(toSet());
-        return queryTypes.contains(CORRECTED) || queryTypes.contains(SUGGESTED);
+    public static boolean queriesContainCorrectedOrSuggested(Map<QueryType, Query> queries) {
+        return queries.containsKey(CORRECTED) || queries.containsKey(SUGGESTED);
     }
 
     /**
