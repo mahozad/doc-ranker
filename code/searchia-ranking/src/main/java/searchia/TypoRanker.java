@@ -3,10 +3,8 @@ package searchia;
 import searchia.Query.QueryType;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -16,23 +14,26 @@ public class TypoRanker {
 
     public static List<Doc> rankByTypo(List<Query> queries, List<Doc> docs) {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
-        if (!queriesContainCorrectedOrSuggested) {
-            queries.stream()
-                    .filter(query -> query.getType() == ORIGINAL || query.getType() == WILDCARD)
-                    .forEach(query -> {
-                        for (Doc doc : docs) {
-                            boolean isDocMatching = isDocMatchingWithQuery(doc, query);
-                            if (isDocMatching) {
-                                doc.setPhaseScore(1);
-                            } else {
-                                doc.setPhaseScore(Math.max(0, doc.getPhaseScore()));
-                            }
-                        }
-                    });
 
+        queries.stream()
+                .filter(query -> query.getType() == ORIGINAL || query.getType() == WILDCARD)
+                .forEach(query -> {
+                    for (Doc doc : docs) {
+                        boolean isDocMatching = isDocMatchingWithQuery(doc, query);
+                        if (isDocMatching) {
+                            doc.setPhaseScore(1);
+                        } else {
+                            doc.setPhaseScore(Math.max(0, doc.getPhaseScore()));
+                        }
+                    }
+                });
+
+        if (queriesContainCorrectedOrSuggested) {
             return docs.stream().sorted().collect(toList());
+        } else {
+            // Reset the scores (all docs should be considered equal in next phase)
+            return docs.stream().sorted().peek(doc -> doc.setPhaseScore(0)).collect(toList());
         }
-        return null;
     }
 
     public static boolean isDocMatchingWithQuery(Doc doc, Query query) {

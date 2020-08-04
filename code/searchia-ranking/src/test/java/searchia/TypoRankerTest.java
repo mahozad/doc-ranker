@@ -83,7 +83,7 @@ class TypoRankerTest {
     // }
 
     @Test
-    void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe2Groups() {
+    void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe1Group() {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
@@ -92,7 +92,21 @@ class TypoRankerTest {
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
 
-        // The set contains two numbers; in other words there is only 2 different scores
+        // The set contains one number; in other words all the docs have the same score
+        assertEquals(1, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
+    }
+
+    @Test
+    void rankByTypo_containsCorrectQueryOrSuggestQuery_resultShouldBe2Groups() {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
+        List<Query> queries = List.of(query1, query2, query3);
+        DocumentProcessor.processDocs(docs);
+
+        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+
+        // The set contains two numbers; in other words there are 2 different scores
         assertEquals(2, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
     }
 
@@ -103,7 +117,8 @@ class TypoRankerTest {
         Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
         List<Query> queries = List.of(query1, query2, query3);
 
-        boolean containsCorrectedOrSuggested = TypoRanker.queriesContainCorrectedOrSuggested(queries);
+        boolean containsCorrectedOrSuggested =
+                TypoRanker.queriesContainCorrectedOrSuggested(queries);
 
         assertFalse(containsCorrectedOrSuggested);
     }
