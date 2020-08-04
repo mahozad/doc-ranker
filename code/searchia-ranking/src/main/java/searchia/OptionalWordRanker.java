@@ -17,16 +17,47 @@ public class OptionalWordRanker {
      * @return
      */
     public static List<Doc> rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) {
+        Query originalQuery = queries.get(QueryType.ORIGINAL);
+        int lengthOfOriginalQuery = DocumentProcessor.tokenizeText(originalQuery.getText()).size();
         if (!queries.containsKey(QueryType.OPTIONAL)) {
-            int numberOfWords = 0;
-            Query originalQuery = queries.get(QueryType.ORIGINAL);
-            numberOfWords = DocumentProcessor.tokenizeText(originalQuery.getText()).size();
             for (Doc doc : docs) {
-                doc.setNumberOfMatches(numberOfWords);
+                doc.setNumberOfMatches(lengthOfOriginalQuery);
             }
             return docs;
+        } else {
+            Query optionalQuery = queries.get(QueryType.OPTIONAL);
+            int lengthOfOptionalQuery = DocumentProcessor.tokenizeText(optionalQuery.getText()).size();
+            List<Doc> result = new ArrayList<>();
+            SortedMap<Long, List<Doc>> docGroups = groupDocsByRank(docs);
+
+            for (List<Doc> group : docGroups.values()) {
+                for (Doc doc : group) {
+                    for (Query query : queries.values().stream().filter(query -> query.getType() != QueryType.OPTIONAL).collect(Collectors.toList())) {
+                        if (TypoRanker.isDocMatchedWithQuery(doc, query)) {
+                            doc.setNumberOfMatches(lengthOfOriginalQuery);
+                            break;
+                        }
+                    }
+                    doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
+                }
+
+                List<Doc> sortedGroup = group.stream().sorted((doc1, doc2) -> doc2.getNumberOfMatches() - doc1.getNumberOfMatches()).collect(Collectors.toList());
+                long previousNumberOfMatches = sortedGroup.get(0).getNumberOfMatches();
+                long rank = sortedGroup.get(0).getRank();
+                for (Doc doc : sortedGroup) {
+                    if (doc.getNumberOfMatches() != previousNumberOfMatches) {
+                        rank++;
+                        doc.setRank(rank);
+                        previousNumberOfMatches = doc.getNumberOfMatches();
+                    } else {
+                        doc.setRank(rank);
+                    }
+                }
+
+                result.addAll(sortedGroup);
+            }
+            return result;
         }
-        return null;
     }
 
     public static SortedMap<Long, List<Doc>> groupDocsByRank(List<Doc> docs) {

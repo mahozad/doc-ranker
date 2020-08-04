@@ -3,7 +3,6 @@ package searchia;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import searchia.*;
 import searchia.Query.QueryType;
 
 import java.io.IOException;
@@ -95,6 +94,25 @@ class OptionalWordRankerTest {
         Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
 
         assertTrue(groupSizes.containsAll(expectedGroupSizes));
+    }
+
+    @Test
+    void rankByOptionalWords_withOptionalQuery() {
+        Query query1 = new Query("dodge charger", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge challenger", QueryType.SUGGESTED);
+        Query query3 = new Query("charger", QueryType.OPTIONAL);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.SUGGESTED, query2,
+                QueryType.OPTIONAL, query3
+        );
+        DocumentProcessor.processDocs(docs);
+        Set<Integer> expectedNonOptionalMatchIds = Set.of(1,2,3,7,9,16,17);
+
+        List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
+        List<Doc> nonOptionalMatches = result.subList(0, expectedNonOptionalMatchIds.size());
+
+        assertTrue(nonOptionalMatches.stream().map(Doc::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));
     }
 
     @Test
