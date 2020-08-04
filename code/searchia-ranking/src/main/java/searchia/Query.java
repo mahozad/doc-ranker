@@ -6,8 +6,8 @@ public class Query {
         ORIGINAL, WILDCARD, CORRECTED, SUGGESTED, SPACED, EQUIVALENT, STEM, OPTIONAL
     }
 
-    private String text;
-    private QueryType type;
+    private final String text;
+    private final QueryType type;
 
     public Query(String text, QueryType type) {
         this.text = text;
@@ -18,15 +18,7 @@ public class Query {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public QueryType getType() {
         return type;
-    }
-
-    public void setType(QueryType type) {
-        this.type = type;
     }
 }
