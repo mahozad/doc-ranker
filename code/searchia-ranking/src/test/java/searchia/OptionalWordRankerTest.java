@@ -114,33 +114,4 @@ class OptionalWordRankerTest {
 
         assertTrue(nonOptionalMatches.stream().map(Doc::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));
     }
-
-    @Test
-    void isWordInDoc() {
-        String word = "dodge";
-        Doc doc = docs.get(0);
-
-        boolean hasWord = OptionalWordRanker.isWordInDoc(word, doc);
-
-        assertTrue(hasWord);
-    }
-
-    @Test
-    void isWordInDoc_not() {
-        String word = "vision";
-        Doc doc = docs.get(0);
-
-        boolean hasWord = OptionalWordRanker.isWordInDoc(word, doc);
-
-        assertFalse(hasWord);
-    }
-
-    @Test
-    void getAllDocWords() {
-        Doc doc = docs.get(13);
-
-        List<String> words = OptionalWordRanker.getAllDocWords(doc);
-
-        assertEquals(6, words.size());
-    }
 }

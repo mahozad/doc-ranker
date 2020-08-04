@@ -64,22 +64,4 @@ public class OptionalWordRanker {
         Map<Long, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getRank));
         return new TreeMap<>(map);
     }
-
-    public static boolean isWordInDoc(String word, Doc doc) {
-        List<String> docWords = getAllDocWords(doc);
-        for (String docWord : docWords) {
-            int distance = TypoRanker.measureWordsDistance(word, docWord, 2);
-            if (distance >= 0 && distance <= 2) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static List<String> getAllDocWords(Doc doc) {
-        return doc.getSearchableAttrs()
-                .stream()
-                .flatMap(attribute -> DocumentProcessor.tokenizeText(attribute.getValue()).stream())
-                .collect(Collectors.toList());
-    }
 }
