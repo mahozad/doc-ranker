@@ -37,6 +37,16 @@ class DocumentProcessorTest {
     }
 
     @ParameterizedTest
+    @ValueSource(strings = {"hello world*", "hello.world*", "hello world*", "hello,world*"})
+    void tokenizeText_english_withWildcard(String text) {
+        List<String> tokens = DocumentProcessor.tokenizeText(text);
+
+        assertEquals(2, tokens.size());
+        assertEquals("hello", tokens.get(0));
+        assertEquals("world*", tokens.get(1));
+    }
+
+    @ParameterizedTest
     @ValueSource(strings = {"سلام دنیا", "سلام‌دنیا", "سلام، دنیا", "سلام، دنیا."})
     void tokenizeText_farsi(String text) {
         List<String> tokens = DocumentProcessor.tokenizeText(text);
@@ -44,6 +54,16 @@ class DocumentProcessorTest {
         assertEquals(2, tokens.size());
         assertEquals("سلام", tokens.get(0));
         assertEquals("دنیا", tokens.get(1));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"سلام دنیا*", "سلام‌دنیا*", "سلام، دنیا*", "سلام، دنیا*"})
+    void tokenizeText_farsi_withWildcard(String text) {
+        List<String> tokens = DocumentProcessor.tokenizeText(text);
+
+        assertEquals(2, tokens.size());
+        assertEquals("سلام", tokens.get(0));
+        assertEquals("دنیا*", tokens.get(1));
     }
 
     @Test
