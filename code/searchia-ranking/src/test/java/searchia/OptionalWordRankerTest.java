@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import searchia.*;
+import searchia.Query.QueryType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +15,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OptionalWordRankerTest {
@@ -65,10 +67,17 @@ class OptionalWordRankerTest {
     }
 
     @Test
-    void rankByOptionalWords() {
-        List<Doc> result = OptionalWordRanker.rankByOptionalWords(docs, query);
+    void rankByOptionalWords_noOptionalQuery() {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge red charger", QueryType.SUGGESTED);
+        List<Query> queries = List.of(query1, query2, query3);
+        DocumentProcessor.processDocs(docs);
 
-        assertEquals(1, result.get(0).getId());
+        List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
+
+        // The set contains one number; in other words all the docs have the same numberOfMatches
+        assertEquals(1, result.stream().map(Doc::getNumberOfMatches).collect(toSet()).size());
     }
 
     @Test

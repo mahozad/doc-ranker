@@ -70,6 +70,7 @@ class Doc implements Comparable<Doc> {
     private Map<String, ?> filterableAttrs;
     private Map<String, TokenInfo> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
+    private int numberOfMatches;
 
     public Doc(int id, Map<String, ?> customAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
         this.id = id;
@@ -109,6 +110,14 @@ class Doc implements Comparable<Doc> {
 
     public void setTokens(Map<String, TokenInfo> tokens) {
         this.tokens = tokens;
+    }
+
+    public int getNumberOfMatches() {
+        return numberOfMatches;
+    }
+
+    public void setNumberOfMatches(int numberOfMatches) {
+        this.numberOfMatches = numberOfMatches;
     }
 
     @Override
