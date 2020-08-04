@@ -3,9 +3,6 @@ package searchia;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import searchia.*;
 import searchia.Query.QueryType;
 
 import java.io.IOException;
@@ -16,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -97,6 +95,21 @@ class TypoRankerTest {
     }
 
     @Test
+    void rankByTypo_emptyCorrectQueryAndSuggestQuery_topResultsShouldMatchOriginalOrWildcard() {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
+        List<Query> queries = List.of(query1, query2, query3);
+        DocumentProcessor.processDocs(docs);
+        Set<Integer> expectedIds = Set.of(2, 16, 17);
+
+        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+        List<Integer> resultIds = result.stream().map(Doc::getId).collect(toList());
+
+        assertTrue(resultIds.subList(0, 3).containsAll(expectedIds));
+    }
+
+    @Test
     void rankByTypo_containsCorrectQueryOrSuggestQuery_resultShouldBe2Groups() {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
@@ -108,6 +121,22 @@ class TypoRankerTest {
 
         // The set contains two numbers; in other words there are 2 different scores
         assertEquals(2, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
+    }
+
+    @Test
+    void rankByTypo_containsCorrectQueryOrSuggestQuery_topResultsShouldMatchOriginalOrWildcard() {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
+        List<Query> queries = List.of(query1, query2, query3);
+        DocumentProcessor.processDocs(docs);
+
+        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+        Set<Integer> group1Scores = result.subList(0, 3).stream().map(Doc::getPhaseScore).collect(toSet());
+        Set<Integer> group2Scores = result.subList(3, result.size()).stream().map(Doc::getPhaseScore).collect(toSet());
+
+        assertEquals(1, group1Scores.size());
+        assertEquals(1, group2Scores.size());
     }
 
     @Test

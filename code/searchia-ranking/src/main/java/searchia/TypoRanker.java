@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static searchia.Query.QueryType.*;
@@ -29,10 +30,10 @@ public class TypoRanker {
                 });
 
         if (queriesContainCorrectedOrSuggested) {
-            return docs.stream().sorted().collect(toList());
+            return docs.stream().sorted(reverseOrder()).collect(toList());
         } else {
             // Reset the scores (all docs should be considered equal in next phase)
-            return docs.stream().sorted().peek(doc -> doc.setPhaseScore(0)).collect(toList());
+            return docs.stream().sorted(reverseOrder()).peek(doc -> doc.setPhaseScore(0)).collect(toList());
         }
     }
 
