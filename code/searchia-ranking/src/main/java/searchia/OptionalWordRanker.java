@@ -29,11 +29,9 @@ public class OptionalWordRanker {
         return null;
     }
 
-    public static SortedMap<Integer, List<Doc>> groupDocsByPhaseScore(List<Doc> docs) {
-        Map<Integer, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getPhaseScore));
-        TreeMap<Integer, List<Doc>> sortedMap = new TreeMap<>(Comparator.reverseOrder());
-        sortedMap.putAll(map);
-        return sortedMap;
+    public static SortedMap<Long, List<Doc>> groupDocsByRank(List<Doc> docs) {
+        Map<Long, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getRank));
+        return new TreeMap<>(map);
     }
 
     public static boolean isWordInDoc(String word, Doc doc) {

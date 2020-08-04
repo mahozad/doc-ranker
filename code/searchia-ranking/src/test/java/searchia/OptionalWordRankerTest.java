@@ -85,6 +85,19 @@ class OptionalWordRankerTest {
     }
 
     @Test
+    void groupDocsByRank() {
+        // Set rank of two docs to size - 2 and the rest have default rank of 0 (so two rank groups)
+        docs.get(1).setRank(docs.size() - 2);
+        docs.get(11).setRank(docs.size() - 2);
+        Set<Integer> expectedGroupSizes = Set.of(2, docs.size() - 2);
+
+        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
+        Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
+
+        assertTrue(groupSizes.containsAll(expectedGroupSizes));
+    }
+
+    @Test
     void isWordInDoc() {
         String word = "dodge";
         Doc doc = docs.get(0);
@@ -112,14 +125,4 @@ class OptionalWordRankerTest {
 
         assertEquals(6, words.size());
     }
-
-    @Test
-    void groupDocsByPhaseScore() {
-        docs.get(0).setPhaseScore(7);
-
-        SortedMap<Integer, List<Doc>> result = OptionalWordRanker.groupDocsByPhaseScore(docs);
-
-        assertEquals(7, result.firstKey());
-    }
-
 }
