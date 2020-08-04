@@ -133,4 +133,26 @@ class TypoRankerTest {
 
         assertTrue(isMatching);
     }
+
+    @Test
+    void isDocMatchingWithQuery_wildcardQuery() {
+        Query query = new Query("dodge charter*", QueryType.WILDCARD);
+        Doc doc = docs.get(1);
+        doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+
+        boolean isMatching = TypoRanker.isDocMatchingWithQuery(doc, query);
+
+        assertTrue(isMatching);
+    }
+
+    @Test
+    void isDocMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() {
+        Query query = new Query("dodge charter", QueryType.WILDCARD);
+        Doc doc = docs.get(1);
+        doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+
+        boolean isMatching = TypoRanker.isDocMatchingWithQuery(doc, query);
+
+        assertTrue(isMatching);
+    }
 }

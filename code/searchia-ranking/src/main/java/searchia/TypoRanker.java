@@ -39,7 +39,13 @@ public class TypoRanker {
     public static boolean isDocMatchingWithQuery(Doc doc, Query query) {
         List<String> tokens = DocumentProcessor.tokenizeText(query.getText());
         for (String token : tokens) {
-            if (!doc.getTokens().containsKey(token)) {
+            if (query.getType() == WILDCARD && token.endsWith("*")) {
+                String tokenStem = token.replace("*", "");
+                boolean noMatches = doc.getTokens().keySet().stream().noneMatch(s -> s.startsWith(tokenStem));
+                if (noMatches) {
+                    return false;
+                }
+            } else if (!doc.getTokens().containsKey(token)) {
                 return false;
             }
         }
