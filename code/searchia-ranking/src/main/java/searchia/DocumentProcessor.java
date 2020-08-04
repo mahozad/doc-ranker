@@ -5,6 +5,15 @@ import java.util.stream.Collectors;
 
 public class DocumentProcessor {
 
+    public static Doc processDoc(Doc doc) {
+        for (Attribute<String> searchableAttr : doc.getSearchableAttrs()) {
+            List<String> tokens = tokenizeText(searchableAttr.getValue());
+            Map<String, TokenInfo> tokenInfo = populateTokenInfo(tokens);
+            doc.getTokens().putAll(tokenInfo);
+        }
+        return doc;
+    }
+
     public static List<String> tokenizeText(String text) {
         return Arrays.stream(text
                 .split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space

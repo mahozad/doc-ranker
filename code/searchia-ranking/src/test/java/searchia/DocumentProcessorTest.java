@@ -5,11 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import searchia.DocumentProcessor;
-import searchia.TokenInfo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -24,6 +23,20 @@ class DocumentProcessorTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void processDoc() {
+        Doc doc = new Doc(1, null, 0, List.of(
+                new Attribute<>("title", "dodge charger"),
+                new Attribute<>("description", "new red dodge charger*"))
+        );
+        Set<String> expectedTokenStrings = Set.of("dodge", "charger", "new", "red", "charger*");
+
+        Doc result = DocumentProcessor.processDoc(doc);
+
+        assertThat(result.getTokens().size(), is(equalTo(5)));
+        assertThat(result.getTokens().keySet(), is(equalTo(expectedTokenStrings)));
     }
 
     @ParameterizedTest

@@ -1,9 +1,6 @@
 package searchia;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Ranker {
 
@@ -71,6 +68,7 @@ class Doc implements Comparable<Doc> {
     private double elasticScore;
     private Map<String, ?> customAttrs;
     private Map<String, ?> filterableAttrs;
+    private Map<String, TokenInfo> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
 
     public Doc(int id, Map<String, ?> customAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
@@ -103,6 +101,14 @@ class Doc implements Comparable<Doc> {
 
     public void setFilterableAttrs(Map<String, ?> filterableAttrs) {
         this.filterableAttrs = filterableAttrs;
+    }
+
+    public Map<String, TokenInfo> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Map<String, TokenInfo> tokens) {
+        this.tokens = tokens;
     }
 
     @Override
