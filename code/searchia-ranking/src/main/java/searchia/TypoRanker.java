@@ -1,50 +1,48 @@
 package searchia;
 
+import searchia.Query.QueryType;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+import static searchia.Query.QueryType.*;
 
 public class TypoRanker {
 
-    public static List<Doc> rankByTypo(String query, List<Doc> docs, int typoThreshold) {
-        List<String> qWords = DocumentProcessor.tokenizeText(query);
-
-        docs.forEach(doc -> OptionalWordRanker.getAllDocWords(doc).forEach(word -> {
-                    if (word.length() < 4 && Arrays.asList(qWords).contains(word)) {
-                        // we do not tolerate typo for words with length less than 4
-                        doc.setPhaseScore(doc.getPhaseScore() + 2);
-                    } else if (word.length() < 8 && typoThreshold > 0) {
-                        // we tolerate up to 1 typo for words with 4<=length<8
-                        int docWordSimilarityScore = 0;
-                        for (String qWord : qWords) {
-                            int distance = measureWordsDistance(qWord, word, 1);
-                            if (distance == 0) {
-                                docWordSimilarityScore = 2 - distance; // 2 = max typos allowed
-                                break; // The best distance found; no need to compare other words of query
-                            } else if (distance > 0) {
-                                docWordSimilarityScore = Math.max(2 - distance, docWordSimilarityScore);
+    public static List<Doc> rankByTypo(List<Query> queries, List<Doc> docs) {
+        Set<QueryType> queryTypes = queries.stream().map(Query::getType).collect(toSet());
+        if (!queryTypes.contains(CORRECTED) && !queryTypes.contains(SUGGESTED)) {
+            queries.stream()
+                    .filter(query -> query.getType() == ORIGINAL || query.getType() == WILDCARD)
+                    .forEach(query -> {
+                        for (Doc doc : docs) {
+                            boolean isDocMatching = isDocMatchingWithQuery(doc, query);
+                            if (isDocMatching) {
+                                doc.setPhaseScore(1);
+                            } else {
+                                doc.setPhaseScore(Math.max(0, doc.getPhaseScore()));
                             }
                         }
-                        doc.setPhaseScore(doc.getPhaseScore() + docWordSimilarityScore);
-                    } else if (typoThreshold > 1) {
-                        // we tolerate up to 2 typos for words with 4<=length<8
-                        int docWordSimilarityScore = 0;
-                        for (String qWord : qWords) {
-                            int distance = measureWordsDistance(qWord, word, 2);
-                            if (distance == 0) {
-                                docWordSimilarityScore = 2 - distance; // 2 = max typos allowed
-                                break; // The best distance found; no need to compare other words of query
-                            } else if (distance > 0) {
-                                docWordSimilarityScore = Math.max(2 - distance, docWordSimilarityScore);
-                            }
-                        }
-                        doc.setPhaseScore(doc.getPhaseScore() + docWordSimilarityScore);
-                    }
-                })
-        );
+                    });
 
-        return docs.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+            return docs.stream().sorted().collect(toList());
+        }
+        return null;
+    }
+
+    public static boolean isDocMatchingWithQuery(Doc doc, Query query) {
+        List<String> tokens = DocumentProcessor.tokenizeText(query.getText());
+        for (String token : tokens) {
+            if (!doc.getTokens().containsKey(token)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

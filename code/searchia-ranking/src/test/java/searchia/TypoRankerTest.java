@@ -2,9 +2,11 @@ package searchia;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import searchia.*;
+import searchia.Query.QueryType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TypoRankerTest {
@@ -38,10 +41,13 @@ class TypoRankerTest {
                     long creationDate = Long.parseLong(attrs[1].split("=")[1]);
                     long viewCount = Long.parseLong(attrs[2].split("=")[1]);
                     double score = Math.random();
-                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[1]);
-                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[1]);
+                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0],
+                            attrs[3].split("=")[1]);
+                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0],
+                            attrs[4].split("=")[1]);
                     List<Attribute<String>> searchableAttrs = List.of(title, description);
-                    Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
+                    Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate"
+                            , creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })
                 .collect(Collectors.toList());
@@ -76,50 +82,28 @@ class TypoRankerTest {
     //     List<Doc> result = TypoRanker.rankByTypo(queries, docs);
     // }
 
-    // @Test
-    // void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe1Group() {
-    //     Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
-    //     Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
-    //     Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
-    //     List<Query> queries = List.of(query1, query2, query3);
-    //
-    //     List<Doc> result = TypoRanker.rankByTypo(queries, docs);
-    //     List<Integer> resultIds = result.stream().map(Doc::getId).collect(Collectors.toList());
-    //
-    //     // The set contains only one number; in other words all doc phaseScores are equal (0)
-    //     assertEquals(1, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
-    // }
+    @Test
+    void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe2Groups() {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
+        List<Query> queries = List.of(query1, query2, query3);
+        DocumentProcessor.processDocs(docs);
 
-    @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2})
-    void measureWordsDistance_sameWords(int maxTypos) {
-        String word1 = "charger";
-        String word2 = "charger";
+        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
 
-        int distance = TypoRanker.measureWordsDistance(word1, word2, maxTypos);
-
-        assertEquals(0, distance);
+        // The set contains two numbers; in other words there is only 2 different scores
+        assertEquals(2, result.stream().map(Doc::getPhaseScore).collect(toSet()).size());
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {1, 2})
-    void measureWordsDistance_1Typo(int maxTypos) {
-        String word1 = "charger";
-        String word2 = "charter";
+    @Test
+    void isDocMatchingWithQuery() {
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        Doc doc = docs.get(1);
+        doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
 
-        int distance = TypoRanker.measureWordsDistance(word1, word2, maxTypos);
+        boolean isMatching = TypoRanker.isDocMatchingWithQuery(doc, query);
 
-        assertEquals(1, distance);
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {2})
-    void measureWordsDistance_2Typo(int maxTypos) {
-        String word1 = "charger";
-        String word2 = "sharper";
-
-        int distance = TypoRanker.measureWordsDistance(word1, word2, maxTypos);
-
-        assertEquals(2, distance);
+        assertTrue(isMatching);
     }
 }
