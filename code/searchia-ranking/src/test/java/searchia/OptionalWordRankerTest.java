@@ -71,7 +71,11 @@ class OptionalWordRankerTest {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge red charger", QueryType.SUGGESTED);
-        List<Query> queries = List.of(query1, query2, query3);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
+        );
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);

@@ -16,15 +16,11 @@ public class OptionalWordRanker {
      * @param docs
      * @return
      */
-    public static List<Doc> rankByOptionalWords(List<Query> queries, List<Doc> docs) {
-        Set<QueryType> queryTypes = queries.stream().map(Query::getType).collect(Collectors.toSet());
-        if (!queryTypes.contains(QueryType.OPTIONAL)) {
+    public static List<Doc> rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) {
+        if (!queries.containsKey(QueryType.OPTIONAL)) {
             int numberOfWords = 0;
-            for (Query query : queries) {
-                if (query.getType() == QueryType.ORIGINAL) {
-                    numberOfWords = DocumentProcessor.tokenizeText(query.getText()).size();
-                }
-            }
+            Query originalQuery = queries.get(QueryType.ORIGINAL);
+            numberOfWords = DocumentProcessor.tokenizeText(originalQuery.getText()).size();
             for (Doc doc : docs) {
                 doc.setNumberOfMatches(numberOfWords);
             }
