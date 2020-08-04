@@ -97,6 +97,18 @@ class TypoRankerTest {
     }
 
     @Test
+    void queriesContainCorrectedOrSuggested() {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
+        List<Query> queries = List.of(query1, query2, query3);
+
+        boolean containsCorrectedOrSuggested = TypoRanker.queriesContainCorrectedOrSuggested(queries);
+
+        assertFalse(containsCorrectedOrSuggested);
+    }
+
+    @Test
     void isDocMatchingWithQuery() {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Doc doc = docs.get(1);

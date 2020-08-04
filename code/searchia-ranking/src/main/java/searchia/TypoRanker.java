@@ -15,8 +15,8 @@ import static searchia.Query.QueryType.*;
 public class TypoRanker {
 
     public static List<Doc> rankByTypo(List<Query> queries, List<Doc> docs) {
-        Set<QueryType> queryTypes = queries.stream().map(Query::getType).collect(toSet());
-        if (!queryTypes.contains(CORRECTED) && !queryTypes.contains(SUGGESTED)) {
+        boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
+        if (!queriesContainCorrectedOrSuggested) {
             queries.stream()
                     .filter(query -> query.getType() == ORIGINAL || query.getType() == WILDCARD)
                     .forEach(query -> {
@@ -43,6 +43,11 @@ public class TypoRanker {
             }
         }
         return true;
+    }
+
+    public static boolean queriesContainCorrectedOrSuggested(List<Query> queries) {
+        Set<QueryType> queryTypes = queries.stream().map(Query::getType).collect(toSet());
+        return queryTypes.contains(CORRECTED) || queryTypes.contains(SUGGESTED);
     }
 
     /**
