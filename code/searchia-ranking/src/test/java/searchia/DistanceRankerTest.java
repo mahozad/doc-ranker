@@ -93,7 +93,7 @@ class DistanceRankerTest {
     }
 
     @Test
-    void calculateDocDistanceByQuery() {
+    void calculateDocDistanceFromQuery() {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
         DocumentProcessor.processDoc(doc);
@@ -104,7 +104,7 @@ class DistanceRankerTest {
     }
 
     @Test
-    void calculateDocDistanceByQuery_docLacksOneOfQueryWords() {
+    void calculateDocDistanceFromQuery_docLacksOneOfQueryWords() {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
         DocumentProcessor.processDoc(doc);
