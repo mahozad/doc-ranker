@@ -1,5 +1,7 @@
 package searchia;
 
+import searchia.Query.QueryType;
+
 import java.util.*;
 
 public class Ranker {
@@ -63,6 +65,16 @@ class RankConfiguration {
 
 class Doc implements Comparable<Doc> {
 
+    static class MinDistance {
+        public final int value;
+        public final QueryType query;
+
+        public MinDistance(int value, QueryType query) {
+            this.value = value;
+            this.query = query;
+        }
+    }
+
     private int id;
     private int phaseScore;
     private double elasticScore;
@@ -70,6 +82,7 @@ class Doc implements Comparable<Doc> {
     private Map<String, ?> filterableAttrs;
     private Map<String, TokenInfo> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
+    private MinDistance minDistance;
     private int numberOfMatches;
     private long rank = 0;
 
@@ -127,6 +140,14 @@ class Doc implements Comparable<Doc> {
 
     public void setRank(long rank) {
         this.rank = rank;
+    }
+
+    public MinDistance getMinDistance() {
+        return minDistance;
+    }
+
+    public void setMinDistance(MinDistance minDistance) {
+        this.minDistance = minDistance;
     }
 
     @Override
