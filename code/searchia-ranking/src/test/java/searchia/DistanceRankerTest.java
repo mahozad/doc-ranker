@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import searchia.Doc.MinDistance;
 import searchia.Query.QueryType;
 
 import java.io.IOException;
@@ -70,6 +71,25 @@ class DistanceRankerTest {
         List<Doc> result = DistanceRanker.rankByWordsDistance(query, docs);
 
         assertEquals(1, result.get(0).getId());
+    }
+
+    @Test
+    void getDocMinDistanceFromQueries() {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge red charger", QueryType.CORRECTED);
+        Query query3 = new Query("red dodge charger", QueryType.SUGGESTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.CORRECTED, query2,
+                QueryType.SUGGESTED, query3
+        );
+        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        DocumentProcessor.processDoc(doc);
+
+        MinDistance minDistance = DistanceRanker.getDocMinDistanceFromQueries(doc, queries);
+
+        assertEquals(2, minDistance.value);
+        assertEquals(QueryType.CORRECTED, minDistance.query);
     }
 
     @Test

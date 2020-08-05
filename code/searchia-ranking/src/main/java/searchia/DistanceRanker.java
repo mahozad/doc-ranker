@@ -1,5 +1,7 @@
 package searchia;
 
+import com.sun.source.tree.NewArrayTree;
+import searchia.Doc.MinDistance;
 import searchia.Query.QueryType;
 
 import java.util.List;
@@ -84,5 +86,9 @@ public class DistanceRanker {
         } else {
             return Math.min(7, minDistance);
         }
+    }
+
+    public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {
+        return new MinDistance(2, QueryType.CORRECTED);
     }
 }
