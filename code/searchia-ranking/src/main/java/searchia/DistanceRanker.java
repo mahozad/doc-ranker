@@ -89,6 +89,16 @@ public class DistanceRanker {
     }
 
     public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {
-        return new MinDistance(2, QueryType.CORRECTED);
+        int minDistance = Integer.MAX_VALUE;
+        QueryType selectedQueryType = QueryType.ORIGINAL;
+        for (QueryType queryType : queries.keySet()) {
+            Query query = queries.get(queryType);
+            int distance = calculateDocDistanceFromQuery(doc, query);
+            if (distance < minDistance) {
+                minDistance = distance;
+                selectedQueryType = queryType;
+            }
+        }
+        return new MinDistance(minDistance, selectedQueryType);
     }
 }
