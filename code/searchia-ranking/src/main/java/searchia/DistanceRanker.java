@@ -59,6 +59,8 @@ public class DistanceRanker {
 
     /**
      * positions1 and positions2 must be sorted in ascending order.
+     * This page seems to provide an algorithm to calculate min list distance:
+     * https://leetcode.com/articles/shortest-word-distance-ii/
      *
      * @param positions1
      * @param positions2
