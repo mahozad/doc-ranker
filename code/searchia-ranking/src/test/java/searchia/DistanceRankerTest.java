@@ -83,6 +83,46 @@ class DistanceRankerTest {
     }
 
     @Test
+    void calculateMinDistanceBetweenTwoPositionLists() {
+        List<Integer> positions1 = List.of(1, 2);
+        List<Integer> positions2 = List.of(3, 5, 6);
+
+        int minDistance = DistanceRanker.calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
+
+        assertEquals(1, minDistance);
+    }
+
+    @Test
+    void calculateMinDistanceBetweenTwoPositionLists_minDistanceIsInSecondAttribute() {
+        List<Integer> positions1 = List.of(2, 1_000_000);
+        List<Integer> positions2 = List.of(5, 1_000_001, 2_000_000);
+
+        int minDistance = DistanceRanker.calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
+
+        assertEquals(1, minDistance);
+    }
+
+    @Test
+    void calculateMinDistanceBetweenTwoPositionLists_secondWordComesBeforeFirstWord() {
+        List<Integer> positions1 = List.of(14, 15, 30, 31);
+        List<Integer> positions2 = List.of(3, 12, 20);
+
+        int minDistance = DistanceRanker.calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
+
+        assertEquals(3, minDistance);
+    }
+
+    @Test
+    void calculateMinDistanceBetweenTwoPositionLists_wordsAreInDifferentAttributes() {
+        List<Integer> positions1 = List.of(4, 15, 30, 31);
+        List<Integer> positions2 = List.of(1_000_013, 1_000_014, 1_000_017, 2_000_016);
+
+        int minDistance = DistanceRanker.calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
+
+        assertEquals(8, minDistance);
+    }
+
+    @Test
     void rankByWordsDistance_oneWordQuery() {
     }
 
