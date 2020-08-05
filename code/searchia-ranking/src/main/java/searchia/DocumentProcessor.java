@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class DocumentProcessor {
 
-    private static final int ATTRIBUTE_DISTANCE = 1_000_000;
+    public static final int ATTRIBUTES_DISTANCE = 1_000_000;
 
     public static void processDocs(List<Doc> docs) {
         for (Doc doc : docs) {
@@ -19,7 +19,7 @@ public class DocumentProcessor {
             List<String> tokens = tokenizeText(searchableAttr.getValue());
             Map<String, TokenInfo> tokenInfo = populateTokenInfo(tokens, offset);
             doc.getTokens().putAll(tokenInfo);
-            offset += ATTRIBUTE_DISTANCE;
+            offset += ATTRIBUTES_DISTANCE;
         }
         return doc;
     }
