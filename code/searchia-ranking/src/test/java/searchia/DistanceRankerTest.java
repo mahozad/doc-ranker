@@ -170,15 +170,4 @@ class DistanceRankerTest {
     @Test
     void rankByWordsDistance_oneWordQuery() {
     }
-
-    @Disabled
-    @Test
-    void getWordPositions() {
-        // Attribute<String> attribute = new Attribute<>("title", "dodge new and dodge red charger");
-        // String word = "dodge";
-        //
-        // int[] positions = DistanceRanker.getWordPositions(word, attribute);
-        //
-        // assertThat(positions, is(equalTo(new int[]{0, 3})));
-    }
 }
