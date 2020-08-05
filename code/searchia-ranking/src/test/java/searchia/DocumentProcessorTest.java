@@ -72,6 +72,7 @@ class DocumentProcessorTest {
     @Test
     void processDocs() {
         int initialSize = docs.size();
+
         DocumentProcessor.processDocs(docs);
 
         assertThat(docs.size(), is(equalTo(initialSize)));
@@ -90,6 +91,17 @@ class DocumentProcessorTest {
 
         assertThat(result.getTokens().size(), is(equalTo(5)));
         assertThat(result.getTokens().keySet(), is(equalTo(expectedTokenStrings)));
+    }
+
+    @Test
+    void processDoc_oneWordRepeatedInMultipleAttributes() {
+        Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
+        String targetToken = "charger";
+
+        DocumentProcessor.processDoc(doc);
+        List<Integer> expectedTokenPositions = doc.getTokens().get(targetToken).getPositions();
+
+        assertThat(expectedTokenPositions, is(equalTo(List.of(1, 1_000_004))));
     }
 
     @ParameterizedTest

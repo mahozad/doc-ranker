@@ -18,7 +18,10 @@ public class DocumentProcessor {
         for (Attribute<String> searchableAttr : doc.getSearchableAttrs()) {
             List<String> tokens = tokenizeText(searchableAttr.getValue());
             Map<String, TokenInfo> tokenInfo = populateTokenInfo(tokens, offset);
-            doc.getTokens().putAll(tokenInfo);
+            tokenInfo.forEach((k, v) -> doc.getTokens().merge(k, v, (t1, t2) -> {
+                t1.getPositions().addAll(t2.getPositions());
+                return t1;
+            }));
             offset += ATTRIBUTES_DISTANCE;
         }
         return doc;
