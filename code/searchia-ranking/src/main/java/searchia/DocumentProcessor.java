@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 public class DocumentProcessor {
 
+    private static final int ATTRIBUTE_DISTANCE = 1_000_000;
+
     public static void processDocs(List<Doc> docs) {
         for (Doc doc : docs) {
             processDoc(doc);
@@ -12,10 +14,12 @@ public class DocumentProcessor {
     }
 
     public static Doc processDoc(Doc doc) {
+        int offset = 0;
         for (Attribute<String> searchableAttr : doc.getSearchableAttrs()) {
             List<String> tokens = tokenizeText(searchableAttr.getValue());
-            Map<String, TokenInfo> tokenInfo = populateTokenInfo(tokens);
+            Map<String, TokenInfo> tokenInfo = populateTokenInfo(tokens, offset);
             doc.getTokens().putAll(tokenInfo);
+            offset += ATTRIBUTE_DISTANCE;
         }
         return doc;
     }
@@ -27,12 +31,20 @@ public class DocumentProcessor {
                 .collect(Collectors.toList());
     }
 
-    public static Map<String, TokenInfo> populateTokenInfo(List<String> tokens) {
+    /**
+     * Positions of a word for every attribute has a large offset.
+     *
+     * @param tokens
+     * @param positionOffset
+     * @return
+     */
+    public static Map<String, TokenInfo> populateTokenInfo(List<String> tokens, int positionOffset) {
         Map<String, TokenInfo> tokensMap = new HashMap<>();
         for (int i = 0; i < tokens.size(); i++) {
             String token = tokens.get(i);
             TokenInfo tokenInfo = new TokenInfo();
-            tokenInfo.getPositions().add(i);
+            int position = positionOffset + i;
+            tokenInfo.getPositions().add(position);
             tokensMap.merge(token, tokenInfo, (oldInfo, newInfo) -> {
                 oldInfo.getPositions().addAll(newInfo.getPositions());
                 return oldInfo;

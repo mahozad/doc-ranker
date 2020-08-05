@@ -135,8 +135,9 @@ class DocumentProcessorTest {
     @Test
     void populateTokenInfo_resultSize() {
         List<String> strings = List.of("dodge", "new", "dodge", "red", "charger");
+        int attributeOffset = 0;
 
-        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings);
+        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings, attributeOffset);
 
         assertEquals(4, tokens.size());
     }
@@ -145,9 +146,10 @@ class DocumentProcessorTest {
     void populateTokenInfo_tokenPositions() {
         List<String> strings = List.of("dodge", "new", "red", "dodge", "charger");
         String targetToken = "dodge";
-        List<Integer> expectedPositions = List.of(0, 3);
+        int attributeOffset = 1_000_000;
+        List<Integer> expectedPositions = List.of(attributeOffset, attributeOffset + 3);
 
-        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings);
+        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings, attributeOffset);
 
         assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
     }
@@ -156,9 +158,10 @@ class DocumentProcessorTest {
     void populateTokenInfo_tokenRepeated3Times() {
         List<String> strings = List.of("dodge", "new", "red", "dodge", "charger", "dodge");
         String targetToken = "dodge";
-        List<Integer> expectedPositions = List.of(0, 3, 5);
+        int attributeOffset = 1_000_000;
+        List<Integer> expectedPositions = List.of(attributeOffset, attributeOffset + 3, attributeOffset + 5);
 
-        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings);
+        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings, attributeOffset);
 
         assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
     }
