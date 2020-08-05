@@ -26,9 +26,12 @@ public class DistanceRanker {
         int totalDistance = 0;
         String word1;
         String word2;
-        while (qWords.size() > i + 1) {
+        while (i + 1 < qWords.size()) {
             word1 = qWords.get(i);
             word2 = qWords.get(i + 1);
+            if (!doc.getTokens().containsKey(word1) || !doc.getTokens().containsKey(word2)) {
+                return Integer.MAX_VALUE;
+            }
             List<Integer> positions1 = doc.getTokens().get(word1).getPositions();
             List<Integer> positions2 = doc.getTokens().get(word2).getPositions();
             int minDistance = calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);

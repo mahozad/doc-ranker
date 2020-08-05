@@ -104,6 +104,17 @@ class DistanceRankerTest {
     }
 
     @Test
+    void calculateDocDistanceByQuery_docLacksOneOfQueryWords() {
+        Query query = new Query("red dodge charger", QueryType.ORIGINAL);
+        Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
+        DocumentProcessor.processDoc(doc);
+
+        int distance = DistanceRanker.calculateDocDistanceFromQuery(doc, query);
+
+        assertEquals(Integer.MAX_VALUE, distance);
+    }
+
+    @Test
     void calculateMinDistanceBetweenTwoPositionLists() {
         List<Integer> positions1 = List.of(1, 2);
         List<Integer> positions2 = List.of(3, 5, 6);
