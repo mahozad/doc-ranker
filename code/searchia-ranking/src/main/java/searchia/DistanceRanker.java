@@ -18,8 +18,22 @@ public class DistanceRanker {
         return List.of(new Doc(1, null, 0, null));
     }
 
-    public static int calculateDocDistanceByQuery(Doc doc, Query query) {
-        return 4;
+    public static int calculateDocDistanceFromQuery(Doc doc, Query query) {
+        List<String> qWords = DocumentProcessor.tokenizeText(query.getText());
+        int i = 0;
+        int totalDistance = 0;
+        String word1;
+        String word2;
+        while (qWords.size() > i + 1) {
+            word1 = qWords.get(i);
+            word2 = qWords.get(i + 1);
+            List<Integer> positions1 = doc.getTokens().get(word1).getPositions();
+            List<Integer> positions2 = doc.getTokens().get(word2).getPositions();
+            int minDistance = calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
+            totalDistance += minDistance;
+            i++;
+        }
+        return totalDistance;
     }
 
     /**

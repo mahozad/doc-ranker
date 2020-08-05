@@ -74,10 +74,11 @@ class DistanceRankerTest {
 
     @Test
     void calculateDocDistanceByQuery() {
+        Query query = new Query("red dodge charger", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
-        Query query = new Query("red dodge charger", QueryType.SUGGESTED);
+        DocumentProcessor.processDoc(doc);
 
-        int distance = DistanceRanker.calculateDocDistanceByQuery(doc, query);
+        int distance = DistanceRanker.calculateDocDistanceFromQuery(doc, query);
 
         assertEquals(4, distance);
     }
