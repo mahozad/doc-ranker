@@ -1,23 +1,39 @@
 package searchia;
 
-import com.sun.source.tree.NewArrayTree;
 import searchia.Doc.MinDistance;
 import searchia.Query.QueryType;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
 public class DistanceRanker {
 
-    public static List<Doc> rankByWordsDistance(String query, List<Doc> docs) {
-        List<String> qWords = DocumentProcessor.tokenizeText(query);
-        if (qWords.size() < 2) {
-            return docs;
+    public static List<Doc> rankByWordsDistance(Map<QueryType, Query> queries, List<Doc> docs) {
+        for (Doc doc : docs) {
+            MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
+            doc.setMinDistance(minDistance);
         }
-
-        return List.of(new Doc(1, null, 0, null));
+        List<Doc> result = new ArrayList<>();
+        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
+        for (List<Doc> group : groups.values()) {
+            // TODO: This code is duplicate of OptionalWordRanker
+            List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(d -> d.getMinDistance().value)).collect(Collectors.toList());
+            long previousDistance = sortedGroup.get(0).getMinDistance().value;
+            long rank = sortedGroup.get(0).getRank();
+            for (Doc doc : sortedGroup) {
+                if (doc.getMinDistance().value != previousDistance) {
+                    rank++;
+                    doc.setRank(rank);
+                    previousDistance = doc.getMinDistance().value;
+                } else {
+                    doc.setRank(rank);
+                }
+            }
+            result.addAll(sortedGroup);
+        }
+        return result;
     }
 
     public static int calculateDocDistanceFromQuery(Doc doc, Query query) {

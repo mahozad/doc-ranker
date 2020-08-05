@@ -68,9 +68,22 @@ class DistanceRankerTest {
 
     @Test
     void rankByWordsDistance() {
-        List<Doc> result = DistanceRanker.rankByWordsDistance(query, docs);
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("red dodge charger", QueryType.SUGGESTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
+        );
+        DocumentProcessor.processDocs(docs);
 
-        assertEquals(1, result.get(0).getId());
+        List<Doc> result = DistanceRanker.rankByWordsDistance(queries, docs);
+
+        assertTrue(result.get(0).getId() == 2 && result.get(0).getRank() == 0);
+        assertTrue(result.get(1).getId() == 3 && result.get(1).getRank() == 1);
+        assertTrue(result.get(2).getId() == 16 && result.get(2).getRank() == 2);
+        assertEquals(3, result.get(10).getRank());
     }
 
     @Test
