@@ -84,9 +84,6 @@ class DistanceRankerTest {
 
     @Test
     void rankByWordsDistance_oneWordQuery() {
-        List<Doc> result = DistanceRanker.rankByWordsDistance("oneWordQuery", docs);
-
-        assertThat(result, is(equalTo(docs)));
     }
 
     @Disabled
