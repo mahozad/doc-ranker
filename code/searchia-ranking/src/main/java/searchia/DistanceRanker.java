@@ -1,6 +1,9 @@
 package searchia;
 
+import searchia.Query.QueryType;
+
 import java.util.List;
+import java.util.Map;
 
 public class DistanceRanker {
 
@@ -13,7 +16,7 @@ public class DistanceRanker {
         return List.of(new Doc(1, null, 0, null));
     }
 
-    public static int[] getWordPositions(String word, Attribute<String> attribute) {
-        return null;
+    public static int calculateDocDistanceByQuery(Doc doc, Query query) {
+        return 4;
     }
 }

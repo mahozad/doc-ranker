@@ -4,7 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import searchia.*;
+import searchia.Query.QueryType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,6 +73,16 @@ class DistanceRankerTest {
     }
 
     @Test
+    void calculateDocDistanceByQuery() {
+        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        Query query = new Query("red dodge charger", QueryType.SUGGESTED);
+
+        int distance = DistanceRanker.calculateDocDistanceByQuery(doc, query);
+
+        assertEquals(4, distance);
+    }
+
+    @Test
     void rankByWordsDistance_oneWordQuery() {
         List<Doc> result = DistanceRanker.rankByWordsDistance("oneWordQuery", docs);
 
@@ -83,11 +92,11 @@ class DistanceRankerTest {
     @Disabled
     @Test
     void getWordPositions() {
-        Attribute<String> attribute = new Attribute<>("title", "dodge new and dodge red charger");
-        String word = "dodge";
-
-        int[] positions = DistanceRanker.getWordPositions(word, attribute);
-
-        assertThat(positions, is(equalTo(new int[]{0, 3})));
+        // Attribute<String> attribute = new Attribute<>("title", "dodge new and dodge red charger");
+        // String word = "dodge";
+        //
+        // int[] positions = DistanceRanker.getWordPositions(word, attribute);
+        //
+        // assertThat(positions, is(equalTo(new int[]{0, 3})));
     }
 }
