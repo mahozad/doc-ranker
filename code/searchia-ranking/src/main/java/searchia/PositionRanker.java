@@ -14,4 +14,8 @@ public class PositionRanker {
         docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().setMinPosition(new MinPosition(1, "title"));
         return docs;
     }
+
+    public static int getDocMinWordPositionByQuery(Doc doc, Query query) {
+        return 0;
+    }
 }

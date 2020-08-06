@@ -82,4 +82,14 @@ class PositionRankerTest {
         assertEquals(1, result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().value);
         assertEquals("title", result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().attributeName);
     }
+
+    @Test
+    void getDocMinWordPositionByQuery() {
+        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+
+        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+
+        assertEquals(0, minPosition);
+    }
 }
