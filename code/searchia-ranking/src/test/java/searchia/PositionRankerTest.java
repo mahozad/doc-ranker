@@ -85,11 +85,23 @@ class PositionRankerTest {
 
     @Test
     void getDocMinWordPositionByQuery() {
-        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        DocumentProcessor.processDoc(doc);
 
         int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
 
         assertEquals(0, minPosition);
+    }
+
+    @Test
+    void getDocMinWordPositionByQuery_aWordIsRepeatedInMultipleAttributesWithDifferentPositions() {
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        Doc doc = docs.stream().filter(d -> d.getId() == 6).findFirst().get();
+        DocumentProcessor.processDoc(doc);
+
+        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+
+        assertEquals(1, minPosition);
     }
 }
