@@ -95,6 +95,7 @@ class Doc implements Comparable<Doc> {
     private MinDistance minDistance;
     private MinPosition minPosition;
     private int numberOfMatches;
+    private int numberOfExactMatches;
     private long rank = 0;
 
     public Doc(int id, Map<String, ?> customAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
@@ -167,6 +168,14 @@ class Doc implements Comparable<Doc> {
 
     public void setMinPosition(MinPosition minPosition) {
         this.minPosition = minPosition;
+    }
+
+    public int getNumberOfExactMatches() {
+        return numberOfExactMatches;
+    }
+
+    public void setNumberOfExactMatches(int numberOfExactMatches) {
+        this.numberOfExactMatches = numberOfExactMatches;
     }
 
     @Override
