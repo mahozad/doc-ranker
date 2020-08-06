@@ -76,8 +76,8 @@ class ExactMatchRankerTest {
 
         List<Doc> result = ExactMatchRanker.rankByExactMatch(queries, docs);
 
-        assertTrue(result.stream().filter(doc -> doc.getId() == 8).findFirst().get().getRank() == 1);
-        assertTrue(result.stream().filter(doc -> doc.getRank() == 1).count() == 1);
-        assertTrue(result.stream().filter(doc -> doc.getRank() == 0).count() == result.size() - 1);
+        assertEquals(1, result.stream().filter(doc -> doc.getId() == 8).findFirst().get().getRank());
+        assertEquals(1, result.stream().filter(doc -> doc.getRank() == 1).count());
+        assertEquals(result.size() - 1, result.stream().filter(doc -> doc.getRank() == 0).count());
     }
 }
