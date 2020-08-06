@@ -6,6 +6,8 @@ import searchia.Query.QueryType;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
+
 public class PositionRanker {
 
     public static List<Doc> rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) {
@@ -50,9 +52,9 @@ public class PositionRanker {
         for (String qWord : qWords) {
             if (doc.getTokens().containsKey(qWord)) {
                 List<Integer> tokenPositions = doc.getTokens().get(qWord).getPositions();
-                Optional<Integer> min = tokenPositions.stream().min(Comparator.comparingInt(p -> p));
+                Optional<Integer> min = tokenPositions.stream().min(Comparator.comparingInt(p -> p % ATTRIBUTES_DISTANCE));
                 if (min.isPresent() && min.get() < minPosition) {
-                    minPosition = min.get();
+                    minPosition = min.get() % ATTRIBUTES_DISTANCE;
                 }
             }
         }
