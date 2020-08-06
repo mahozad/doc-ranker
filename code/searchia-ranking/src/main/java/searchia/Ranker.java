@@ -75,6 +75,16 @@ class Doc implements Comparable<Doc> {
         }
     }
 
+    static class MinPosition {
+        public final int value;
+        public final String attributeName;
+
+        public MinPosition(int value, String attributeName) {
+            this.value = value;
+            this.attributeName = attributeName;
+        }
+    }
+
     private int id;
     private int phaseScore;
     private double elasticScore;
@@ -83,6 +93,7 @@ class Doc implements Comparable<Doc> {
     private Map<String, TokenInfo> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
     private MinDistance minDistance;
+    private MinPosition minPosition;
     private int numberOfMatches;
     private long rank = 0;
 
@@ -148,6 +159,14 @@ class Doc implements Comparable<Doc> {
 
     public void setMinDistance(MinDistance minDistance) {
         this.minDistance = minDistance;
+    }
+
+    public MinPosition getMinPosition() {
+        return minPosition;
+    }
+
+    public void setMinPosition(MinPosition minPosition) {
+        this.minPosition = minPosition;
     }
 
     @Override
