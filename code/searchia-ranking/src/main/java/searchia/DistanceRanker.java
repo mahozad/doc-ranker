@@ -10,6 +10,9 @@ import static searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
 public class DistanceRanker {
 
+    private static final int WORDS_DISTANCE_IN_DIFFERENT_ATTRIBUTES = 8;
+    private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
+
     public static List<Doc> rankByWordsDistance(Map<QueryType, Query> queries, List<Doc> docs) {
         for (Doc doc : docs) {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
@@ -74,38 +77,30 @@ public class DistanceRanker {
         int penalty = 0;
 
         while (i < positions1.size() && j < positions2.size()) {
-            if (positions1.get(i) < positions2.get(j)) {
-                // first word has occurred before the second word in the text
-                penalty = 0;
+            int position1 = positions1.get(i);
+            int position2 = positions2.get(j);
+
+            if (position1 < position2) {
+                penalty = 0; // first word has occurred before the second word in the text
             } else {
-                // first word has occurred after the second word in the text
-                penalty = 1;
-            }
-            int distance = Math.abs(positions1.get(i) - positions2.get(j)) + penalty;
-            if (distance < minDistance) {
-                minDistance = distance;
+                penalty = 1; // first word has occurred after the second word in the text
             }
 
-            if (positions1.get(i) < positions2.get(j)) {
-                if (i < positions1.size() - 1) {
-                    i++;
-                } else {
-                    j++;
-                }
+            int distance = Math.abs(position1 - position2) + penalty;
+            minDistance = Math.min(minDistance, distance);
+
+            if (position1 < position2 && i < positions1.size() - 1) {
+                i++;
             } else {
-                if (j < positions2.size() - 1) {
-                    j++;
-                } else {
-                    i++;
-                }
+                j++;
             }
         }
 
         if (minDistance > ATTRIBUTES_DISTANCE / 2) {
-            // The words were in different attributes so their distance is 8
-            return 8;
+            // The two words (and so their distance) were from different attributes
+            return WORDS_DISTANCE_IN_DIFFERENT_ATTRIBUTES;
         } else {
-            return Math.min(7, minDistance);
+            return Math.min(minDistance, MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE);
         }
     }
 
