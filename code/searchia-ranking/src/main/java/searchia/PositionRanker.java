@@ -3,18 +3,45 @@ package searchia;
 import searchia.Doc.MinPosition;
 import searchia.Query.QueryType;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PositionRanker {
 
     public static List<Doc> rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) {
-        docs.stream().filter(doc -> doc.getId() == 2).findFirst().get().setRank(0);
-        docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().setRank(1);
-        docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().setMinPosition(new MinPosition(1, "title"));
-        return docs;
+        for (Doc doc : docs) {
+            int minPosition = Integer.MAX_VALUE;
+            for (QueryType queryType : queries.keySet()) {
+                Query query = queries.get(queryType);
+                int minPositionFromQuery = getDocMinWordPositionByQuery(doc, query);
+                if (minPositionFromQuery < minPosition) {
+                    minPosition = minPositionFromQuery;
+                }
+            }
+            // FIXME: The attribute name is set to a constant value
+            doc.setMinPosition(new MinPosition(minPosition, "title"));
+        }
+
+        List<Doc> result = new ArrayList<>();
+        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
+        for (List<Doc> group : groups.values()) {
+            // TODO: This code is duplicate in other ranker classes
+            List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(d -> d.getMinPosition().value)).collect(Collectors.toList());
+            long previousMinPosition = sortedGroup.get(0).getMinPosition().value;
+            long rank = sortedGroup.get(0).getRank();
+            for (Doc doc : sortedGroup) {
+                if (doc.getMinPosition().value != previousMinPosition) {
+                    rank++;
+                    doc.setRank(rank);
+                    previousMinPosition = doc.getMinPosition().value;
+                } else {
+                    doc.setRank(rank);
+                }
+            }
+            result.addAll(sortedGroup);
+        }
+
+        return result;
     }
 
     public static int getDocMinWordPositionByQuery(Doc doc, Query query) {
