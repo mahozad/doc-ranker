@@ -20,11 +20,12 @@ public class DistanceRanker {
         }
         List<Doc> result = new ArrayList<>();
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
-        for (List<Doc> group : groups.values()) {
+        for (long rankOfGroupMembers : groups.keySet()) {
+            List<Doc> group = groups.get(rankOfGroupMembers);
             // TODO: This code is duplicate of OptionalWordRanker
             List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(d -> d.getMinDistance().value)).collect(Collectors.toList());
             long previousDistance = sortedGroup.get(0).getMinDistance().value;
-            long rank = sortedGroup.get(0).getRank();
+            long rank = rankOfGroupMembers;
             for (Doc doc : sortedGroup) {
                 if (doc.getMinDistance().value != previousDistance) {
                     rank++;
