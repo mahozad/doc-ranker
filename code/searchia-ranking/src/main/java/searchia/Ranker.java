@@ -88,8 +88,8 @@ class Doc implements Comparable<Doc> {
     private int id;
     private int phaseScore;
     private double elasticScore;
-    private Map<String, ?> customAttrs;
     private Map<String, ?> filterableAttrs;
+    private Map<String, ?> customRankingAttrs;
     private Map<String, TokenInfo> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
     private MinDistance minDistance;
@@ -98,9 +98,9 @@ class Doc implements Comparable<Doc> {
     private int numberOfExactMatches;
     private long rank = 0;
 
-    public Doc(int id, Map<String, ?> customAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
+    public Doc(int id, Map<String, ?> customRankingAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
         this.id = id;
-        this.customAttrs = customAttrs;
+        this.customRankingAttrs = customRankingAttrs;
         this.elasticScore = elasticScore;
         this.searchableAttrs = searchableAttrs;
         this.filterableAttrs = Map.of();
@@ -176,6 +176,14 @@ class Doc implements Comparable<Doc> {
 
     public void setNumberOfExactMatches(int numberOfExactMatches) {
         this.numberOfExactMatches = numberOfExactMatches;
+    }
+
+    public Map<String, ?> getCustomRankingAttrs() {
+        return customRankingAttrs;
+    }
+
+    public void setCustomRankingAttrs(Map<String, ?> customRankingAttrs) {
+        this.customRankingAttrs = customRankingAttrs;
     }
 
     @Override
