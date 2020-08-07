@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -10,14 +13,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="Update kotlin targer java version to 11">
+    <list default="true" id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="Remove and update some unused dependencies">
+      <change afterPath="$PROJECT_DIR$/../alaki/alaki.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/searchia-ranking.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Report#001◆24 Tir–26 Tir.docx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DocumentProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DocumentProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/DocumentProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/DocumentProcessorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +79,7 @@
     <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.42063493" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -82,7 +89,31 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.All">
+    <configuration name="DocumentProcessor" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ir.parsijoo.searchia.DocumentProcessor" />
+      <module name="searchia-ranking.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ir.parsijoo.searchia.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="All" type="JUnit" factoryName="JUnit">
       <useClassPathOnly />
       <option name="PACKAGE_NAME" value="ir.parsijoo.searchia" />
@@ -97,7 +128,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DocumentProcessor" />
+      </list>
+    </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -110,7 +147,11 @@
       <updated>1596795954410</updated>
       <workItem from="1596795976278" duration="3185000" />
       <workItem from="1596799226069" duration="621000" />
-      <workItem from="1596799985284" duration="311000" />
+      <workItem from="1596799985284" duration="1291000" />
+      <workItem from="1596801698257" duration="237000" />
+      <workItem from="1596803399604" duration="2026000" />
+      <workItem from="1596805587548" duration="256000" />
+      <workItem from="1596811168109" duration="1810000" />
     </task>
     <task id="LOCAL-00001" summary="Convert project from regular type to gradle type">
       <created>1596798553333</created>
@@ -133,11 +174,29 @@
       <option name="project" value="LOCAL" />
       <updated>1596798921887</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Remove and update some unused dependencies">
+      <created>1596800424681</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1596800424681</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+    <option name="SHOW_ROOT_NAMES" value="true" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -155,72 +214,100 @@
     <MESSAGE value="Convert project from regular type to gradle type" />
     <MESSAGE value="Move all classes to a new package" />
     <MESSAGE value="Update kotlin targer java version to 11" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update kotlin targer java version to 11" />
+    <MESSAGE value="Remove and update some unused dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove and update some unused dependencies" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596798681761">
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596804500552">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596798681761" />
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596804500552" />
     <state x="690" y="295" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1596797063978">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="295" key="#com.intellij.ide.util.PackageChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596797063978" />
+    <state x="324" y="0" width="1536" height="860" key="DiffContextDialog" timestamp="1596805435898">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="324" y="0" width="1536" height="860" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596805435898" />
+    <state x="827" y="269" key="EnvironmentVariablesDialog" timestamp="1596804335659">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="827" y="269" key="EnvironmentVariablesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596804335659" />
     <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1596797835439">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1596797835439" />
-    <state width="1877" height="452" key="GridCell.Tab.0.bottom" timestamp="1596800267095">
+    <state width="181" height="178" key="Git.Branch.Popup" timestamp="1596805083854">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="452" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
-    <state width="1877" height="452" key="GridCell.Tab.0.center" timestamp="1596800267095">
+    <state width="181" height="178" key="Git.Branch.Popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596805083854" />
+    <state width="1877" height="435" key="GridCell.Tab.0.bottom" timestamp="1596812461031">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="452" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
-    <state width="1877" height="452" key="GridCell.Tab.0.left" timestamp="1596800267095">
+    <state width="1877" height="435" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596812461031" />
+    <state width="1877" height="435" key="GridCell.Tab.0.center" timestamp="1596812461031">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="452" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
-    <state width="1877" height="452" key="GridCell.Tab.0.right" timestamp="1596800267095">
+    <state width="1877" height="435" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596812461031" />
+    <state width="1877" height="435" key="GridCell.Tab.0.left" timestamp="1596812461031">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="452" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
-    <state width="1877" height="337" key="GridCell.Tab.1.bottom" timestamp="1596799169366">
+    <state width="1877" height="435" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596812461031" />
+    <state width="1877" height="435" key="GridCell.Tab.0.right" timestamp="1596812461031">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="337" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
-    <state width="1877" height="337" key="GridCell.Tab.1.center" timestamp="1596799169366">
+    <state width="1877" height="435" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596812461031" />
+    <state width="1877" height="337" key="GridCell.Tab.1.bottom" timestamp="1596805843248">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="337" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
-    <state width="1877" height="337" key="GridCell.Tab.1.left" timestamp="1596799169366">
+    <state width="1877" height="337" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596805843248" />
+    <state width="1877" height="337" key="GridCell.Tab.1.center" timestamp="1596805843248">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="337" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
-    <state width="1877" height="337" key="GridCell.Tab.1.right" timestamp="1596799169366">
+    <state width="1877" height="337" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596805843248" />
+    <state width="1877" height="337" key="GridCell.Tab.1.left" timestamp="1596805843247">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="337" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
-    <state x="440" y="94" key="SettingsEditor" timestamp="1596799733107">
+    <state width="1877" height="337" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596805843247" />
+    <state width="1877" height="337" key="GridCell.Tab.1.right" timestamp="1596805843248">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1596799733107" />
+    <state width="1877" height="337" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596805843248" />
+    <state x="836" y="128" key="RollbackChangesDialog" timestamp="1596805418590">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="836" y="128" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596805418590" />
+    <state x="440" y="94" key="SettingsEditor" timestamp="1596812724364">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1596812724364" />
     <state x="776" y="303" key="chooseDestDirectoryDialog" timestamp="1596796876636">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="776" y="303" key="chooseDestDirectoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596796876636" />
-    <state x="758" y="187" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1596797757752">
+    <state x="758" y="187" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1596805391758">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="758" y="187" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1596797757752" />
+    <state x="758" y="187" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1596805391758" />
     <state x="731" y="348" width="458" height="355" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1596796876654">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="731" y="348" width="458" height="355" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596796876654" />
+    <state x="540" y="174" key="editAsTableFormatDialogDimension" timestamp="1596803853242">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="540" y="174" key="editAsTableFormatDialogDimension/0.0.1920.1040@0.0.1920.1040" timestamp="1596803853242" />
     <state x="779" y="344" key="export.test.results" timestamp="1596798194682">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="779" y="344" key="export.test.results/0.0.1920.1040@0.0.1920.1040" timestamp="1596798194682" />
+    <state x="342" y="130" key="new project wizard" timestamp="1596811319379">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="130" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1596811319379" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/searchia_ranking$All.ic" NAME="All Coverage Results" MODIFIED="1596804506688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
