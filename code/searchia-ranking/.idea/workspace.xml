@@ -10,11 +10,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="Move all classes to a new package">
+    <list default="true" id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="Update kotlin targer java version to 11">
       <change beforePath="$PROJECT_DIR$/../../Report#001◆24 Tir–26 Tir.docx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DocumentProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DocumentProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,10 +69,10 @@
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/test/java" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.42063493" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -105,7 +108,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1596795954410</updated>
-      <workItem from="1596795976278" duration="2906000" />
+      <workItem from="1596795976278" duration="3185000" />
+      <workItem from="1596799226069" duration="621000" />
+      <workItem from="1596799985284" duration="311000" />
     </task>
     <task id="LOCAL-00001" summary="Convert project from regular type to gradle type">
       <created>1596798553333</created>
@@ -121,7 +126,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596798640166</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Update kotlin targer java version to 11">
+      <created>1596798921887</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1596798921887</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,11 +149,13 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Convert project from regular type to gradle type" />
     <MESSAGE value="Move all classes to a new package" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move all classes to a new package" />
+    <MESSAGE value="Update kotlin targer java version to 11" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update kotlin targer java version to 11" />
   </component>
   <component name="WindowStateProjectService">
     <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596798681761">
@@ -156,22 +170,42 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1596797835439" />
-    <state width="1877" height="738" key="GridCell.Tab.0.bottom" timestamp="1596798673719">
+    <state width="1877" height="452" key="GridCell.Tab.0.bottom" timestamp="1596800267095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
-    <state width="1877" height="738" key="GridCell.Tab.0.center" timestamp="1596798673719">
+    <state width="1877" height="452" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
+    <state width="1877" height="452" key="GridCell.Tab.0.center" timestamp="1596800267095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
-    <state width="1877" height="738" key="GridCell.Tab.0.left" timestamp="1596798673719">
+    <state width="1877" height="452" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
+    <state width="1877" height="452" key="GridCell.Tab.0.left" timestamp="1596800267095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
-    <state width="1877" height="738" key="GridCell.Tab.0.right" timestamp="1596798673719">
+    <state width="1877" height="452" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
+    <state width="1877" height="452" key="GridCell.Tab.0.right" timestamp="1596800267095">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
+    <state width="1877" height="452" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596800267095" />
+    <state width="1877" height="337" key="GridCell.Tab.1.bottom" timestamp="1596799169366">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="337" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
+    <state width="1877" height="337" key="GridCell.Tab.1.center" timestamp="1596799169366">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="337" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
+    <state width="1877" height="337" key="GridCell.Tab.1.left" timestamp="1596799169366">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="337" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
+    <state width="1877" height="337" key="GridCell.Tab.1.right" timestamp="1596799169366">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="337" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596799169366" />
+    <state x="440" y="94" key="SettingsEditor" timestamp="1596799733107">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1596799733107" />
     <state x="776" y="303" key="chooseDestDirectoryDialog" timestamp="1596796876636">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
