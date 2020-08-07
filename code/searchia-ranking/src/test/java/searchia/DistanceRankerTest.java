@@ -79,6 +79,7 @@ class DistanceRankerTest {
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = DistanceRanker.rankByWordsDistance(queries, docs);
+        result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
 
         assertTrue(result.get(0).getId() == 2 && result.get(0).getRank() == 0);
         assertTrue(result.get(1).getId() == 3 && result.get(1).getRank() == 1);

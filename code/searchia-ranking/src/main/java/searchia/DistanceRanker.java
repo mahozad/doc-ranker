@@ -18,14 +18,13 @@ public class DistanceRanker {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
         }
-        List<Doc> result = new ArrayList<>();
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
+        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
         for (long rankOfGroupMembers : groups.keySet()) {
             List<Doc> group = groups.get(rankOfGroupMembers);
             // TODO: This code is duplicate of OptionalWordRanker
             List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(d -> d.getMinDistance().value)).collect(Collectors.toList());
             long previousDistance = sortedGroup.get(0).getMinDistance().value;
-            long rank = rankOfGroupMembers;
             for (Doc doc : sortedGroup) {
                 if (doc.getMinDistance().value != previousDistance) {
                     rank++;
@@ -35,9 +34,9 @@ public class DistanceRanker {
                     doc.setRank(rank);
                 }
             }
-            result.addAll(sortedGroup);
+            rank++;
         }
-        return result;
+        return docs;
     }
 
     public static int calculateDocDistanceFromQuery(Doc doc, Query query) {

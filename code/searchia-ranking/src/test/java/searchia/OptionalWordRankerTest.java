@@ -107,9 +107,10 @@ class OptionalWordRankerTest {
                 QueryType.OPTIONAL, query3
         );
         DocumentProcessor.processDocs(docs);
-        Set<Integer> expectedNonOptionalMatchIds = Set.of(1,2,3,7,9,16,17);
+        Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 16, 17);
 
         List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
+        result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
         List<Doc> nonOptionalMatches = result.subList(0, expectedNonOptionalMatchIds.size());
 
         assertTrue(nonOptionalMatches.stream().map(Doc::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));

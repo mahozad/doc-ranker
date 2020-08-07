@@ -24,13 +24,12 @@ public class PositionRanker {
             doc.setMinPosition(new MinPosition(minPosition, "title"));
         }
 
-        List<Doc> result = new ArrayList<>();
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
+        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
         for (List<Doc> group : groups.values()) {
             // TODO: This code is duplicate in other ranker classes
             List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(d -> d.getMinPosition().value)).collect(Collectors.toList());
             long previousMinPosition = sortedGroup.get(0).getMinPosition().value;
-            long rank = sortedGroup.get(0).getRank();
             for (Doc doc : sortedGroup) {
                 if (doc.getMinPosition().value != previousMinPosition) {
                     rank++;
@@ -40,10 +39,10 @@ public class PositionRanker {
                     doc.setRank(rank);
                 }
             }
-            result.addAll(sortedGroup);
+            rank++;
         }
 
-        return result;
+        return docs;
     }
 
     public static int getDocMinWordPositionByQuery(Doc doc, Query query) {

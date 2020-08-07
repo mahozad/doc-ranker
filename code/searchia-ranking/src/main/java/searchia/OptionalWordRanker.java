@@ -23,13 +23,12 @@ public class OptionalWordRanker {
             for (Doc doc : docs) {
                 doc.setNumberOfMatches(lengthOfOriginalQuery);
             }
-            return docs;
         } else {
             Query optionalQuery = queries.get(QueryType.OPTIONAL);
             int lengthOfOptionalQuery = DocumentProcessor.tokenizeText(optionalQuery.getText()).size();
-            List<Doc> result = new ArrayList<>();
             SortedMap<Long, List<Doc>> docGroups = groupDocsByRank(docs);
 
+            int rank = 0; // Rank starts from 0 (top doc has rank of 0)
             for (List<Doc> group : docGroups.values()) {
                 for (Doc doc : group) {
                     for (Query query : queries.values().stream().filter(query -> query.getType() != QueryType.OPTIONAL).collect(Collectors.toList())) {
@@ -43,7 +42,6 @@ public class OptionalWordRanker {
 
                 List<Doc> sortedGroup = group.stream().sorted((doc1, doc2) -> doc2.getNumberOfMatches() - doc1.getNumberOfMatches()).collect(Collectors.toList());
                 long previousNumberOfMatches = sortedGroup.get(0).getNumberOfMatches();
-                long rank = sortedGroup.get(0).getRank();
                 for (Doc doc : sortedGroup) {
                     if (doc.getNumberOfMatches() != previousNumberOfMatches) {
                         rank++;
@@ -53,11 +51,10 @@ public class OptionalWordRanker {
                         doc.setRank(rank);
                     }
                 }
-
-                result.addAll(sortedGroup);
+                rank++;
             }
-            return result;
         }
+        return docs;
     }
 
     public static SortedMap<Long, List<Doc>> groupDocsByRank(List<Doc> docs) {
