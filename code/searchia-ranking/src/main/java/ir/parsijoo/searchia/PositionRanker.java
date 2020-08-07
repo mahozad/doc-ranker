@@ -1,12 +1,14 @@
-package searchia;
+package ir.parsijoo.searchia;
 
-import searchia.Doc.MinPosition;
-import searchia.Query.QueryType;
+
+
+import ir.parsijoo.searchia.Query.QueryType;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
+
 
 public class PositionRanker {
 
@@ -21,7 +23,7 @@ public class PositionRanker {
                 }
             }
             // FIXME: The attribute name is set to a constant value
-            doc.setMinPosition(new MinPosition(minPosition, "title"));
+            doc.setMinPosition(new Doc.MinPosition(minPosition, "title"));
         }
 
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);

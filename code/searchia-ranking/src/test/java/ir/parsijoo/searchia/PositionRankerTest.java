@@ -1,9 +1,9 @@
-package searchia;
+package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import searchia.Query.QueryType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,13 +11,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 
-class OptionalWordRankerTest {
+class PositionRankerTest {
 
     Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
 
@@ -66,53 +64,56 @@ class OptionalWordRankerTest {
     }
 
     @Test
-    void rankByOptionalWords_noOptionalQuery() {
+    void rankByWordPosition() {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
-        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
-        Query query3 = new Query("dodge red charger", QueryType.SUGGESTED);
+        Query query2 = new Query("dodge charger*", QueryType.CORRECTED);
+        Query query3 = new Query("red dodge charger", QueryType.SUGGESTED);
         Map<QueryType, Query> queries = Map.of(
                 QueryType.ORIGINAL, query1,
-                QueryType.WILDCARD, query2,
+                QueryType.CORRECTED, query2,
                 QueryType.SUGGESTED, query3
         );
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
-
-        // The set contains one number; in other words all the docs have the same numberOfMatches
-        assertEquals(1, result.stream().map(Doc::getNumberOfMatches).collect(toSet()).size());
-    }
-
-    @Test
-    void groupDocsByRank() {
-        // Set rank of two docs to size - 2 and the rest have default rank of 0 (so two rank groups)
-        docs.get(1).setRank(docs.size() - 2);
-        docs.get(11).setRank(docs.size() - 2);
-        Set<Integer> expectedGroupSizes = Set.of(2, docs.size() - 2);
-
-        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
-        Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
-
-        assertTrue(groupSizes.containsAll(expectedGroupSizes));
-    }
-
-    @Test
-    void rankByOptionalWords_withOptionalQuery() {
-        Query query1 = new Query("dodge charger", QueryType.ORIGINAL);
-        Query query2 = new Query("dodge challenger", QueryType.SUGGESTED);
-        Query query3 = new Query("charger", QueryType.OPTIONAL);
-        Map<QueryType, Query> queries = Map.of(
-                QueryType.ORIGINAL, query1,
-                QueryType.SUGGESTED, query2,
-                QueryType.OPTIONAL, query3
-        );
-        DocumentProcessor.processDocs(docs);
-        Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 16, 17);
-
-        List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
+        List<Doc> result = PositionRanker.rankByWordPosition(docs, queries);
         result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
-        List<Doc> nonOptionalMatches = result.subList(0, expectedNonOptionalMatchIds.size());
 
-        assertTrue(nonOptionalMatches.stream().map(Doc::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));
+        assertEquals(0, result.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
+        assertEquals(1, result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getRank());
+        assertEquals(1, result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().value);
+        assertEquals("title", result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().attributeName);
+    }
+
+    @Test
+    void getDocMinWordPositionByQuery() {
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        DocumentProcessor.processDoc(doc);
+
+        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+
+        assertEquals(0, minPosition);
+    }
+
+    @Test
+    void getDocMinWordPositionByQuery_docHasMinPositionInSecondAttribute() {
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        Doc doc = docs.stream().filter(d -> d.getId() == 3).findFirst().get();
+        DocumentProcessor.processDoc(doc);
+
+        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+
+        assertEquals(0, minPosition);
+    }
+
+    @Test
+    void getDocMinWordPositionByQuery_aWordIsRepeatedInMultipleAttributesWithDifferentPositions() {
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        Doc doc = docs.stream().filter(d -> d.getId() == 6).findFirst().get();
+        DocumentProcessor.processDoc(doc);
+
+        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+
+        assertEquals(1, minPosition);
     }
 }

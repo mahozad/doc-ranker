@@ -1,6 +1,7 @@
-package searchia;
+package ir.parsijoo.searchia;
 
-import searchia.Query.QueryType;
+
+
 
 import java.util.*;
 
@@ -67,9 +68,9 @@ class Doc implements Comparable<Doc> {
 
     static class MinDistance {
         public final int value;
-        public final QueryType query;
+        public final Query.QueryType query;
 
-        public MinDistance(int value, QueryType query) {
+        public MinDistance(int value, Query.QueryType query) {
             this.value = value;
             this.query = query;
         }

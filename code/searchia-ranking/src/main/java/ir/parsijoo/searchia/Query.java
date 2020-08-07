@@ -1,4 +1,5 @@
-package searchia;
+package ir.parsijoo.searchia;
+
 
 public class Query {
 

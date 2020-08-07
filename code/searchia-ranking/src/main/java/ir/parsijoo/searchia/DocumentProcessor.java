@@ -1,4 +1,4 @@
-package searchia;
+package ir.parsijoo.searchia;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +31,20 @@ public class DocumentProcessor {
         return Arrays.stream(text
                 .split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space
                 .flatMap(token -> Arrays.stream(token.split("[.,;:\"،؛']")))
+                .peek(token -> {
+                    // String str = "گل‌های آبي 1 ۲";
+                    // ir.parsijoo.persianstemmer.Stemmer.stem()
+                    //
+                    // ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
+                    //
+                    // TokenStream tokenStream = parsiAnalyzer.tokenStream(null,str);
+                    // tokenStream.reset();
+                    // while (tokenStream.incrementToken()) {
+                    //     Attribute attribute = tokenStream.getAttribute(CharTermAttribute.class);
+                    //     String string = attribute.toString();
+                    //     System.out.println(string);
+                    // }
+                })
                 .collect(Collectors.toList());
     }
 
@@ -54,6 +68,14 @@ public class DocumentProcessor {
             });
         }
         return tokensMap;
+    }
+
+    public static String normalizeToken(String token) {
+        // return ir.parsijoo.persianstemmer.NewStemmer.getStem(token);
+        // return ir.parsijoo.persianstemmer.FullStemmer.getStem(token);
+        // return ir.parsijoo.persianstemmer.Stemmer.stem(token);
+        // return ir.parsijoo.persianstemmer.Stemmer.normalizeChars(token);
+        return "";
     }
 }
 

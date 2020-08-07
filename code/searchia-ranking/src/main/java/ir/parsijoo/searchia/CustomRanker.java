@@ -1,4 +1,4 @@
-package searchia;
+package ir.parsijoo.searchia;
 
 import java.util.*;
 import java.util.stream.Collectors;

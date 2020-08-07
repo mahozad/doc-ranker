@@ -1,4 +1,4 @@
-package searchia;
+package ir.parsijoo.searchia;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

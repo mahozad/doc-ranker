@@ -1,4 +1,5 @@
-package searchia;
+package ir.parsijoo.searchia;
+
 
 import java.util.List;
 import java.util.Set;

@@ -1,8 +1,12 @@
-package searchia;
+package ir.parsijoo.searchia;
 
-import searchia.Query.QueryType;
 
-import java.util.*;
+import ir.parsijoo.searchia.Query.QueryType;
+
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class OptionalWordRanker {

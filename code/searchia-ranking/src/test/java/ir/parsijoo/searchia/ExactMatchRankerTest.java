@@ -1,9 +1,10 @@
-package searchia;
+package ir.parsijoo.searchia;
 
+
+import ir.parsijoo.searchia.Query.QueryType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import searchia.Query.QueryType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PositionRankerTest {
+class ExactMatchRankerTest {
 
     Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
 
@@ -64,56 +65,20 @@ class PositionRankerTest {
     }
 
     @Test
-    void rankByWordPosition() {
+    void rankByExactMatch() {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
-        Query query2 = new Query("dodge charger*", QueryType.CORRECTED);
-        Query query3 = new Query("red dodge charger", QueryType.SUGGESTED);
+        @SuppressWarnings("SpellCheckingInspection")
+        Query query2 = new Query("aventado*", QueryType.WILDCARD);
         Map<QueryType, Query> queries = Map.of(
                 QueryType.ORIGINAL, query1,
-                QueryType.CORRECTED, query2,
-                QueryType.SUGGESTED, query3
+                QueryType.WILDCARD, query2
         );
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = PositionRanker.rankByWordPosition(docs, queries);
-        result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        List<Doc> result = ExactMatchRanker.rankByExactMatch(queries, docs);
 
-        assertEquals(0, result.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
-        assertEquals(1, result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getRank());
-        assertEquals(1, result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().value);
-        assertEquals("title", result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().attributeName);
-    }
-
-    @Test
-    void getDocMinWordPositionByQuery() {
-        Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
-        DocumentProcessor.processDoc(doc);
-
-        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
-
-        assertEquals(0, minPosition);
-    }
-
-    @Test
-    void getDocMinWordPositionByQuery_docHasMinPositionInSecondAttribute() {
-        Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 3).findFirst().get();
-        DocumentProcessor.processDoc(doc);
-
-        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
-
-        assertEquals(0, minPosition);
-    }
-
-    @Test
-    void getDocMinWordPositionByQuery_aWordIsRepeatedInMultipleAttributesWithDifferentPositions() {
-        Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 6).findFirst().get();
-        DocumentProcessor.processDoc(doc);
-
-        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
-
-        assertEquals(1, minPosition);
+        assertEquals(1, result.stream().filter(doc -> doc.getId() == 8).findFirst().get().getRank());
+        assertEquals(1, result.stream().filter(doc -> doc.getRank() == 1).count());
+        assertEquals(result.size() - 1, result.stream().filter(doc -> doc.getRank() == 0).count());
     }
 }

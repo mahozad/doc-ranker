@@ -1,20 +1,19 @@
-package searchia;
+package ir.parsijoo.searchia;
 
-import searchia.Query.QueryType;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ExactMatchRanker {
 
-    public static List<Doc> rankByExactMatch(Map<QueryType, Query> queries, List<Doc> docs) {
-        String textOfOriginalQuery = queries.get(QueryType.ORIGINAL).getText();
+    public static List<Doc> rankByExactMatch(Map<Query.QueryType, Query> queries, List<Doc> docs) {
+        String textOfOriginalQuery = queries.get(Query.QueryType.ORIGINAL).getText();
         int lengthOfOriginalQuery = DocumentProcessor.tokenizeText(textOfOriginalQuery).size();
         for (Doc doc : docs) {
-            for (QueryType queryType : queries.keySet()) {
+            for (Query.QueryType queryType : queries.keySet()) {
                 Query query = queries.get(queryType);
                 boolean isDocMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
-                if (isDocMatching && queryType == QueryType.WILDCARD) {
+                if (isDocMatching && queryType == Query.QueryType.WILDCARD) {
                     doc.setNumberOfExactMatches(lengthOfOriginalQuery - 1);
                     break;
                 } else {

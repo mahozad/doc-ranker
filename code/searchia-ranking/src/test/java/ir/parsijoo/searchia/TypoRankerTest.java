@@ -1,9 +1,9 @@
-package searchia;
+package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import searchia.Query.QueryType;
 
 import java.io.IOException;
 import java.nio.file.Files;

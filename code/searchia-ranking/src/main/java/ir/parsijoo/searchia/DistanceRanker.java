@@ -1,21 +1,20 @@
-package searchia;
+package ir.parsijoo.searchia;
 
-import searchia.Doc.MinDistance;
-import searchia.Query.QueryType;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
+
 
 public class DistanceRanker {
 
     private static final int WORDS_DISTANCE_IN_DIFFERENT_ATTRIBUTES = 8;
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
-    public static List<Doc> rankByWordsDistance(Map<QueryType, Query> queries, List<Doc> docs) {
+    public static List<Doc> rankByWordsDistance(Map<Query.QueryType, Query> queries, List<Doc> docs) {
         for (Doc doc : docs) {
-            MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
+            Doc.MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
         }
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
@@ -104,10 +103,10 @@ public class DistanceRanker {
         }
     }
 
-    public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {
+    public static Doc.MinDistance getDocMinDistanceFromQueries(Doc doc, Map<Query.QueryType, Query> queries) {
         int minDistance = Integer.MAX_VALUE;
-        QueryType selectedQueryType = QueryType.ORIGINAL;
-        for (QueryType queryType : queries.keySet()) {
+        Query.QueryType selectedQueryType = Query.QueryType.ORIGINAL;
+        for (Query.QueryType queryType : queries.keySet()) {
             Query query = queries.get(queryType);
             int distance = calculateDocDistanceFromQuery(doc, query);
             if (distance < minDistance) {
@@ -115,6 +114,6 @@ public class DistanceRanker {
                 selectedQueryType = queryType;
             }
         }
-        return new MinDistance(minDistance, selectedQueryType);
+        return new Doc.MinDistance(minDistance, selectedQueryType);
     }
 }

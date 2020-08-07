@@ -1,4 +1,4 @@
-package searchia;
+package ir.parsijoo.searchia;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -177,4 +177,15 @@ class DocumentProcessorTest {
 
         assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
     }
+
+    @Test
+    void normalizeToken() {
+        String token = "آبي";
+        String expected = "ابی";
+
+        String normalizedToken = DocumentProcessor.normalizeToken(token);
+
+        assertEquals(expected, normalizedToken);
+    }
+
 }

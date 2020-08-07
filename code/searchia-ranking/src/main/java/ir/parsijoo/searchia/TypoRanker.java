@@ -1,13 +1,15 @@
-package searchia;
+package ir.parsijoo.searchia;
 
-import searchia.Query.QueryType;
+
+
+import ir.parsijoo.searchia.Query.QueryType;
 
 import java.util.List;
 import java.util.Map;
 
+import static ir.parsijoo.searchia.Query.QueryType.*;
 import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
-import static searchia.Query.QueryType.*;
 
 public class TypoRanker {
 
