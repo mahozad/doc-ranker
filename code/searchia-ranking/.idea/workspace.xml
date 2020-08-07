@@ -10,64 +10,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Mahdi.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/CustomRanker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DistanceRanker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DocumentProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/ExactMatchRanker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/FilterRanker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/OptionalWordRanker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/PositionRanker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/Query.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/Ranker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/TypoRanker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/CustomRankerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/DistanceRankerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/DocumentProcessorTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/ExactMatchRankerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/FilterRankerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/OptionalWordRankerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/PositionRankerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/RankerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/TypoRankerTest.java" afterDir="false" />
+    <list default="true" id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="Move all classes to a new package">
       <change beforePath="$PROJECT_DIR$/../../Report#001◆24 Tir–26 Tir.docx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/searchia-ranking.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/CustomRanker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/DistanceRanker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/DocumentProcessor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/ExactMatchRanker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/FilterRanker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/OptionalWordRanker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/PositionRanker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/Query.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/Ranker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/TypoRanker.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/CustomRankerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/DistanceRankerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/DocumentProcessorTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/ExactMatchRankerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/FilterRankerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/OptionalWordRankerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/PositionRankerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/RankerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/TypoRankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,26 +79,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All">
-    <configuration name="All" type="GradleRunConfiguration" factoryName="Gradle">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-          </list>
-        </option>
-        <option name="vmOptions" value="" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager">
     <configuration name="All" type="JUnit" factoryName="JUnit">
       <useClassPathOnly />
       <option name="PACKAGE_NAME" value="ir.parsijoo.searchia" />
@@ -166,10 +94,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Gradle.All" />
-      <item itemvalue="JUnit.All" />
-    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -181,8 +105,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1596795954410</updated>
-      <workItem from="1596795976278" duration="2298000" />
+      <workItem from="1596795976278" duration="2906000" />
     </task>
+    <task id="LOCAL-00001" summary="Convert project from regular type to gradle type">
+      <created>1596798553333</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1596798553334</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Move all classes to a new package">
+      <created>1596798640166</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1596798640166</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,11 +138,16 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Convert project from regular type to gradle type" />
+    <MESSAGE value="Move all classes to a new package" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move all classes to a new package" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596798280277">
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596798681761">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596798280277" />
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596798681761" />
     <state x="690" y="295" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1596797063978">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -212,22 +156,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1596797835439" />
-    <state width="1877" height="738" key="GridCell.Tab.0.bottom" timestamp="1596798257778">
+    <state width="1877" height="738" key="GridCell.Tab.0.bottom" timestamp="1596798673719">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
-    <state width="1877" height="738" key="GridCell.Tab.0.center" timestamp="1596798257778">
+    <state width="1877" height="738" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
+    <state width="1877" height="738" key="GridCell.Tab.0.center" timestamp="1596798673719">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
-    <state width="1877" height="738" key="GridCell.Tab.0.left" timestamp="1596798257778">
+    <state width="1877" height="738" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
+    <state width="1877" height="738" key="GridCell.Tab.0.left" timestamp="1596798673719">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
-    <state width="1877" height="738" key="GridCell.Tab.0.right" timestamp="1596798257778">
+    <state width="1877" height="738" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
+    <state width="1877" height="738" key="GridCell.Tab.0.right" timestamp="1596798673719">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="738" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
+    <state width="1877" height="738" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596798673719" />
     <state x="776" y="303" key="chooseDestDirectoryDialog" timestamp="1596796876636">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
