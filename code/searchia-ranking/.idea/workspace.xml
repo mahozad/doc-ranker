@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Mahdi.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/CustomRanker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DistanceRanker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/DocumentProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/ExactMatchRanker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/FilterRanker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/OptionalWordRanker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/PositionRanker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/Query.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/Ranker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ir/parsijoo/searchia/TypoRanker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/CustomRankerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/DistanceRankerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/DocumentProcessorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/ExactMatchRankerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/FilterRankerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/OptionalWordRankerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/PositionRankerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/RankerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ir/parsijoo/searchia/TypoRankerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Report#001◆24 Tir–26 Tir.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/searchia-ranking.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/CustomRanker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/DistanceRanker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/DocumentProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/ExactMatchRanker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/FilterRanker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/OptionalWordRanker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/PositionRanker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/Query.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/Ranker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/searchia/TypoRanker.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/CustomRankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/DistanceRankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/DocumentProcessorTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/ExactMatchRankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/FilterRankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/OptionalWordRankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/PositionRankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/RankerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/searchia/TypoRankerTest.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1flc7nZYGG2nC4h0nAvyj1CEbaM" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/test/java" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.42063493" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="ir.parsijoo.searchia" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.All">
+    <configuration name="All" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="All" type="JUnit" factoryName="JUnit">
+      <useClassPathOnly />
+      <option name="PACKAGE_NAME" value="ir.parsijoo.searchia" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="PARAMETERS" value="" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.All" />
+      <item itemvalue="JUnit.All" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2a61dc9d-4607-4d29-b206-1e9b80444575" name="Default Changelist" comment="" />
+      <created>1596795954410</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1596795954410</updated>
+      <workItem from="1596795976278" duration="2298000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596798280277">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596798280277" />
+    <state x="690" y="295" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1596797063978">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="295" key="#com.intellij.ide.util.PackageChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596797063978" />
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1596797835439">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1596797835439" />
+    <state width="1877" height="738" key="GridCell.Tab.0.bottom" timestamp="1596798257778">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="738" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
+    <state width="1877" height="738" key="GridCell.Tab.0.center" timestamp="1596798257778">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="738" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
+    <state width="1877" height="738" key="GridCell.Tab.0.left" timestamp="1596798257778">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="738" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
+    <state width="1877" height="738" key="GridCell.Tab.0.right" timestamp="1596798257778">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="738" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1596798257778" />
+    <state x="776" y="303" key="chooseDestDirectoryDialog" timestamp="1596796876636">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="776" y="303" key="chooseDestDirectoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596796876636" />
+    <state x="758" y="187" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1596797757752">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="758" y="187" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1596797757752" />
+    <state x="731" y="348" width="458" height="355" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1596796876654">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="731" y="348" width="458" height="355" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1596796876654" />
+    <state x="779" y="344" key="export.test.results" timestamp="1596798194682">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="779" y="344" key="export.test.results/0.0.1920.1040@0.0.1920.1040" timestamp="1596798194682" />
+  </component>
+</project>
