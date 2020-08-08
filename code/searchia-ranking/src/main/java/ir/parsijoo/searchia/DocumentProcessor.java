@@ -28,8 +28,7 @@ public class DocumentProcessor {
     }
 
     public static List<String> tokenizeText(String text) {
-        return Arrays.stream(text
-                .split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space
+        return Arrays.stream(text.split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space
                 .flatMap(token -> Arrays.stream(token.split("[.,;:\"،؛']")))
                 .peek(token -> {
                     // String str = "گل‌های آبي 1 ۲";
