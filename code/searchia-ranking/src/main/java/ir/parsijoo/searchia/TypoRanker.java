@@ -42,7 +42,7 @@ public class TypoRanker {
             }
         }
 
-        return docs.stream().sorted(reverseOrder()).collect(toList());
+        return docs;
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {

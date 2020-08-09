@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -112,7 +113,7 @@ class TypoRankerTest {
         Set<Integer> expectedIds = Set.of(2, 16, 17);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
-        List<Integer> resultIds = result.stream().map(Doc::getId).collect(toList());
+        List<Integer> resultIds = result.stream().sorted(Comparator.reverseOrder()).map(Doc::getId).collect(toList());
 
         assertTrue(resultIds.subList(0, 3).containsAll(expectedIds));
     }
@@ -147,7 +148,7 @@ class TypoRankerTest {
         );
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+        List<Doc> result = TypoRanker.rankByTypo(queries, docs).stream().sorted(Comparator.reverseOrder()).collect(toList());
         Set<Long> group1Ranks = result.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
         Set<Long> group2Ranks = result.subList(3, result.size()).stream().map(Doc::getRank).collect(toSet());
 
