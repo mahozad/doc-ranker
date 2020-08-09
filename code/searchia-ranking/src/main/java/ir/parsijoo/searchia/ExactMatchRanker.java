@@ -22,14 +22,13 @@ public class ExactMatchRanker {
             }
         }
 
-        List<Doc> result = new ArrayList<>();
+        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
         for (long rankOfGroupMembers : groups.keySet()) {
             List<Doc> group = groups.get(rankOfGroupMembers);
             // TODO: This code is duplicate in other ranker classes
             List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(Doc::getNumberOfExactMatches)).collect(Collectors.toList());
             long previousExactNumber = sortedGroup.get(0).getNumberOfExactMatches();
-            long rank = rankOfGroupMembers;
             for (Doc doc : sortedGroup) {
                 if (doc.getNumberOfExactMatches() != previousExactNumber) {
                     rank++;
@@ -39,9 +38,8 @@ public class ExactMatchRanker {
                     doc.setRank(rank);
                 }
             }
-            result.addAll(sortedGroup);
+            rank++;
         }
-        // return result;
 
         docs.stream().filter(doc -> doc.getId() == 8).findFirst().get().setRank(1);
         return docs;
