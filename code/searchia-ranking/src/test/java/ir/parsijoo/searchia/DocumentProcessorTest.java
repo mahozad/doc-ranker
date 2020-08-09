@@ -189,6 +189,16 @@ class DocumentProcessorTest {
     }
 
     @Test
+    void normalizeText_english() throws IOException {
+        String text = "Dodge";
+        List<String> expectedTokens = List.of("dodge");
+
+        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
+
+        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
+    }
+
+    @Test
     void normalizeText_multiWordText() throws IOException {
         String text = "گل‌های آبي 1 ۲";
         List<String> expectedTokens = List.of("گل", "های", "ابی", "1", "2");
@@ -197,5 +207,4 @@ class DocumentProcessorTest {
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
-
 }
