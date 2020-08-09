@@ -4,6 +4,7 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class TypoRanker {
             }
         }
 
-        return docs;
+        return docs.stream().sorted(Comparator.comparingInt(Doc::getNumberOfTypos).reversed()).collect(toList());
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
