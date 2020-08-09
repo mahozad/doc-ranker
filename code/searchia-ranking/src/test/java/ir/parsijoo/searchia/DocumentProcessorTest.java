@@ -181,21 +181,21 @@ class DocumentProcessorTest {
     @Test
     void normalizeText() throws IOException {
         String text = "آبي";
-        String expected = "ابی";
+        List<String> expectedTokens = List.of("ابی");
 
-        String normalizedToken = DocumentProcessor.normalizeText(text);
+        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
 
-        assertEquals(expected, normalizedToken);
+        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
 
     @Test
     void normalizeText_multiWordText() throws IOException {
         String text = "گل‌های آبي 1 ۲";
-        String expected = "گل های ابی 1 2";
+        List<String> expectedTokens = List.of("گل", "های", "ابی", "1", "2");
 
-        String normalizedToken = DocumentProcessor.normalizeText(text);
+        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
 
-        assertEquals(expected, normalizedToken);
+        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
 
 }

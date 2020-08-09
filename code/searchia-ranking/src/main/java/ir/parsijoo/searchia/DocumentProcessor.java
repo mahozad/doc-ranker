@@ -74,20 +74,19 @@ public class DocumentProcessor {
         return tokensMap;
     }
 
-    public static String normalizeText(String text) throws IOException {
+    public static List<String> normalizeText(String text) throws IOException {
         // TODO: Extract this object creation
         ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
         TokenStream tokenStream = parsiAnalyzer.tokenStream(null, text);
         tokenStream.reset();
 
-        StringBuilder normalizedText = new StringBuilder();
+        List<String> normalizedTokens = new ArrayList<>();
         while (tokenStream.incrementToken()) {
             CharTermAttribute attribute = tokenStream.getAttribute(CharTermAttribute.class);
-            normalizedText.append(attribute);
-            normalizedText.append(' ');
+            normalizedTokens.add(attribute.toString());
         }
 
-        return normalizedText.toString().stripTrailing();
+        return normalizedTokens;
     }
 }
 
