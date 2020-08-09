@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    implementation(files("lib/stemmer-complete-0.1.0.jar"))
+    implementation(files("lib/parsi-analyzer-1.2.0.jar"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.elasticsearch:elasticsearch:7.1.1")
 
