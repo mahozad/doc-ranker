@@ -179,11 +179,21 @@ class DocumentProcessorTest {
     }
 
     @Test
-    void normalizeToken() throws IOException {
-        String token = "آبي";
+    void normalizeText() throws IOException {
+        String text = "آبي";
         String expected = "ابی";
 
-        String normalizedToken = DocumentProcessor.normalizeText(token);
+        String normalizedToken = DocumentProcessor.normalizeText(text);
+
+        assertEquals(expected, normalizedToken);
+    }
+
+    @Test
+    void normalizeText_multiWordText() throws IOException {
+        String text = "گل‌های آبي 1 ۲";
+        String expected = "گل های ابی 1 2";
+
+        String normalizedToken = DocumentProcessor.normalizeText(text);
 
         assertEquals(expected, normalizedToken);
     }
