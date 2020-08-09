@@ -91,7 +91,7 @@ class Doc implements Comparable<Doc> {
     }
 
     private int id;
-    private int phaseScore;
+    private int numberOfTypos;
     private double elasticScore;
     private Map<String, ?> filterableAttrs;
     private Map<String, ?> customRankingAttrs;
@@ -119,12 +119,12 @@ class Doc implements Comparable<Doc> {
         return searchableAttrs;
     }
 
-    public int getPhaseScore() {
-        return phaseScore;
+    public int getNumberOfTypos() {
+        return numberOfTypos;
     }
 
-    public void setPhaseScore(int phaseScore) {
-        this.phaseScore = phaseScore;
+    public void setNumberOfTypos(int numberOfTypos) {
+        this.numberOfTypos = numberOfTypos;
     }
 
     public Map<String, ?> getFilterableAttrs() {
