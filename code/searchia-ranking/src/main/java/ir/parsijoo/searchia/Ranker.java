@@ -193,7 +193,7 @@ class Doc implements Comparable<Doc> {
 
     @Override
     public int compareTo(Doc other) {
-        return phaseScore - other.phaseScore;
+        return (int) (rank - other.rank);
     }
 }
 
