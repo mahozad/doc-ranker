@@ -1,5 +1,10 @@
 package ir.parsijoo.searchia;
 
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.elasticsearch.analyzer.ParsiAnalyzer;
+
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,12 +74,18 @@ public class DocumentProcessor {
         return tokensMap;
     }
 
-    public static String normalizeToken(String token) {
-        // return ir.parsijoo.persianstemmer.NewStemmer.getStem(token);
-        // return ir.parsijoo.persianstemmer.FullStemmer.getStem(token);
-        // return ir.parsijoo.persianstemmer.Stemmer.stem(token);
-        // return ir.parsijoo.persianstemmer.Stemmer.normalizeChars(token);
-        return "";
+    public static String normalizeText(String token) throws IOException {
+        ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
+        TokenStream tokenStream = parsiAnalyzer.tokenStream(null, token);
+        tokenStream.reset();
+
+        StringBuilder normalizedToken = new StringBuilder();
+        while (tokenStream.incrementToken()) {
+            CharTermAttribute attribute = tokenStream.getAttribute(CharTermAttribute.class);
+            normalizedToken.append(attribute.toString());
+        }
+
+        return normalizedToken.toString();
     }
 }
 

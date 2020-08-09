@@ -179,11 +179,11 @@ class DocumentProcessorTest {
     }
 
     @Test
-    void normalizeToken() {
+    void normalizeToken() throws IOException {
         String token = "آبي";
         String expected = "ابی";
 
-        String normalizedToken = DocumentProcessor.normalizeToken(token);
+        String normalizedToken = DocumentProcessor.normalizeText(token);
 
         assertEquals(expected, normalizedToken);
     }
