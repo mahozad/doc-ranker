@@ -62,6 +62,10 @@ class RankConfiguration {
     public void setSelectedFilters(Set<Filter<?>> selectedFilters) {
         this.selectedFilters = selectedFilters;
     }
+
+    public List<String> getCustomRankingAttrs() {
+        return customRankingAttrs;
+    }
 }
 
 class Doc implements Comparable<Doc> {
