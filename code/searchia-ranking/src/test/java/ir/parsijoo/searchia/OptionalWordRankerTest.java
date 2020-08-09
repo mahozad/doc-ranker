@@ -66,7 +66,7 @@ class OptionalWordRankerTest {
     }
 
     @Test
-    void rankByOptionalWords_noOptionalQuery() {
+    void rankByOptionalWords_noOptionalQuery() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge red charger", QueryType.SUGGESTED);
@@ -97,7 +97,7 @@ class OptionalWordRankerTest {
     }
 
     @Test
-    void rankByOptionalWords_withOptionalQuery() {
+    void rankByOptionalWords_withOptionalQuery() throws IOException {
         Query query1 = new Query("dodge charger", QueryType.ORIGINAL);
         Query query2 = new Query("dodge challenger", QueryType.SUGGESTED);
         Query query3 = new Query("charger", QueryType.OPTIONAL);
@@ -107,7 +107,7 @@ class OptionalWordRankerTest {
                 QueryType.OPTIONAL, query3
         );
         DocumentProcessor.processDocs(docs);
-        Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 16, 17);
+        Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 10, 11, 12, 16, 17);
 
         List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
         result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));

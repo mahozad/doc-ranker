@@ -70,7 +70,7 @@ class DocumentProcessorTest {
     }
 
     @Test
-    void processDocs() {
+    void processDocs() throws IOException {
         int initialSize = docs.size();
 
         DocumentProcessor.processDocs(docs);
@@ -80,21 +80,21 @@ class DocumentProcessorTest {
     }
 
     @Test
-    void processDoc() {
+    void processDoc() throws IOException {
         Doc doc = new Doc(1, null, 0, List.of(
                 new Attribute<>("title", "dodge charger"),
                 new Attribute<>("description", "new red dodge charger*"))
         );
-        Set<String> expectedTokenStrings = Set.of("dodge", "charger", "new", "red", "charger*");
+        Set<String> expectedTokenStrings = Set.of("dodge", "charger", "new", "red");
 
         Doc result = DocumentProcessor.processDoc(doc);
 
-        assertThat(result.getTokens().size(), is(equalTo(5)));
+        assertThat(result.getTokens().size(), is(equalTo(4)));
         assertThat(result.getTokens().keySet(), is(equalTo(expectedTokenStrings)));
     }
 
     @Test
-    void processDoc_oneWordRepeatedInMultipleAttributes() {
+    void processDoc_oneWordRepeatedInMultipleAttributes() throws IOException {
         Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
         String targetToken = "charger";
 

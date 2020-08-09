@@ -81,7 +81,7 @@ class TypoRankerTest {
     // }
 
     @Test
-    void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe1Group() {
+    void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe1Group() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
@@ -99,7 +99,7 @@ class TypoRankerTest {
     }
 
     @Test
-    void rankByTypo_emptyCorrectQueryAndSuggestQuery_topResultsShouldMatchOriginalOrWildcard() {
+    void rankByTypo_emptyCorrectQueryAndSuggestQuery_topResultsShouldMatchOriginalOrWildcard() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
@@ -118,7 +118,7 @@ class TypoRankerTest {
     }
 
     @Test
-    void rankByTypo_containsCorrectQueryOrSuggestQuery_resultShouldBe2Groups() {
+    void rankByTypo_containsCorrectQueryOrSuggestQuery_resultShouldBe2Groups() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
@@ -136,7 +136,7 @@ class TypoRankerTest {
     }
 
     @Test
-    void rankByTypo_containsCorrectQueryOrSuggestQuery_topResultsShouldMatchOriginalOrWildcard() {
+    void rankByTypo_containsCorrectQueryOrSuggestQuery_topResultsShouldMatchOriginalOrWildcard() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("dodge charger", QueryType.SUGGESTED);

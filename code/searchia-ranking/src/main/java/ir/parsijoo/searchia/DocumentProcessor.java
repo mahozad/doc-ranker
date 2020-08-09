@@ -12,16 +12,16 @@ public class DocumentProcessor {
 
     public static final int ATTRIBUTES_DISTANCE = 1_000_000;
 
-    public static void processDocs(List<Doc> docs) {
+    public static void processDocs(List<Doc> docs) throws IOException {
         for (Doc doc : docs) {
             processDoc(doc);
         }
     }
 
-    public static Doc processDoc(Doc doc) {
+    public static Doc processDoc(Doc doc) throws IOException {
         int offset = 0;
         for (Attribute<String> searchableAttr : doc.getSearchableAttrs()) {
-            List<String> tokens = tokenizeText(searchableAttr.getValue());
+            List<String> tokens = normalizeText(searchableAttr.getValue());
             Map<String, TokenInfo> tokenInfo = populateTokenInfo(tokens, offset);
             tokenInfo.forEach((k, v) -> doc.getTokens().merge(k, v, (t1, t2) -> {
                 t1.getPositions().addAll(t2.getPositions());

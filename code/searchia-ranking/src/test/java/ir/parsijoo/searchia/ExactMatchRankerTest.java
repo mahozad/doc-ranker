@@ -65,7 +65,7 @@ class ExactMatchRankerTest {
     }
 
     @Test
-    void rankByExactMatch() {
+    void rankByExactMatch() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         @SuppressWarnings("SpellCheckingInspection")
         Query query2 = new Query("aventado*", QueryType.WILDCARD);

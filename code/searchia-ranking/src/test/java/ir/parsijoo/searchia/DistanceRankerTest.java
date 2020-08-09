@@ -68,7 +68,7 @@ class DistanceRankerTest {
     }
 
     @Test
-    void rankByWordsDistance() {
+    void rankByWordsDistance() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
         Query query3 = new Query("red dodge charger", QueryType.SUGGESTED);
@@ -89,7 +89,7 @@ class DistanceRankerTest {
     }
 
     @Test
-    void getDocMinDistanceFromQueries() {
+    void getDocMinDistanceFromQueries() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge red charger", QueryType.CORRECTED);
         Query query3 = new Query("red dodge charger", QueryType.SUGGESTED);
@@ -108,7 +108,7 @@ class DistanceRankerTest {
     }
 
     @Test
-    void calculateDocDistanceFromQuery() {
+    void calculateDocDistanceFromQuery() throws IOException {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
         DocumentProcessor.processDoc(doc);
@@ -119,7 +119,7 @@ class DistanceRankerTest {
     }
 
     @Test
-    void calculateDocDistanceFromQuery_docLacksOneOfQueryWords() {
+    void calculateDocDistanceFromQuery_docLacksOneOfQueryWords() throws IOException {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
         DocumentProcessor.processDoc(doc);
