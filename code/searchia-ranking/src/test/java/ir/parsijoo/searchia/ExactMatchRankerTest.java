@@ -89,4 +89,24 @@ class ExactMatchRankerTest {
         assertThat(result.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
         assertThat(result.stream().filter(doc -> doc.getRank() == 2).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
     }
+
+    @RepeatedTest(5) // Order of reading queries in rankByExactMatch may differ in each execution
+    void rankByExactMatch_otherQueryIsLongerThanOriginalQuery_resultShouldBeLengthOfOriginalQuery() throws IOException {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("red new charger", QueryType.EQUIVALENT);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.EQUIVALENT, query2
+        );
+        DocumentProcessor.processDocs(docs);
+        Set<Integer> expectedGroup1Ids = Set.of(2, 3, 16);
+        Set<Integer> expectedGroup2Ids = Set.of(1, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17);
+        Set<Integer> expectedGroup3Ids = Set.of(4, 13);
+
+        List<Doc> result = ExactMatchRanker.rankByExactMatch(queries, docs);
+
+        assertThat(result.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
+        assertThat(result.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
+        assertThat(result.stream().filter(doc -> doc.getRank() == 2).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
+    }
 }

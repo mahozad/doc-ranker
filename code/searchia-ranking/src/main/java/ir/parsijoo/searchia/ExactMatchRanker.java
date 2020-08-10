@@ -13,6 +13,7 @@ public class ExactMatchRanker {
             for (Query.QueryType queryType : queries.keySet()) {
                 Query query = queries.get(queryType);
                 int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
+                numberOfMatches = Math.min(numberOfMatches, lengthOfOriginalQuery);
                 if (queryType == Query.QueryType.WILDCARD) {
                     doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches - 1));
                 } else if (numberOfMatches == lengthOfOriginalQuery) {
