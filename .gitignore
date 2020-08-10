@@ -1,0 +1,23 @@
+### General ###
+/src/main/resources/public
+/index
+lombok.config
+
+### Gradle ###
+.gradle
+build/
+
+### IntelliJ IDEA ###
+.idea
+out/
+*.iws
+*.ipr
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
