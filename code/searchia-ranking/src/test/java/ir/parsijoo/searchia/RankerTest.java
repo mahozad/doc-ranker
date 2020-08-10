@@ -16,8 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RankerTest {
@@ -107,7 +106,7 @@ class RankerTest {
 
     @Test
     void rank_executionTime() throws IOException {
-        long timeThreshold = 20/*ms*/;
+        long timeThreshold = 50/*ms*/;
         int offset = 0;
         int limit = 10;
         Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
@@ -124,7 +123,7 @@ class RankerTest {
         Ranker.rank(queries, docs, promotions, configuration, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
-        assertTrue(() -> duration < timeThreshold);
+        assertThat(duration, is(lessThan(timeThreshold)));
     }
 
     @Test
