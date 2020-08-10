@@ -4,17 +4,22 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ir.parsijoo.searchia.Query.QueryType.*;
+import static java.util.stream.Collectors.toSet;
+
 public class ExactMatchRanker {
 
+    private static final Set<Query.QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
+
     public static List<Doc> rankByExactMatch(Map<Query.QueryType, Query> queries, List<Doc> docs) throws IOException {
-        String textOfOriginalQuery = queries.get(Query.QueryType.ORIGINAL).getText();
+        String textOfOriginalQuery = queries.get(ORIGINAL).getText();
         int lengthOfOriginalQuery = DocumentProcessor.normalizeText(textOfOriginalQuery).size();
         for (Doc doc : docs) {
-            for (Query.QueryType queryType : queries.keySet()) {
+            for (Query.QueryType queryType : queries.keySet().stream().filter(queryTypes::contains).collect(toSet())) {
                 Query query = queries.get(queryType);
                 int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
                 numberOfMatches = Math.min(numberOfMatches, lengthOfOriginalQuery);
-                if (queryType == Query.QueryType.WILDCARD) {
+                if (queryType == WILDCARD) {
                     doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches - 1));
                 } else if (numberOfMatches == lengthOfOriginalQuery) {
                     doc.setNumberOfExactMatches(numberOfMatches);
