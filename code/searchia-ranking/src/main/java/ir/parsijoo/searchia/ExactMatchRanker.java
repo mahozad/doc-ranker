@@ -1,23 +1,25 @@
 package ir.parsijoo.searchia;
 
-
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ExactMatchRanker {
 
-    public static List<Doc> rankByExactMatch(Map<Query.QueryType, Query> queries, List<Doc> docs) {
+    public static List<Doc> rankByExactMatch(Map<Query.QueryType, Query> queries, List<Doc> docs) throws IOException {
         String textOfOriginalQuery = queries.get(Query.QueryType.ORIGINAL).getText();
-        int lengthOfOriginalQuery = DocumentProcessor.tokenizeText(textOfOriginalQuery).size();
+        int lengthOfOriginalQuery = DocumentProcessor.normalizeText(textOfOriginalQuery).size();
         for (Doc doc : docs) {
             for (Query.QueryType queryType : queries.keySet()) {
                 Query query = queries.get(queryType);
-                boolean isDocMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
-                if (isDocMatching && queryType == Query.QueryType.WILDCARD) {
-                    doc.setNumberOfExactMatches(lengthOfOriginalQuery - 1);
+                int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
+                if (queryType == Query.QueryType.WILDCARD) {
+                    doc.setNumberOfExactMatches(Math.max(0, numberOfMatches - 1));
+                } else if (numberOfMatches == lengthOfOriginalQuery) {
+                    doc.setNumberOfExactMatches(numberOfMatches);
                     break;
                 } else {
-                    doc.setNumberOfExactMatches(lengthOfOriginalQuery);
+                    doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches));
                 }
             }
         }
@@ -27,7 +29,7 @@ public class ExactMatchRanker {
         for (long rankOfGroupMembers : groups.keySet()) {
             List<Doc> group = groups.get(rankOfGroupMembers);
             // TODO: This code is duplicate in other ranker classes
-            List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(Doc::getNumberOfExactMatches)).collect(Collectors.toList());
+            List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(Doc::getNumberOfExactMatches).reversed()).collect(Collectors.toList());
             long previousExactNumber = sortedGroup.get(0).getNumberOfExactMatches();
             for (Doc doc : sortedGroup) {
                 if (doc.getNumberOfExactMatches() != previousExactNumber) {
@@ -41,7 +43,6 @@ public class ExactMatchRanker {
             rank++;
         }
 
-        docs.stream().filter(doc -> doc.getId() == 8).findFirst().get().setRank(1);
         return docs;
     }
 }
