@@ -207,4 +207,15 @@ class DocumentProcessorTest {
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
+
+    @Test
+    void getNumberOfMatches() throws IOException {
+        Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
+        Query query = new Query("dodge charter", Query.QueryType.ORIGINAL);
+        DocumentProcessor.processDoc(doc);
+
+        int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
+
+        assertEquals(1, numberOfMatches);
+    }
 }

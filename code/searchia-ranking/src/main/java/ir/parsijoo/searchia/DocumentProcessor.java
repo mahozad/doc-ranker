@@ -88,6 +88,17 @@ public class DocumentProcessor {
 
         return normalizedTokens;
     }
+
+    public static int getNumberOfMatches(Doc doc, Query query) throws IOException {
+        List<String> qWords = normalizeText(query.getText());
+        int numberOfMatches = 0;
+        for (String qWord : qWords) {
+            if (doc.getTokens().containsKey(qWord)) {
+                numberOfMatches++;
+            }
+        }
+        return numberOfMatches;
+    }
 }
 
 class TokenInfo {
