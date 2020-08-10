@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RankerTest {
@@ -26,10 +29,9 @@ class RankerTest {
     List<Promotion> promotions;
     RankConfiguration configuration;
 
-    // @formatter:off
     @BeforeEach
     void setUp() throws IOException {
-        query = "charger";
+        query = "dodge charger";
 
         docs = Files
                 .lines(samplesPath)
@@ -37,31 +39,30 @@ class RankerTest {
                 .map(line -> {
                     String[] attrs = line.split("\\|");
                     int id = Integer.parseInt(attrs[0].split("=")[1]);
-                    long creationDate = Long.parseLong(attrs[1].split("=")[1]);
-                    long viewCount = Long.parseLong(attrs[2].split("=")[1]);
+                    double creationDate = Long.parseLong(attrs[1].split("=")[1]);
+                    double viewCount = Long.parseLong(attrs[2].split("=")[1]);
                     double score = Math.random();
-                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[0]);
-                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[0]);
+                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[1]);
+                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[1]);
                     List<Attribute<String>> searchableAttrs = List.of(title, description);
-                    Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
+                    Map<String, Double> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })
                 .collect(Collectors.toList());
-
-        promotions = List.of(
-                new Promotion(),
-                new Promotion()
-        );
 
         configuration = new RankConfiguration(
                 "price",
                 null,
                 false,
                 List.of("viewCount", "creationDate"),
-                Set.of()
+                Set.of("dodge")
+        );
+
+        promotions = List.of(
+                new Promotion(),
+                new Promotion()
         );
     }
-    // @formatter:on
 
     @AfterEach
     void tearDown() {
@@ -69,42 +70,79 @@ class RankerTest {
 
     @Test
     void sortDocs() {
-        docs.get(0).setPhaseScore(5);
-        docs.get(2).setPhaseScore(3);
-        docs.get(10).setPhaseScore(7);
-        docs.get(12).setPhaseScore(4);
+        docs.get(0).setRank(5);
+        docs.get(2).setRank(3);
+        docs.get(10).setRank(7);
+        docs.get(12).setRank(4);
 
-        docs = docs.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        docs = docs.stream().sorted().collect(Collectors.toList());
 
-        assertEquals(7, docs.get(0).getPhaseScore());
-        assertEquals(5, docs.get(1).getPhaseScore());
-        assertEquals(4, docs.get(2).getPhaseScore());
-        assertEquals(3, docs.get(3).getPhaseScore());
-        assertEquals(0, docs.get(4).getPhaseScore());
+        assertEquals(7, docs.get(docs.size()-1).getRank());
+        assertEquals(5, docs.get(docs.size()-2).getRank());
+        assertEquals(4, docs.get(docs.size()-3).getRank());
+        assertEquals(3, docs.get(docs.size()-4).getRank());
+        assertEquals(1, docs.subList(0, docs.size()-5).stream().map(Doc::getRank).collect(Collectors.toSet()).size());
     }
 
     @Test
-    void rank() {
-        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
+    void rank() throws IOException {
+        int offset = 0;
+        int limit = 10;
+        Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", Query.QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", Query.QueryType.SUGGESTED);
+        Map<Query.QueryType, Query> queries = Map.of(
+                Query.QueryType.ORIGINAL, query1,
+                Query.QueryType.WILDCARD, query2,
+                Query.QueryType.SUGGESTED, query3
+        );
+        DocumentProcessor.processDocs(docs);
+        List<Integer> expectedDocIdOrder =
+                List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
-        assertEquals(1, result.get(0).getId());
+        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+
+        assertThat(result.stream().map(Doc::getId).collect(Collectors.toList()), is(equalTo(expectedDocIdOrder)));
     }
 
     @Test
-    void rank_time() {
-        long timeThreshold = 200/*ms*/;
+    void rank_executionTime() throws IOException {
+        long timeThreshold = 20/*ms*/;
+        int offset = 0;
+        int limit = 10;
+        Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", Query.QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", Query.QueryType.SUGGESTED);
+        Map<Query.QueryType, Query> queries = Map.of(
+                Query.QueryType.ORIGINAL, query1,
+                Query.QueryType.WILDCARD, query2,
+                Query.QueryType.SUGGESTED, query3
+        );
+        DocumentProcessor.processDocs(docs);
 
         Instant startTime = Instant.now();
-        Ranker.rank(query, docs, promotions, configuration, 0, 10);
+        Ranker.rank(queries, docs, promotions, configuration, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertTrue(() -> duration < timeThreshold);
     }
 
     @Test
-    void rank_resultSize() {
-        List<Doc> result = Ranker.rank(query, docs, promotions, configuration, 0, 10);
+    void rank_resultSize() throws IOException {
+        int offset = 0;
+        int limit = 10;
+        Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", Query.QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", Query.QueryType.SUGGESTED);
+        Map<Query.QueryType, Query> queries = Map.of(
+                Query.QueryType.ORIGINAL, query1,
+                Query.QueryType.WILDCARD, query2,
+                Query.QueryType.SUGGESTED, query3
+        );
+        DocumentProcessor.processDocs(docs);
 
-        assertEquals(10, result.size());
+        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+
+        assertEquals(limit, result.size());
     }
 }

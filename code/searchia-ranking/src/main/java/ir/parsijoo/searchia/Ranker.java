@@ -1,32 +1,28 @@
 package ir.parsijoo.searchia;
 
-
-
-
+import java.io.IOException;
 import java.util.*;
 
 public class Ranker {
 
     public static List<Doc> rank(
-            String query,
+            Map<Query.QueryType, Query> queries,
             List<Doc> docs,
             List<Promotion> promotions,
             RankConfiguration configuration,
             int offset,
-            int limit) {
+            int limit) throws IOException {
 
-        return List.of(
-                new Doc(1, null, 0, Collections.emptyList()),
-                new Doc(2, null, 0, Collections.emptyList()),
-                new Doc(3, null, 0, Collections.emptyList()),
-                new Doc(4, null, 0, Collections.emptyList()),
-                new Doc(5, null, 0, Collections.emptyList()),
-                new Doc(6, null, 0, Collections.emptyList()),
-                new Doc(7, null, 0, Collections.emptyList()),
-                new Doc(8, null, 0, Collections.emptyList()),
-                new Doc(9, null, 0, Collections.emptyList()),
-                new Doc(10, null, 0, Collections.emptyList())
-        );
+        List<Doc> sortedByTypo = TypoRanker.rankByTypo(queries, docs);
+        List<Doc> sortedByOptionalWords = OptionalWordRanker.rankByOptionalWords(queries, sortedByTypo);
+        List<Doc> sortedByWordsDistance = DistanceRanker.rankByWordsDistance(queries, sortedByOptionalWords);
+        List<Doc> sortedByWordPosition = PositionRanker.rankByWordPosition(sortedByWordsDistance, queries);
+        List<Doc> sortedByExactMatch = ExactMatchRanker.rankByExactMatch(queries, sortedByWordPosition);
+        List<Doc> finalResult = CustomRanker.rankByCustomAttributes(sortedByExactMatch, configuration.getCustomRankingAttrs());
+
+        List<Doc> sublist = finalResult.subList(offset, limit);
+        sublist.sort(Doc::compareTo);
+        return sublist;
     }
 }
 
@@ -35,8 +31,8 @@ class RankConfiguration {
     private String sortAttribute;
     private double[] geoLocation;
     private boolean shouldRemoveDuplicates;
-    private List<String> customRankingAttrs;
-    private Set<String> queryOptionalWords;
+    private final List<String> customRankingAttrs;
+    private final Set<String> queryOptionalWords;
     private Set<Filter<?>> selectedFilters;
 
     public RankConfiguration(String sortAttribute,
