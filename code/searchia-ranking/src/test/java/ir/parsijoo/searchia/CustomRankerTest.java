@@ -35,7 +35,7 @@ class CustomRankerTest {
 
         docs = Files
                 .lines(samplesPath)
-                .skip(1)
+                .filter(line -> !line.startsWith("#"))
                 .map(line -> {
                     String[] attrs = line.split("\\|");
                     int id = Integer.parseInt(attrs[0].split("=")[1]);
