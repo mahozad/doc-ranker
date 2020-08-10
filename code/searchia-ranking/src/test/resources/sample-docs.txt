@@ -1,4 +1,5 @@
-﻿#format: attr1Name=attr1Value|attr2Name=attr2Value[|attrNName=attrNValue]newLine
+# NOTE: Do NOT modify this file. If you want to modify or add some records, add it to another file and use that file
+# Record format: attr1Name=attr1Value|attr2Name=attr2Value[|attrNName=attrNValue]newLine
 id=1|creationDate=4|views=14|title=Dodge charger|description=The description contains dodge charger as well.
 id=2|creationDate=20|views=50|title=charter and charger|description=dodge red charger
 id=3|creationDate=2|views=14|title=Dodge new charger|description=dodge new red charger.
