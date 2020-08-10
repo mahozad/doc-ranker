@@ -14,9 +14,9 @@ public class CustomRanker {
                     Object attr1 = d1.getCustomRankingAttrs().get(attrName);
                     Object attr2 = d2.getCustomRankingAttrs().get(attrName);
                     if (attr1 instanceof Boolean && attr2 instanceof Boolean) {
-                        return d1.compareTo(d2);
+                        return d2.compareTo(d1);
                     } else if (attr1 instanceof Double && attr2 instanceof Double) {
-                        return ((Double) attr1).compareTo((Double) attr2);
+                        return ((Double) attr2).compareTo((Double) attr1);
                     } else {
                         throw new RuntimeException("The attribute \"" + attrName + "\" that is provided for custom ranking is not boolean or numeric");
                     }
