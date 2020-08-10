@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
+
 public class DocumentProcessor {
 
     public static final int ATTRIBUTES_DISTANCE = 1_000_000;
@@ -92,8 +94,14 @@ public class DocumentProcessor {
     public static int getNumberOfMatches(Doc doc, Query query) throws IOException {
         List<String> qWords = normalizeText(query.getText());
         int numberOfMatches = 0;
-        for (String qWord : qWords) {
-            if (doc.getTokens().containsKey(qWord)) {
+        for (int i = 0; i < qWords.size(); i++) {
+            if (query.getType() == WILDCARD && i == qWords.size() - 1) {
+                String qWordStem = qWords.get(i).replace("*", "");
+                boolean matches = doc.getTokens().keySet().stream().anyMatch(s -> s.startsWith(qWordStem));
+                if (matches) {
+                    numberOfMatches++;
+                }
+            } else if (doc.getTokens().containsKey(qWords.get(i))) {
                 numberOfMatches++;
             }
         }

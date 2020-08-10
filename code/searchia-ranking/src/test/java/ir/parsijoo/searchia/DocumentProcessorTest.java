@@ -218,4 +218,15 @@ class DocumentProcessorTest {
 
         assertEquals(1, numberOfMatches);
     }
+
+    @Test
+    void getNumberOfMatches_wildCardQuery() throws IOException {
+        Doc doc = docs.stream().filter(d -> d.getId() == 8).findFirst().get();
+        Query query = new Query("lamborghini aventado*", Query.QueryType.WILDCARD);
+        DocumentProcessor.processDoc(doc);
+
+        int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
+
+        assertEquals(2, numberOfMatches);
+    }
 }
