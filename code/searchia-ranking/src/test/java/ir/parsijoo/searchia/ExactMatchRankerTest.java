@@ -4,6 +4,7 @@ package ir.parsijoo.searchia;
 import ir.parsijoo.searchia.Query.QueryType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -68,7 +69,7 @@ class ExactMatchRankerTest {
     void tearDown() {
     }
 
-    @Test
+    @RepeatedTest(5) // Order of reading queries in rankByExactMatch may differ in each execution
     void rankByExactMatch() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         @SuppressWarnings("SpellCheckingInspection")
@@ -83,10 +84,9 @@ class ExactMatchRankerTest {
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
 
         List<Doc> result = ExactMatchRanker.rankByExactMatch(queries, docs);
-        result.sort(Doc::compareTo);
 
-        assertThat(result.subList(0, 2).stream().map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
-        assertThat(result.subList(2, 12).stream().map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
-        assertThat(result.subList(12, 17).stream().map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
+        assertThat(result.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
+        assertThat(result.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
+        assertThat(result.stream().filter(doc -> doc.getRank() == 2).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
     }
 }

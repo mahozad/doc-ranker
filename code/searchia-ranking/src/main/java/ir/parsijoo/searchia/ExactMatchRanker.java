@@ -14,7 +14,7 @@ public class ExactMatchRanker {
                 Query query = queries.get(queryType);
                 int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
                 if (queryType == Query.QueryType.WILDCARD) {
-                    doc.setNumberOfExactMatches(Math.max(0, numberOfMatches - 1));
+                    doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches - 1));
                 } else if (numberOfMatches == lengthOfOriginalQuery) {
                     doc.setNumberOfExactMatches(numberOfMatches);
                     break;
