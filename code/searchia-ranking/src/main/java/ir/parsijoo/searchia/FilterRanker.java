@@ -11,7 +11,7 @@ public class FilterRanker {
             for (Doc doc : docs) {
                 // if (filter.getValue() instanceof Double) {
                 int score = setDocScoreByNumericFilter(doc, filter);
-                doc.setPhaseScore(doc.getPhaseScore() + score);
+//                doc.setPhaseScore(doc.getPhaseScore() + score);
                 // }
             }
         });
