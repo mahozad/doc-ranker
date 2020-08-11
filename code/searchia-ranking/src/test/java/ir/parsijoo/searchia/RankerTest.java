@@ -9,10 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -95,7 +92,6 @@ class RankerTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
-        DocumentProcessor.processDocs(docs);
         List<Integer> expectedDocIdOrder =
                 List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
@@ -117,7 +113,6 @@ class RankerTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
-        DocumentProcessor.processDocs(docs);
 
         Instant startTime = Instant.now();
         Ranker.rank(queries, docs, promotions, configuration, offset, limit);
@@ -138,7 +133,6 @@ class RankerTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
-        DocumentProcessor.processDocs(docs);
 
         List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
 

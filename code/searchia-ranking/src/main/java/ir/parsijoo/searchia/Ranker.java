@@ -13,6 +13,8 @@ public class Ranker {
             int offset,
             int limit) throws IOException {
 
+        DocumentProcessor.processDocs(docs);
+
         List<Doc> sortedByTypo = TypoRanker.rankByTypo(queries, docs);
         List<Doc> sortedByOptionalWords = OptionalWordRanker.rankByOptionalWords(queries, sortedByTypo);
         List<Doc> sortedByWordsDistance = DistanceRanker.rankByWordsDistance(queries, sortedByOptionalWords);
