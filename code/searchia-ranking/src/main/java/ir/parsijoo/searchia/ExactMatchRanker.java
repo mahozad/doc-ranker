@@ -2,8 +2,9 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
 import static java.util.stream.Collectors.toSet;
@@ -29,26 +30,7 @@ public class ExactMatchRanker {
                 }
             }
         }
-
-        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
-        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
-        for (long rankOfGroupMembers : groups.keySet()) {
-            List<Doc> group = groups.get(rankOfGroupMembers);
-            // TODO: This code is duplicate in other ranker classes
-            List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(Doc::getNumberOfExactMatches).reversed()).collect(Collectors.toList());
-            long previousExactNumber = sortedGroup.get(0).getNumberOfExactMatches();
-            for (Doc doc : sortedGroup) {
-                if (doc.getNumberOfExactMatches() != previousExactNumber) {
-                    rank++;
-                    doc.setRank(rank);
-                    previousExactNumber = doc.getNumberOfExactMatches();
-                } else {
-                    doc.setRank(rank);
-                }
-            }
-            rank++;
-        }
-
+        Ranker.updateRanks(docs, Doc::getNumberOfExactMatches, true);
         return docs;
     }
 }

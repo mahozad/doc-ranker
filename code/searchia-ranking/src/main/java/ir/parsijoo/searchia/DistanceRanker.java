@@ -3,11 +3,8 @@ package ir.parsijoo.searchia;
 import ir.parsijoo.searchia.Doc.MinDistance;
 import ir.parsijoo.searchia.Query.QueryType;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
@@ -21,24 +18,7 @@ public class DistanceRanker {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
         }
-        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
-        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
-        for (long rankOfGroupMembers : groups.keySet()) {
-            List<Doc> group = groups.get(rankOfGroupMembers);
-            // TODO: This code is duplicate of OptionalWordRanker
-            List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(d -> d.getMinDistance().value)).collect(Collectors.toList());
-            long previousDistance = sortedGroup.get(0).getMinDistance().value;
-            for (Doc doc : sortedGroup) {
-                if (doc.getMinDistance().value != previousDistance) {
-                    rank++;
-                    doc.setRank(rank);
-                    previousDistance = doc.getMinDistance().value;
-                } else {
-                    doc.setRank(rank);
-                }
-            }
-            rank++;
-        }
+        Ranker.updateRanks(docs, doc -> doc.getMinDistance().value, false);
         return docs;
     }
 

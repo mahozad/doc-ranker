@@ -2,8 +2,10 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
@@ -21,25 +23,7 @@ public class PositionRanker {
             // FIXME: The attribute name is set to a constant value
             doc.setMinPosition(new Doc.MinPosition(minPosition, "title"));
         }
-
-        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
-        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
-        for (List<Doc> group : groups.values()) {
-            // TODO: This code is duplicate in other ranker classes
-            List<Doc> sortedGroup = group.stream().sorted(Comparator.comparingInt(d -> d.getMinPosition().value)).collect(Collectors.toList());
-            long previousMinPosition = sortedGroup.get(0).getMinPosition().value;
-            for (Doc doc : sortedGroup) {
-                if (doc.getMinPosition().value != previousMinPosition) {
-                    rank++;
-                    doc.setRank(rank);
-                    previousMinPosition = doc.getMinPosition().value;
-                } else {
-                    doc.setRank(rank);
-                }
-            }
-            rank++;
-        }
-
+        Ranker.updateRanks(docs, doc -> doc.getMinPosition().value, false);
         return docs;
     }
 

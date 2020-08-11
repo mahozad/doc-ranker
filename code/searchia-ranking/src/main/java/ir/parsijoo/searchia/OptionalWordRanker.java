@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.Query.QueryType.OPTIONAL;
 import static ir.parsijoo.searchia.Query.QueryType.ORIGINAL;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public class OptionalWordRanker {
@@ -29,7 +28,6 @@ public class OptionalWordRanker {
         } else {
             int lengthOfOptionalQuery = queries.get(OPTIONAL).getTokens().size();
             Set<Query> rankQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
-
             for (Doc doc : docs) {
                 for (Query query : rankQueries) {
                     if (TypoRanker.isDocMatchedWithQuery(doc, query)) {
@@ -39,23 +37,7 @@ public class OptionalWordRanker {
                 }
                 doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
             }
-
-            SortedMap<Long, List<Doc>> docGroups = groupDocsByRank(docs);
-            int rank = 0; // Rank starts from 0 (top doc has rank of 0)
-            for (List<Doc> group : docGroups.values()) {
-                List<Doc> sortedGroup = group.stream().sorted((d1, d2) -> d2.getNumberOfMatches() - d1.getNumberOfMatches()).collect(toList());
-                long previousNumberOfMatches = sortedGroup.get(0).getNumberOfMatches();
-                for (Doc doc : sortedGroup) {
-                    if (doc.getNumberOfMatches() != previousNumberOfMatches) {
-                        rank++;
-                        doc.setRank(rank);
-                        previousNumberOfMatches = doc.getNumberOfMatches();
-                    } else {
-                        doc.setRank(rank);
-                    }
-                }
-                rank++;
-            }
+            Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
         }
         return docs;
     }
