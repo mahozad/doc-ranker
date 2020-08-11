@@ -3,11 +3,13 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static ir.parsijoo.searchia.Query.QueryType.OPTIONAL;
+import static ir.parsijoo.searchia.Query.QueryType.ORIGINAL;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class OptionalWordRanker {
 
@@ -21,19 +23,18 @@ public class OptionalWordRanker {
      * @return
      */
     public static List<Doc> rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) {
-        int lengthOfOriginalQuery = queries.get(QueryType.ORIGINAL).getTokens().size();
-        if (!queries.containsKey(QueryType.OPTIONAL)) {
-            for (Doc doc : docs) {
-                doc.setNumberOfMatches(lengthOfOriginalQuery);
-            }
+        int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
+        if (!queries.containsKey(OPTIONAL)) {
+            docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));
         } else {
-            int lengthOfOptionalQuery = queries.get(QueryType.OPTIONAL).getTokens().size();
+            int lengthOfOptionalQuery = queries.get(OPTIONAL).getTokens().size();
             SortedMap<Long, List<Doc>> docGroups = groupDocsByRank(docs);
+            Set<Query> rankQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
 
             int rank = 0; // Rank starts from 0 (top doc has rank of 0)
             for (List<Doc> group : docGroups.values()) {
                 for (Doc doc : group) {
-                    for (Query query : queries.values().stream().filter(query -> query.getType() != QueryType.OPTIONAL).collect(Collectors.toList())) {
+                    for (Query query : rankQueries) {
                         if (TypoRanker.isDocMatchedWithQuery(doc, query)) {
                             doc.setNumberOfMatches(lengthOfOriginalQuery);
                             break;
@@ -42,7 +43,7 @@ public class OptionalWordRanker {
                     doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
                 }
 
-                List<Doc> sortedGroup = group.stream().sorted((doc1, doc2) -> doc2.getNumberOfMatches() - doc1.getNumberOfMatches()).collect(Collectors.toList());
+                List<Doc> sortedGroup = group.stream().sorted((d1, d2) -> d2.getNumberOfMatches() - d1.getNumberOfMatches()).collect(toList());
                 long previousNumberOfMatches = sortedGroup.get(0).getNumberOfMatches();
                 for (Doc doc : sortedGroup) {
                     if (doc.getNumberOfMatches() != previousNumberOfMatches) {
