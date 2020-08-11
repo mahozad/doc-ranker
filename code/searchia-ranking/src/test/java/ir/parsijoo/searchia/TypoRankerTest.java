@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -91,6 +90,7 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.OPTIONAL, query3
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
@@ -109,6 +109,7 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.OPTIONAL, query3
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedIds = Set.of(2, 16, 17);
 
@@ -128,6 +129,7 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
@@ -146,6 +148,7 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs).stream().sorted().collect(toList());
@@ -177,6 +180,7 @@ class TypoRankerTest {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
 
         boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
 
@@ -188,6 +192,7 @@ class TypoRankerTest {
         Query query = new Query("dodge charter*", QueryType.WILDCARD);
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
 
         boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
 
@@ -199,6 +204,7 @@ class TypoRankerTest {
         Query query = new Query("dodge charter", QueryType.WILDCARD);
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
 
         boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
 

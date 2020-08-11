@@ -13,6 +13,7 @@ public class Ranker {
             int offset,
             int limit) throws IOException {
 
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
         List<Doc> sortedByTypo = TypoRanker.rankByTypo(queries, docs);

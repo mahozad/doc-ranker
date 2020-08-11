@@ -39,8 +39,8 @@ public class DistanceRanker {
         return docs;
     }
 
-    public static int calculateDocDistanceFromQuery(Doc doc, Query query) throws IOException {
-        List<String> qWords = DocumentProcessor.normalizeText(query.getText());
+    public static int calculateDocDistanceFromQuery(Doc doc, Query query) {
+        List<String> qWords = query.getTokens();
         int i = 0;
         int totalDistance = 0;
         String word1;

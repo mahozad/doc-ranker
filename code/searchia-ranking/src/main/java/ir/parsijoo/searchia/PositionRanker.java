@@ -48,10 +48,9 @@ public class PositionRanker {
         return docs;
     }
 
-    public static int getDocMinWordPositionByQuery(Doc doc, Query query) throws IOException {
+    public static int getDocMinWordPositionByQuery(Doc doc, Query query) {
         int minPosition = Integer.MAX_VALUE;
-        List<String> qWords = DocumentProcessor.normalizeText(query.getText());
-        for (String qWord : qWords) {
+        for (String qWord : query.getTokens()) {
             if (doc.getTokens().containsKey(qWord)) {
                 List<Integer> tokenPositions = doc.getTokens().get(qWord).getPositions();
                 Optional<Integer> min = tokenPositions.stream().min(Comparator.comparingInt(p -> p % ATTRIBUTES_DISTANCE));

@@ -47,8 +47,8 @@ public class TypoRanker {
         return docs.stream().sorted(Comparator.comparingInt(Doc::getNumberOfTypos).reversed()).collect(toList());
     }
 
-    public static boolean isDocMatchedWithQuery(Doc doc, Query query) throws IOException {
-        List<String> tokens = DocumentProcessor.normalizeText(query.getText());
+    public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
+        List<String> tokens = query.getTokens();
         for (int i = 0; i < tokens.size(); i++) {
             String token = tokens.get(i);
             // If queryType is WILDCARD, the last word should be considered as prefix

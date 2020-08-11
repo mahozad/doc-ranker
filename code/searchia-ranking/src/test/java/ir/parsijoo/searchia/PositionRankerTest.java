@@ -73,6 +73,7 @@ class PositionRankerTest {
                 QueryType.CORRECTED, query2,
                 QueryType.SUGGESTED, query3
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
         List<Doc> result = PositionRanker.rankByWordPosition(docs, queries);
@@ -88,6 +89,7 @@ class PositionRankerTest {
     void getDocMinWordPositionByQuery() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
         DocumentProcessor.processDoc(doc);
 
         int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
@@ -99,6 +101,7 @@ class PositionRankerTest {
     void getDocMinWordPositionByQuery_docHasMinPositionInSecondAttribute() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 3).findFirst().get();
+        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
         DocumentProcessor.processDoc(doc);
 
         int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
@@ -110,6 +113,7 @@ class PositionRankerTest {
     void getDocMinWordPositionByQuery_aWordIsRepeatedInMultipleAttributesWithDifferentPositions() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 6).findFirst().get();
+        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
         DocumentProcessor.processDoc(doc);
 
         int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);

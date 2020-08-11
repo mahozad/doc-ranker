@@ -5,9 +5,11 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.elasticsearch.analyzer.ParsiAnalyzer;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
 
@@ -74,8 +76,8 @@ public class DocumentProcessor {
         return normalizedTokens;
     }
 
-    public static int getNumberOfMatches(Doc doc, Query query) throws IOException {
-        List<String> qWords = normalizeText(query.getText());
+    public static int getNumberOfMatches(Doc doc, Query query) {
+        List<String> qWords = query.getTokens();
         int numberOfMatches = 0;
         for (int i = 0; i < qWords.size(); i++) {
             if (query.getType() == WILDCARD && i == qWords.size() - 1) {

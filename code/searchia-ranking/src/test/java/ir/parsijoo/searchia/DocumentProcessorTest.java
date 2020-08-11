@@ -212,6 +212,7 @@ class DocumentProcessorTest {
     void getNumberOfMatches() throws IOException {
         Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
         Query query = new Query("dodge charter", Query.QueryType.ORIGINAL);
+        QueryProcessor.processQueries(Map.of(Query.QueryType.ORIGINAL, query));
         DocumentProcessor.processDoc(doc);
 
         int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
@@ -223,6 +224,7 @@ class DocumentProcessorTest {
     void getNumberOfMatches_wildCardQuery() throws IOException {
         Doc doc = docs.stream().filter(d -> d.getId() == 8).findFirst().get();
         Query query = new Query("lamborghini aventado*", Query.QueryType.WILDCARD);
+        QueryProcessor.processQueries(Map.of(Query.QueryType.WILDCARD, query));
         DocumentProcessor.processDoc(doc);
 
         int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);

@@ -78,6 +78,7 @@ class ExactMatchRankerTest {
                 QueryType.ORIGINAL, query1,
                 QueryType.WILDCARD, query2
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
@@ -101,6 +102,7 @@ class ExactMatchRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, unusedQuery
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
@@ -121,6 +123,7 @@ class ExactMatchRankerTest {
                 QueryType.ORIGINAL, query1,
                 QueryType.EQUIVALENT, query2
         );
+        QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedGroup1Ids = Set.of(2, 3, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17);

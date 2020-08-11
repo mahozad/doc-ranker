@@ -1,6 +1,5 @@
 package ir.parsijoo.searchia;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,9 +10,8 @@ public class ExactMatchRanker {
 
     private static final Set<Query.QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
 
-    public static List<Doc> rankByExactMatch(Map<Query.QueryType, Query> queries, List<Doc> docs) throws IOException {
-        String textOfOriginalQuery = queries.get(ORIGINAL).getText();
-        int lengthOfOriginalQuery = DocumentProcessor.normalizeText(textOfOriginalQuery).size();
+    public static List<Doc> rankByExactMatch(Map<Query.QueryType, Query> queries, List<Doc> docs) {
+        int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         for (Doc doc : docs) {
             for (Query.QueryType queryType : queries.keySet().stream().filter(queryTypes::contains).collect(toSet())) {
                 Query query = queries.get(queryType);
