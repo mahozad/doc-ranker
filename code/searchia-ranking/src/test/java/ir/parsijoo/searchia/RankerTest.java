@@ -5,6 +5,7 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import ir.parsijoo.searchia.dto.RankDTO;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static ir.parsijoo.searchia.dto.RankDTO.RankingPhase.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -129,10 +131,11 @@ class RankerTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
+        List<RankDTO.RankingPhase> rankingPhases = List.of(TYPO, NUMBER_OF_WORDS, WORDS_DISTANCE, WORDS_POSITION, EXACT_MATCH, CUSTOM);
         List<Integer> expectedDocIdOrder =
                 List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
-        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, rankingPhases, offset, limit);
 
         assertThat(result.stream().map(Doc::getId).collect(toList()), is(equalTo(expectedDocIdOrder)));
     }
@@ -150,9 +153,10 @@ class RankerTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
+        List<RankDTO.RankingPhase> rankingPhases = List.of(TYPO, NUMBER_OF_WORDS, WORDS_DISTANCE, WORDS_POSITION, EXACT_MATCH, CUSTOM);
 
         Instant startTime = Instant.now();
-        Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+        Ranker.rank(queries, docs, promotions, configuration, rankingPhases, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -170,8 +174,9 @@ class RankerTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
+        List<RankDTO.RankingPhase> rankingPhases = List.of(TYPO, NUMBER_OF_WORDS, WORDS_DISTANCE, WORDS_POSITION, EXACT_MATCH, CUSTOM);
 
-        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, rankingPhases, offset, limit);
 
         assertEquals(limit, result.size());
     }
@@ -226,9 +231,11 @@ class RankerTest {
                 Query.QueryType.CORRECTED, query3
         );
 
+        List<RankDTO.RankingPhase> rankingPhases = List.of(TYPO, NUMBER_OF_WORDS, WORDS_DISTANCE, WORDS_POSITION, EXACT_MATCH, CUSTOM);
+
         long timeThreshold = 20/*ms*/;
         Instant startTime = Instant.now();
-        Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+        Ranker.rank(queries, docs, promotions, configuration, rankingPhases, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -283,10 +290,11 @@ class RankerTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.CORRECTED, query3
         );
+        List<RankDTO.RankingPhase> rankingPhases = List.of(TYPO, NUMBER_OF_WORDS, WORDS_DISTANCE, WORDS_POSITION, EXACT_MATCH, CUSTOM);
 
         double timeThreshold = 50.0/*ms*/;
         Instant startTime = Instant.now();
-        Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+        Ranker.rank(queries, docs, promotions, configuration, rankingPhases, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
         totalDuration += duration;
         maxDuration = Math.max(maxDuration, duration);

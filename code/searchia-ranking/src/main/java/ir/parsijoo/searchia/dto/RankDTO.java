@@ -11,11 +11,17 @@ import static ir.parsijoo.searchia.dto.RankDTO.RankingPhase.TYPO;
 
 public class RankDTO {
 
-    enum RankingPhase {
+    public enum RankingPhase {
         TYPO(0), NUMBER_OF_WORDS(1), WORDS_DISTANCE(2), WORDS_POSITION(3), EXACT_MATCH(4), CUSTOM(5);
-        int order;
+
+        private final int order;
+
         RankingPhase(int order) {
             this.order = order;
+        }
+
+        public int getOrder() {
+            return order;
         }
     }
 

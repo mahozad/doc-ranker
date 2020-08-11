@@ -1,10 +1,13 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.dto.RankDTO.RankingPhase;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 
 import static ir.parsijoo.searchia.OptionalWordRanker.groupDocsByRank;
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
 public class Ranker {
@@ -14,18 +17,36 @@ public class Ranker {
             List<Doc> docs,
             List<Promotion> promotions,
             RankConfiguration configuration,
+            List<RankingPhase> rankingPhases,
             int offset,
             int limit) throws IOException {
 
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        TypoRanker.rankByTypo(queries, docs);
-        OptionalWordRanker.rankByOptionalWords(queries, docs);
-        DistanceRanker.rankByWordsDistance(queries, docs);
-        PositionRanker.rankByWordPosition(queries, docs);
-        ExactMatchRanker.rankByExactMatch(queries, docs);
-        CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());
+        List<RankingPhase> phases = rankingPhases.stream().sorted(comparingInt(RankingPhase::getOrder)).collect(toList());
+        for (RankingPhase rankingPhase : phases) {
+            switch (rankingPhase) {
+                case TYPO:
+                    TypoRanker.rankByTypo(queries, docs);
+                    break;
+                case NUMBER_OF_WORDS:
+                    OptionalWordRanker.rankByOptionalWords(queries, docs);
+                    break;
+                case WORDS_DISTANCE:
+                    DistanceRanker.rankByWordsDistance(queries, docs);
+                    break;
+                case WORDS_POSITION:
+                    PositionRanker.rankByWordPosition(queries, docs);
+                    break;
+                case EXACT_MATCH:
+                    ExactMatchRanker.rankByExactMatch(queries, docs);
+                    break;
+                case CUSTOM:
+                    CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());
+                    break;
+            }
+        }
 
         docs.sort(Doc::compareTo);
         return docs.subList(offset, limit);
