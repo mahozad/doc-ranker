@@ -23,7 +23,7 @@ public class Ranker {
         TypoRanker.rankByTypo(queries, docs);
         OptionalWordRanker.rankByOptionalWords(queries, docs);
         DistanceRanker.rankByWordsDistance(queries, docs);
-        PositionRanker.rankByWordPosition(docs, queries);
+        PositionRanker.rankByWordPosition(queries, docs);
         ExactMatchRanker.rankByExactMatch(queries, docs);
         CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());
 

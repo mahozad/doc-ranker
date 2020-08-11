@@ -76,7 +76,7 @@ class PositionRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        PositionRanker.rankByWordPosition(docs, queries);
+        PositionRanker.rankByWordPosition(queries, docs);
         docs.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
 
         assertEquals(0, docs.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
