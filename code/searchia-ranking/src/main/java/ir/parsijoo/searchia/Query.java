@@ -1,5 +1,6 @@
 package ir.parsijoo.searchia;
 
+import java.util.List;
 
 public class Query {
 
@@ -9,6 +10,7 @@ public class Query {
 
     private final String text;
     private final QueryType type;
+    private List<String> tokens;
 
     public Query(String text, QueryType type) {
         this.text = text;
@@ -21,5 +23,13 @@ public class Query {
 
     public QueryType getType() {
         return type;
+    }
+
+    public List<String> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<String> tokens) {
+        this.tokens = tokens;
     }
 }
