@@ -43,7 +43,7 @@ public class TypoRanker {
             }
         }
 
-        return docs.stream().sorted(Comparator.comparingInt(Doc::getNumberOfTypos)).collect(toList());
+        return docs;
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {

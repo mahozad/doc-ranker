@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
@@ -114,7 +115,7 @@ class TypoRankerTest {
         Set<Integer> expectedIds = Set.of(2, 16, 17);
 
         List<Doc> result = TypoRanker.rankByTypo(queries, docs);
-        List<Integer> resultIds = result.stream().map(Doc::getId).collect(toList());
+        List<Integer> resultIds = result.stream().sorted(comparingInt(Doc::getNumberOfTypos)).map(Doc::getId).collect(toList());
 
         assertTrue(resultIds.subList(0, 3).containsAll(expectedIds));
     }
