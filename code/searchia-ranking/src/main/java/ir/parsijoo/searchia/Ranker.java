@@ -20,15 +20,15 @@ public class Ranker {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> sortedByTypo = TypoRanker.rankByTypo(queries, docs);
-        List<Doc> sortedByOptionalWords = OptionalWordRanker.rankByOptionalWords(queries, sortedByTypo);
-        List<Doc> sortedByWordsDistance = DistanceRanker.rankByWordsDistance(queries, sortedByOptionalWords);
-        List<Doc> sortedByWordPosition = PositionRanker.rankByWordPosition(sortedByWordsDistance, queries);
-        List<Doc> sortedByExactMatch = ExactMatchRanker.rankByExactMatch(queries, sortedByWordPosition);
-        List<Doc> finalResult = CustomRanker.rankByCustomAttributes(sortedByExactMatch, configuration.getCustomRankingAttrs());
+        TypoRanker.rankByTypo(queries, docs);
+        OptionalWordRanker.rankByOptionalWords(queries, docs);
+        DistanceRanker.rankByWordsDistance(queries, docs);
+        PositionRanker.rankByWordPosition(docs, queries);
+        ExactMatchRanker.rankByExactMatch(queries, docs);
+        CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());
 
-        finalResult.sort(Doc::compareTo);
-        return finalResult.subList(offset, limit);
+        docs.sort(Doc::compareTo);
+        return docs.subList(offset, limit);
     }
 
     public static <T extends Comparable<T>> void updateRanks(List<Doc> docs, Function<Doc, T> function, boolean reversed) {
