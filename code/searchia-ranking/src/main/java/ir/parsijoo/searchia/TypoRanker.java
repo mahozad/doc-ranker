@@ -15,20 +15,24 @@ public class TypoRanker {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
         List<Query> rankQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
         for (Doc doc : docs) {
-            for (Query query : rankQueries) {
-                boolean isDocMatching = isDocMatchedWithQuery(doc, query);
-                if (isDocMatching) {
-                    doc.setNumberOfTypos(0);
-                    break;
-                } else {
-                    doc.setNumberOfTypos(1);
-                }
-            }
+            computeNumberOfTypos(rankQueries, doc);
         }
         if (queriesContainCorrectedOrSuggested) {
             Ranker.updateRanks(docs, Doc::getNumberOfTypos, false);
         }
         docs.sort(comparingInt(Doc::getNumberOfTypos));
+    }
+
+    private static void computeNumberOfTypos(List<Query> queries, Doc doc) {
+        for (Query query : queries) {
+            boolean isDocMatching = isDocMatchedWithQuery(doc, query);
+            if (isDocMatching) {
+                doc.setNumberOfTypos(0);
+                break;
+            } else {
+                doc.setNumberOfTypos(1);
+            }
+        }
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
