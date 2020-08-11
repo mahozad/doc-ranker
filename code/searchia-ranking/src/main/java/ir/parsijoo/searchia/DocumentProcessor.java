@@ -6,6 +6,7 @@ import org.elasticsearch.analyzer.ParsiAnalyzer;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
@@ -24,11 +25,13 @@ public class DocumentProcessor {
         int offset = 0;
         for (Attribute<String> searchableAttr : doc.getSearchableAttrs()) {
             List<String> tokens = normalizeText(searchableAttr.getValue());
-            Map<String, TokenInfo> tokenInfo = populateTokenInfo(tokens, offset);
-            tokenInfo.forEach((k, v) -> doc.getTokens().merge(k, v, (t1, t2) -> {
-                t1.getPositions().addAll(t2.getPositions());
-                return t1;
-            }));
+            Map<String, TokenInfo> tokensMap = populateTokenInfo(tokens, offset);
+            for (Entry<String, TokenInfo> token : tokensMap.entrySet()) {
+                doc.getTokens().merge(token.getKey(), token.getValue(), (v1, v2) -> {
+                    v1.getPositions().addAll(v2.getPositions());
+                    return v1;
+                });
+            }
             offset += ATTRIBUTES_DISTANCE;
         }
         return doc;
