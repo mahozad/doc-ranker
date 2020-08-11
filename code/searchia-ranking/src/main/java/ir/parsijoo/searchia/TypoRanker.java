@@ -1,23 +1,17 @@
 package ir.parsijoo.searchia;
 
-
-
 import ir.parsijoo.searchia.Query.QueryType;
 
-import java.io.IOException;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
-import static java.util.stream.Collectors.toList;
 
 public class TypoRanker {
 
-    public static List<Doc> rankByTypo(Map<QueryType, Query> queries, List<Doc> docs) throws IOException {
+    public static List<Doc> rankByTypo(Map<QueryType, Query> queries, List<Doc> docs) {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
-        long topGroupCount = 0;
 
         List<Query> rankQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
         for (Doc doc : docs) {
@@ -25,7 +19,6 @@ public class TypoRanker {
                 boolean isDocMatching = isDocMatchedWithQuery(doc, query);
                 if (isDocMatching) {
                     doc.setNumberOfTypos(0);
-                    topGroupCount++;
                     break;
                 } else {
                     doc.setNumberOfTypos(1);
@@ -34,13 +27,7 @@ public class TypoRanker {
         }
 
         if (queriesContainCorrectedOrSuggested) {
-            // Example: if the top group has 7 members, all its members should be ranked 0 and
-            // all members of second group should be ranked 7
-            for (Doc doc : docs) {
-                if (doc.getNumberOfTypos() == 1) {
-                    doc.setRank(topGroupCount);
-                }
-            }
+            Ranker.updateRanks(docs, Doc::getNumberOfTypos, false);
         }
 
         return docs;
