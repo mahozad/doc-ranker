@@ -6,11 +6,11 @@ import ir.parsijoo.searchia.Query.QueryType;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
-import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
 
 public class TypoRanker {
@@ -47,11 +47,11 @@ public class TypoRanker {
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
-        List<String> tokens = query.getTokens();
-        for (int i = 0; i < tokens.size(); i++) {
-            String token = tokens.get(i);
+        Iterator<String> tokens = query.getTokens().iterator();
+        while (tokens.hasNext()) {
+            String token = tokens.next();
             // If queryType is WILDCARD, the last word should be considered as prefix
-            if (query.getType() == WILDCARD && i == tokens.size() - 1) {
+            if (query.getType() == WILDCARD && !tokens.hasNext()) {
                 boolean noMatches = doc.getTokens().keySet().stream().noneMatch(s -> s.startsWith(token));
                 if (noMatches) {
                     return false;
