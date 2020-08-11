@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -92,7 +93,7 @@ class OptionalWordRankerTest {
         docs.get(11).setRank(docs.size() - 2);
         Set<Integer> expectedGroupSizes = Set.of(2, docs.size() - 2);
 
-        SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
+        SortedMap<Integer, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
 
         Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
         assertTrue(groupSizes.containsAll(expectedGroupSizes));
@@ -114,7 +115,7 @@ class OptionalWordRankerTest {
 
         OptionalWordRanker.rankByOptionalWords(queries, docs);
 
-        docs.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        docs.sort(comparingInt(Doc::getRank));
         List<Doc> nonOptionalMatches = docs.subList(0, expectedNonOptionalMatchIds.size());
         assertTrue(nonOptionalMatches.stream().map(Doc::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));
     }

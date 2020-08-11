@@ -41,8 +41,8 @@ public class OptionalWordRanker {
         }
     }
 
-    public static SortedMap<Long, List<Doc>> groupDocsByRank(List<Doc> docs) {
-        Map<Long, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getRank));
+    public static SortedMap<Integer, List<Doc>> groupDocsByRank(List<Doc> docs) {
+        Map<Integer, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getRank));
         return new TreeMap<>(map);
     }
 }

@@ -53,7 +53,7 @@ public class Ranker {
     }
 
     public static <T extends Comparable<T>> void updateRanks(List<Doc> docs, Function<Doc, T> function, boolean reversed) {
-        SortedMap<Long, List<Doc>> groups = groupDocsByRank(docs);
+        SortedMap<Integer, List<Doc>> groups = groupDocsByRank(docs);
         int rank = 0; // Rank starts from 0 (top doc has rank of 0)
         for (List<Doc> group : groups.values()) {
             Comparator<Doc> comparator = Comparator.comparing(function);
@@ -147,7 +147,7 @@ class Doc implements Comparable<Doc> {
     private MinPosition minPosition;
     private int numberOfMatches;
     private int numberOfExactMatches;
-    private long rank = 0;
+    private int rank = 0;
 
     public Doc(int id, Map<String, ?> customRankingAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
         this.id = id;
@@ -197,11 +197,11 @@ class Doc implements Comparable<Doc> {
         this.numberOfMatches = numberOfMatches;
     }
 
-    public long getRank() {
+    public int getRank() {
         return rank;
     }
 
-    public void setRank(long rank) {
+    public void setRank(int rank) {
         this.rank = rank;
     }
 
@@ -239,7 +239,7 @@ class Doc implements Comparable<Doc> {
 
     @Override
     public int compareTo(Doc other) {
-        return (int) (rank - other.rank);
+        return rank - other.rank;
     }
 }
 

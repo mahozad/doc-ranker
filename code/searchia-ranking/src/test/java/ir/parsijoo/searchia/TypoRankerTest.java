@@ -154,8 +154,8 @@ class TypoRankerTest {
         TypoRanker.rankByTypo(queries, docs);
 
         docs = docs.stream().sorted().collect(toList());
-        Set<Long> group1Ranks = docs.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
-        Set<Long> group2Ranks = docs.subList(3, docs.size()).stream().map(Doc::getRank).collect(toSet());
+        Set<Integer> group1Ranks = docs.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
+        Set<Integer> group2Ranks = docs.subList(3, docs.size()).stream().map(Doc::getRank).collect(toSet());
         assertEquals(1, group1Ranks.size());
         assertEquals(1, group2Ranks.size());
     }

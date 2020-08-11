@@ -59,7 +59,7 @@ class CustomRankerTest {
     void rankByCustomAttributes() throws IOException {
         List<String> customAttrs = List.of("viewCount", "creationDate");
         DocumentProcessor.processDocs(docs);
-        List<Long> expectedRanks = List.of(14L, 8L, 15L, 9L, 11L, 16L, 10L, 13L, 6L, 1L, 0L, 7L, 2L, 5L, 12L, 3L, 4L);
+        List<Integer> expectedRanks = List.of(14, 8, 15, 9, 11, 16, 10, 13, 6, 1, 0, 7, 2, 5, 12, 3, 4);
 
         CustomRanker.rankByCustomAttributes(docs, customAttrs);
 

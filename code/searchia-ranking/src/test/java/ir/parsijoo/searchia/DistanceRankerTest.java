@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparingInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -81,7 +82,7 @@ class DistanceRankerTest {
 
         DistanceRanker.rankByWordsDistance(queries, docs);
 
-        docs.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        docs.sort(comparingInt(Doc::getRank));
         assertTrue(docs.get(0).getId() == 2 && docs.get(0).getRank() == 0);
         assertTrue(docs.get(1).getId() == 3 && docs.get(1).getRank() == 1);
         assertTrue(docs.get(2).getId() == 16 && docs.get(2).getRank() == 2);

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparingInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PositionRankerTest {
@@ -77,7 +78,7 @@ class PositionRankerTest {
         DocumentProcessor.processDocs(docs);
 
         PositionRanker.rankByWordPosition(queries, docs);
-        docs.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        docs.sort(comparingInt(Doc::getRank));
 
         assertEquals(0, docs.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
         assertEquals(1, docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().getRank());
