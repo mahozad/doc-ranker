@@ -43,7 +43,7 @@ public class Ranker {
             List<Doc> sortedGroup = group.stream().sorted(comparator).collect(toList());
             T currentValue = function.apply(sortedGroup.get(0));
             for (Doc doc : sortedGroup) {
-                if (function.apply(doc) != currentValue) {
+                if (function.apply(doc).compareTo(currentValue) != 0) {
                     rank++;
                     doc.setRank(rank);
                     currentValue = function.apply(doc);
