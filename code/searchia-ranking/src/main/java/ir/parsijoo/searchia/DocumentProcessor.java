@@ -37,26 +37,6 @@ public class DocumentProcessor {
         return doc;
     }
 
-    public static List<String> tokenizeText(String text) {
-        return Arrays.stream(text.split("[\\s\\u200c]")) // \u200c is zero-width non-joiner space
-                .flatMap(token -> Arrays.stream(token.split("[.,;:\"،؛']")))
-                .peek(token -> {
-                    // String str = "گل‌های آبي 1 ۲";
-                    // ir.parsijoo.persianstemmer.Stemmer.stem()
-                    //
-                    // ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
-                    //
-                    // TokenStream tokenStream = parsiAnalyzer.tokenStream(null,str);
-                    // tokenStream.reset();
-                    // while (tokenStream.incrementToken()) {
-                    //     Attribute attribute = tokenStream.getAttribute(CharTermAttribute.class);
-                    //     String string = attribute.toString();
-                    //     System.out.println(string);
-                    // }
-                })
-                .collect(Collectors.toList());
-    }
-
     /**
      * Positions of a word for every other attribute starts with a large offset.
      *
