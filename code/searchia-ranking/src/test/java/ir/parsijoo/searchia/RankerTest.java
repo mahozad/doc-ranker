@@ -1,9 +1,16 @@
 package ir.parsijoo.searchia;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -137,5 +144,63 @@ class RankerTest {
         List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
 
         assertEquals(limit, result.size());
+    }
+
+    @Test
+    void rank_useRealData() throws IOException, CsvException {
+        File file = new File("src/test/resources/real-docs.csv");
+        CSVParser csvParser = new CSVParserBuilder().withIgnoreQuotations(true).build();
+        CSVReader csvReader = new CSVReaderBuilder(new FileReader(file))
+                .withSkipLines(1)
+                .withCSVParser(csvParser)
+                .build();
+        List<String[]> records = csvReader.readAll();
+
+        List<Doc> docs = records.stream()
+                .map(fields -> {
+                    List<Attribute<String>> attributes = Arrays.stream(fields)
+                            .filter(field -> field.startsWith("{\"anchorText\":") || field.startsWith("\"title\":\""))
+                            .map(field -> {
+                                if (field.startsWith("{\"")) {
+                                    field = field.substring(1);
+                                } else if (field.endsWith("\"}")) {
+                                    field = field.substring(0, field.length() - 1);
+                                }
+                                String[] fieldParts = field.split("\":\"");
+                                fieldParts[0] = fieldParts[0].substring(1);
+                                fieldParts[1] = fieldParts[1].substring(0, fieldParts[1].length() - 1);
+
+                                return new Attribute<>(fieldParts[0], fieldParts[1]);
+                            })
+                            .collect(Collectors.toList());
+                    return new Doc(0, Map.of(), 0, attributes);
+                })
+                .collect(Collectors.toList());
+
+        RankConfiguration configuration = new RankConfiguration(
+                "fake",
+                null,
+                false,
+                List.of(),
+                Set.of("fake")
+        );
+
+        int offset = 0;
+        int limit = 10;
+        Query query1 = new Query("معرفی فیل", Query.QueryType.ORIGINAL);
+        Query query2 = new Query("معرفی فیل*", Query.QueryType.WILDCARD);
+        Query query3 = new Query("معرفی فیلم", Query.QueryType.CORRECTED);
+        Map<Query.QueryType, Query> queries = Map.of(
+                Query.QueryType.ORIGINAL, query1,
+                Query.QueryType.WILDCARD, query2,
+                Query.QueryType.CORRECTED, query3
+        );
+
+        long timeThreshold = 20/*ms*/;
+        Instant startTime = Instant.now();
+        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
+        long duration = Duration.between(startTime, Instant.now()).toMillis();
+
+        assertThat(duration, is(lessThan(timeThreshold)));
     }
 }
