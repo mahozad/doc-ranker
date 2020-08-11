@@ -19,8 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,7 +58,7 @@ class RankerTest {
                     Map<String, Double> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
 
         configuration = new RankConfiguration(
                 "price",
@@ -84,13 +85,24 @@ class RankerTest {
         docs.get(10).setRank(7);
         docs.get(12).setRank(4);
 
-        docs = docs.stream().sorted().collect(Collectors.toList());
+        docs = docs.stream().sorted().collect(toList());
 
         assertEquals(7, docs.get(docs.size()-1).getRank());
         assertEquals(5, docs.get(docs.size()-2).getRank());
         assertEquals(4, docs.get(docs.size()-3).getRank());
         assertEquals(3, docs.get(docs.size()-4).getRank());
-        assertEquals(1, docs.subList(0, docs.size()-5).stream().map(Doc::getRank).collect(Collectors.toSet()).size());
+        assertEquals(1, docs.subList(0, docs.size()-5).stream().map(Doc::getRank).collect(toSet()).size());
+    }
+
+    @Test
+    void updateRanks() {
+        docs.stream().filter(doc -> doc.getId() < 5).forEach(doc -> doc.setRank(1));
+        docs.stream().filter(doc -> doc.getId() % 2 == 0).forEach(doc -> doc.setNumberOfMatches(1));
+        List<Long> expectedRanks = Arrays.asList(2L, 3L, 2L, 3L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L);
+
+        Ranker.updateRanks(docs, Doc::getNumberOfMatches, false);
+
+        assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 
     @Test
@@ -110,7 +122,7 @@ class RankerTest {
 
         List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, offset, limit);
 
-        assertThat(result.stream().map(Doc::getId).collect(Collectors.toList()), is(equalTo(expectedDocIdOrder)));
+        assertThat(result.stream().map(Doc::getId).collect(toList()), is(equalTo(expectedDocIdOrder)));
     }
 
     @Test
@@ -178,10 +190,10 @@ class RankerTest {
 
                                 return new Attribute<>(fieldParts[0], fieldParts[1]);
                             })
-                            .collect(Collectors.toList());
+                            .collect(toList());
                     return new Doc(0, Map.of(), 0, attributes);
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
 
         RankConfiguration configuration = new RankConfiguration(
                 "fake",
@@ -236,10 +248,10 @@ class RankerTest {
 
                                 return new Attribute<>(fieldParts[0], fieldParts[1]);
                             })
-                            .collect(Collectors.toList());
+                            .collect(toList());
                     return new Doc(0, Map.of(), 0, attributes);
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
 
         RankConfiguration configuration = new RankConfiguration(
                 "fake",

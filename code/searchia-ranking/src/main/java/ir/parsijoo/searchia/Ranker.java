@@ -2,6 +2,10 @@ package ir.parsijoo.searchia;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
+
+import static ir.parsijoo.searchia.OptionalWordRanker.groupDocsByRank;
+import static java.util.stream.Collectors.toList;
 
 public class Ranker {
 
@@ -26,6 +30,29 @@ public class Ranker {
         List<Doc> sublist = finalResult.subList(offset, limit);
         sublist.sort(Doc::compareTo);
         return sublist;
+    }
+
+    public static <T extends Comparable<T>> void updateRanks(List<Doc> docs, Function<Doc, T> function, boolean reversed) {
+        SortedMap<Long, List<Doc>> groups = groupDocsByRank(docs);
+        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
+        for (List<Doc> group : groups.values()) {
+            Comparator<Doc> comparator = Comparator.comparing(function);
+            if (reversed) {
+                comparator = comparator.reversed();
+            }
+            List<Doc> sortedGroup = group.stream().sorted(comparator).collect(toList());
+            T currentValue = function.apply(sortedGroup.get(0));
+            for (Doc doc : sortedGroup) {
+                if (function.apply(doc) != currentValue) {
+                    rank++;
+                    doc.setRank(rank);
+                    currentValue = function.apply(doc);
+                } else {
+                    doc.setRank(rank);
+                }
+            }
+            rank++;
+        }
     }
 }
 
