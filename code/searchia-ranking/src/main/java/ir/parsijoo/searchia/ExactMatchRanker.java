@@ -1,5 +1,7 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,16 +10,16 @@ import static java.util.stream.Collectors.toSet;
 
 public class ExactMatchRanker {
 
-    private static final Set<Query.QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
+    private static final Set<QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
 
-    public static List<Doc> rankByExactMatch(Map<Query.QueryType, Query> queries, List<Doc> docs) {
+    public static List<Doc> rankByExactMatch(Map<QueryType, Query> queries, List<Doc> docs) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
+        Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
         for (Doc doc : docs) {
-            for (Query.QueryType queryType : queries.keySet().stream().filter(queryTypes::contains).collect(toSet())) {
-                Query query = queries.get(queryType);
+            for (Query query : rankQueries) {
                 int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
                 numberOfMatches = Math.min(numberOfMatches, lengthOfOriginalQuery);
-                if (queryType == WILDCARD) {
+                if (query.getType() == WILDCARD) {
                     doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches - 1));
                 } else if (numberOfMatches == lengthOfOriginalQuery) {
                     doc.setNumberOfExactMatches(numberOfMatches);
