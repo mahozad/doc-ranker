@@ -24,12 +24,11 @@ public class TypoRanker {
             for (Query query : rankQueries) {
                 boolean isDocMatching = isDocMatchedWithQuery(doc, query);
                 if (isDocMatching) {
-                    doc.setNumberOfTypos(1);
+                    doc.setNumberOfTypos(0);
                     topGroupCount++;
                     break;
                 } else {
-                    int score = Math.max(0, doc.getNumberOfTypos());
-                    doc.setNumberOfTypos(score);
+                    doc.setNumberOfTypos(1);
                 }
             }
         }
@@ -38,13 +37,13 @@ public class TypoRanker {
             // Example: if the top group has 7 members, all its members should be ranked 0 and
             // all members of second group should be ranked 7
             for (Doc doc : docs) {
-                if (doc.getNumberOfTypos() == 0) {
+                if (doc.getNumberOfTypos() == 1) {
                     doc.setRank(topGroupCount);
                 }
             }
         }
 
-        return docs.stream().sorted(Comparator.comparingInt(Doc::getNumberOfTypos).reversed()).collect(toList());
+        return docs.stream().sorted(Comparator.comparingInt(Doc::getNumberOfTypos)).collect(toList());
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
