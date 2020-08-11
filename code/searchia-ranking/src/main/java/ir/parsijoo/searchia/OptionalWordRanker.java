@@ -28,21 +28,21 @@ public class OptionalWordRanker {
             docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));
         } else {
             int lengthOfOptionalQuery = queries.get(OPTIONAL).getTokens().size();
-            SortedMap<Long, List<Doc>> docGroups = groupDocsByRank(docs);
             Set<Query> rankQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
 
+            for (Doc doc : docs) {
+                for (Query query : rankQueries) {
+                    if (TypoRanker.isDocMatchedWithQuery(doc, query)) {
+                        doc.setNumberOfMatches(lengthOfOriginalQuery);
+                        break;
+                    }
+                }
+                doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
+            }
+
+            SortedMap<Long, List<Doc>> docGroups = groupDocsByRank(docs);
             int rank = 0; // Rank starts from 0 (top doc has rank of 0)
             for (List<Doc> group : docGroups.values()) {
-                for (Doc doc : group) {
-                    for (Query query : rankQueries) {
-                        if (TypoRanker.isDocMatchedWithQuery(doc, query)) {
-                            doc.setNumberOfMatches(lengthOfOriginalQuery);
-                            break;
-                        }
-                    }
-                    doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
-                }
-
                 List<Doc> sortedGroup = group.stream().sorted((d1, d2) -> d2.getNumberOfMatches() - d1.getNumberOfMatches()).collect(toList());
                 long previousNumberOfMatches = sortedGroup.get(0).getNumberOfMatches();
                 for (Doc doc : sortedGroup) {
