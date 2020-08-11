@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.toList;
 
 public class TypoRanker {
 
@@ -30,7 +32,7 @@ public class TypoRanker {
             Ranker.updateRanks(docs, Doc::getNumberOfTypos, false);
         }
 
-        return docs;
+        return docs.stream().sorted(comparingInt(Doc::getNumberOfTypos)).collect(toList());
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
