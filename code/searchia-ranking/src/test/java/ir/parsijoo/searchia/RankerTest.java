@@ -105,7 +105,7 @@ class RankerTest {
         assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 
-    @Test
+    @Test // see https://stackoverflow.com/a/3637974
     void updateRanks_ensureComparingBoxedTypesWithEqualValuesProducesCorrectResult() {
         docs.stream().filter(doc -> doc.getId() < 5).forEach(doc -> doc.setRank(1));
         docs.stream().filter(doc -> doc.getId() % 2 == 0).forEach(doc -> doc.setNumberOfMatches(1));
