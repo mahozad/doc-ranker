@@ -11,7 +11,7 @@ import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
 public class PositionRanker {
 
-    public static List<Doc> rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) {
+    public static void rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) {
         for (Doc doc : docs) {
             int minPosition = Integer.MAX_VALUE;
             for (Query query : queries.values()) {
@@ -24,7 +24,6 @@ public class PositionRanker {
             doc.setMinPosition(new Doc.MinPosition(minPosition, "title"));
         }
         Ranker.updateRanks(docs, doc -> doc.getMinPosition().value, false);
-        return docs;
     }
 
     public static int getDocMinWordPositionByQuery(Doc doc, Query query) {

@@ -21,7 +21,7 @@ public class OptionalWordRanker {
      * @param docs
      * @return
      */
-    public static List<Doc> rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) {
+    public static void rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         if (!queries.containsKey(OPTIONAL)) {
             docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));
@@ -39,7 +39,6 @@ public class OptionalWordRanker {
             }
             Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
         }
-        return docs;
     }
 
     public static SortedMap<Long, List<Doc>> groupDocsByRank(List<Doc> docs) {

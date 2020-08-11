@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 public class CustomRanker {
 
-    public static List<Doc> rankByCustomAttributes(List<Doc> docs, List<String> customAttrs) {
+    public static void rankByCustomAttributes(List<Doc> docs, List<String> customAttrs) {
         for (String attrName : customAttrs) {
             Object attr = docs.get(0).getCustomRankingAttrs().get(attrName);
             if (attr instanceof Boolean) {
@@ -18,6 +18,5 @@ public class CustomRanker {
                 throw new RuntimeException("The attribute \"" + attrName + "\" provided for custom ranking is not of type Boolean or Double");
             }
         }
-        return docs;
     }
 }

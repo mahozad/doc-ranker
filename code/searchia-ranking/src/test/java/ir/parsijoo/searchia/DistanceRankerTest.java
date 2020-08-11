@@ -5,7 +5,6 @@ import ir.parsijoo.searchia.Doc.MinDistance;
 import ir.parsijoo.searchia.Query.QueryType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -16,8 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DistanceRankerTest {
 
@@ -80,13 +79,13 @@ class DistanceRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = DistanceRanker.rankByWordsDistance(queries, docs);
-        result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        DistanceRanker.rankByWordsDistance(queries, docs);
 
-        assertTrue(result.get(0).getId() == 2 && result.get(0).getRank() == 0);
-        assertTrue(result.get(1).getId() == 3 && result.get(1).getRank() == 1);
-        assertTrue(result.get(2).getId() == 16 && result.get(2).getRank() == 2);
-        assertEquals(3, result.get(10).getRank());
+        docs.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        assertTrue(docs.get(0).getId() == 2 && docs.get(0).getRank() == 0);
+        assertTrue(docs.get(1).getId() == 3 && docs.get(1).getRank() == 1);
+        assertTrue(docs.get(2).getId() == 16 && docs.get(2).getRank() == 2);
+        assertEquals(3, docs.get(10).getRank());
     }
 
     @Test

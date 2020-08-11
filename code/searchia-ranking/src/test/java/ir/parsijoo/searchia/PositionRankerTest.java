@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PositionRankerTest {
 
@@ -76,13 +76,13 @@ class PositionRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = PositionRanker.rankByWordPosition(docs, queries);
-        result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        PositionRanker.rankByWordPosition(docs, queries);
+        docs.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
 
-        assertEquals(0, result.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
-        assertEquals(1, result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getRank());
-        assertEquals(1, result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().value);
-        assertEquals("title", result.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().attributeName);
+        assertEquals(0, docs.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
+        assertEquals(1, docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().getRank());
+        assertEquals(1, docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().value);
+        assertEquals("title", docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().attributeName);
     }
 
     @Test

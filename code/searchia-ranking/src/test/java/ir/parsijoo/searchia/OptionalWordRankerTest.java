@@ -15,7 +15,8 @@ import java.util.SortedMap;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OptionalWordRankerTest {
 
@@ -78,10 +79,10 @@ class OptionalWordRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
+        OptionalWordRanker.rankByOptionalWords(queries, docs);
 
         // The set contains one number; in other words all the docs have the same numberOfMatches
-        assertEquals(1, result.stream().map(Doc::getNumberOfMatches).collect(toSet()).size());
+        assertEquals(1, docs.stream().map(Doc::getNumberOfMatches).collect(toSet()).size());
     }
 
     @Test
@@ -92,8 +93,8 @@ class OptionalWordRankerTest {
         Set<Integer> expectedGroupSizes = Set.of(2, docs.size() - 2);
 
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
-        Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
 
+        Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
         assertTrue(groupSizes.containsAll(expectedGroupSizes));
     }
 
@@ -111,10 +112,10 @@ class OptionalWordRankerTest {
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 10, 11, 12, 16, 17);
 
-        List<Doc> result = OptionalWordRanker.rankByOptionalWords(queries, docs);
-        result.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
-        List<Doc> nonOptionalMatches = result.subList(0, expectedNonOptionalMatchIds.size());
+        OptionalWordRanker.rankByOptionalWords(queries, docs);
 
+        docs.sort((o1, o2) -> (int) (o1.getRank() - o2.getRank()));
+        List<Doc> nonOptionalMatches = docs.subList(0, expectedNonOptionalMatchIds.size());
         assertTrue(nonOptionalMatches.stream().map(Doc::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));
     }
 }

@@ -61,8 +61,8 @@ class CustomRankerTest {
         DocumentProcessor.processDocs(docs);
         List<Long> expectedRanks = List.of(14L, 8L, 15L, 9L, 11L, 16L, 10L, 13L, 6L, 1L, 0L, 7L, 2L, 5L, 12L, 3L, 4L);
 
-        List<Doc> result = CustomRanker.rankByCustomAttributes(docs, customAttrs);
+        CustomRanker.rankByCustomAttributes(docs, customAttrs);
 
-        assertThat(result.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
+        assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 }

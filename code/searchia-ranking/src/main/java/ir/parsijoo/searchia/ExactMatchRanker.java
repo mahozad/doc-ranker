@@ -13,7 +13,7 @@ public class ExactMatchRanker {
 
     private static final Set<QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
 
-    public static List<Doc> rankByExactMatch(Map<QueryType, Query> queries, List<Doc> docs) {
+    public static void rankByExactMatch(Map<QueryType, Query> queries, List<Doc> docs) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
         for (Doc doc : docs) {
@@ -31,6 +31,5 @@ public class ExactMatchRanker {
             }
         }
         Ranker.updateRanks(docs, Doc::getNumberOfExactMatches, true);
-        return docs;
     }
 }

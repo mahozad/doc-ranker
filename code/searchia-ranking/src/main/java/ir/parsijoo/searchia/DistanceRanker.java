@@ -13,13 +13,12 @@ public class DistanceRanker {
     private static final int WORDS_DISTANCE_IN_DIFFERENT_ATTRIBUTES = 8;
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
-    public static List<Doc> rankByWordsDistance(Map<QueryType, Query> queries, List<Doc> docs) {
+    public static void rankByWordsDistance(Map<QueryType, Query> queries, List<Doc> docs) {
         for (Doc doc : docs) {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
         }
         Ranker.updateRanks(docs, doc -> doc.getMinDistance().value, false);
-        return docs;
     }
 
     public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {

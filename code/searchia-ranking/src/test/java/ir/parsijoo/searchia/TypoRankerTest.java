@@ -93,10 +93,10 @@ class TypoRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+        TypoRanker.rankByTypo(queries, docs);
 
         // The set contains one number; in other words all the docs have the same rank
-        assertEquals(1, result.stream().map(Doc::getRank).collect(toSet()).size());
+        assertEquals(1, docs.stream().map(Doc::getRank).collect(toSet()).size());
     }
 
     @Test
@@ -113,9 +113,9 @@ class TypoRankerTest {
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedIds = Set.of(2, 16, 17);
 
-        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
-        List<Integer> resultIds = result.stream().map(Doc::getId).collect(toList());
+        TypoRanker.rankByTypo(queries, docs);
 
+        List<Integer> resultIds = docs.stream().map(Doc::getId).collect(toList());
         assertTrue(resultIds.subList(0, 3).containsAll(expectedIds));
     }
 
@@ -132,10 +132,10 @@ class TypoRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+        TypoRanker.rankByTypo(queries, docs);
 
         // The set contains two numbers; in other words there are 2 different scores
-        assertEquals(2, result.stream().map(Doc::getRank).collect(toSet()).size());
+        assertEquals(2, docs.stream().map(Doc::getRank).collect(toSet()).size());
     }
 
     @Test
@@ -151,10 +151,11 @@ class TypoRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<Doc> result = TypoRanker.rankByTypo(queries, docs).stream().sorted().collect(toList());
-        Set<Long> group1Ranks = result.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
-        Set<Long> group2Ranks = result.subList(3, result.size()).stream().map(Doc::getRank).collect(toSet());
+        TypoRanker.rankByTypo(queries, docs);
 
+        docs = docs.stream().sorted().collect(toList());
+        Set<Long> group1Ranks = docs.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
+        Set<Long> group2Ranks = docs.subList(3, docs.size()).stream().map(Doc::getRank).collect(toSet());
         assertEquals(1, group1Ranks.size());
         assertEquals(1, group2Ranks.size());
     }

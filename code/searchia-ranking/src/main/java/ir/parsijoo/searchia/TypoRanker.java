@@ -8,13 +8,11 @@ import java.util.Map;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
 import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.toList;
 
 public class TypoRanker {
 
-    public static List<Doc> rankByTypo(Map<QueryType, Query> queries, List<Doc> docs) {
+    public static void rankByTypo(Map<QueryType, Query> queries, List<Doc> docs) {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
-
         List<Query> rankQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
         for (Doc doc : docs) {
             for (Query query : rankQueries) {
@@ -27,12 +25,10 @@ public class TypoRanker {
                 }
             }
         }
-
         if (queriesContainCorrectedOrSuggested) {
             Ranker.updateRanks(docs, Doc::getNumberOfTypos, false);
         }
-
-        return docs.stream().sorted(comparingInt(Doc::getNumberOfTypos)).collect(toList());
+        docs.sort(comparingInt(Doc::getNumberOfTypos));
     }
 
     public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
