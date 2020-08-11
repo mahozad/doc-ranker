@@ -27,9 +27,8 @@ public class Ranker {
         List<Doc> sortedByExactMatch = ExactMatchRanker.rankByExactMatch(queries, sortedByWordPosition);
         List<Doc> finalResult = CustomRanker.rankByCustomAttributes(sortedByExactMatch, configuration.getCustomRankingAttrs());
 
-        List<Doc> sublist = finalResult.subList(offset, limit);
-        sublist.sort(Doc::compareTo);
-        return sublist;
+        finalResult.sort(Doc::compareTo);
+        return finalResult.subList(offset, limit);
     }
 
     public static <T extends Comparable<T>> void updateRanks(List<Doc> docs, Function<Doc, T> function, boolean reversed) {

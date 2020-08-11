@@ -9,16 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.hamcrest.MatcherAssert.*;
-import org.hamcrest.CoreMatchers.*;
-
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CustomRankerTest {
 
@@ -48,7 +43,7 @@ class CustomRankerTest {
                     Map<String, Double> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })
-                .collect(Collectors.toList());
+                .collect(toList());
 
         promotions = List.of(
                 new Promotion(),
@@ -64,10 +59,10 @@ class CustomRankerTest {
     void rankByCustomAttributes() throws IOException {
         List<String> customAttrs = List.of("viewCount", "creationDate");
         DocumentProcessor.processDocs(docs);
-        List<Integer> expectedDocOrder = List.of(11, 10, 13, 16, 17, 14, 9, 12, 2, 4, 7, 5, 15, 8, 1, 3, 6);
+        List<Long> expectedRanks = List.of(14L, 8L, 15L, 9L, 11L, 16L, 10L, 13L, 6L, 1L, 0L, 7L, 2L, 5L, 12L, 3L, 4L);
 
         List<Doc> result = CustomRanker.rankByCustomAttributes(docs, customAttrs);
 
-        assertThat(result.stream().map(Doc::getId).collect(Collectors.toList()), is(equalTo(expectedDocOrder)));
+        assertThat(result.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 }

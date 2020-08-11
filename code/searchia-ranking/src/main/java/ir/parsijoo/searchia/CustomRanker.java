@@ -18,7 +18,6 @@ public class CustomRanker {
                 throw new RuntimeException("The attribute \"" + attrName + "\" provided for custom ranking is not of type Boolean or Double");
             }
         }
-        docs.sort((d1, d2) -> (int) (d1.getRank() - d2.getRank()));
         return docs;
     }
 }
