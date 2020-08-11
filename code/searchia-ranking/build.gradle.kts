@@ -23,6 +23,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.6.2")
     testImplementation("org.junit.platform:junit-platform-engine:1.6.2")
     testImplementation("org.junit.platform:junit-platform-commons:1.6.2")
+    testImplementation("com.opencsv:opencsv:5.2")
 }
 
 configure<JavaPluginConvention> {
