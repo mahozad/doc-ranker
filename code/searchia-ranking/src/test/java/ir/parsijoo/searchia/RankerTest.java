@@ -98,7 +98,7 @@ class RankerTest {
     void updateRanks() {
         docs.stream().filter(doc -> doc.getId() < 5).forEach(doc -> doc.setRank(1));
         docs.stream().filter(doc -> doc.getId() % 2 == 0).forEach(doc -> doc.setNumberOfMatches(1));
-        List<Long> expectedRanks = Arrays.asList(3L, 2L, 3L, 2L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L);
+        List<Long> expectedRanks = List.of(3L, 2L, 3L, 2L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L, 0L, 1L);
 
         Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
 
@@ -110,7 +110,7 @@ class RankerTest {
         docs.stream().filter(doc -> doc.getId() < 5).forEach(doc -> doc.setRank(1));
         docs.stream().filter(doc -> doc.getId() % 2 == 0).forEach(doc -> doc.setNumberOfMatches(1));
         docs.stream().filter(doc -> doc.getId() > 10).forEach(doc -> doc.setNumberOfMatches(Integer.MAX_VALUE));
-        List<Long> expectedRanks = Arrays.asList(4L, 3L, 4L, 3L, 2L, 1L, 2L, 1L, 2L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L);
+        List<Long> expectedRanks = List.of(4L, 3L, 4L, 3L, 2L, 1L, 2L, 1L, 2L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L);
 
         Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
 
