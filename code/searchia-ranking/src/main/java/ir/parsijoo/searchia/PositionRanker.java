@@ -1,23 +1,18 @@
 package ir.parsijoo.searchia;
 
-
-
 import ir.parsijoo.searchia.Query.QueryType;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
-
 public class PositionRanker {
 
-    public static List<Doc> rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) throws IOException {
+    public static List<Doc> rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) {
         for (Doc doc : docs) {
             int minPosition = Integer.MAX_VALUE;
-            for (QueryType queryType : queries.keySet()) {
-                Query query = queries.get(queryType);
+            for (Query query : queries.values()) {
                 int minPositionFromQuery = getDocMinWordPositionByQuery(doc, query);
                 if (minPositionFromQuery < minPosition) {
                     minPosition = minPositionFromQuery;
@@ -57,6 +52,10 @@ public class PositionRanker {
                 if (min.isPresent() && min.get() < minPosition) {
                     minPosition = min.get() % ATTRIBUTES_DISTANCE;
                 }
+            }
+            // A slight optimization: because the best position is 0 we do not continue the loop
+            if (minPosition == 0) {
+                break;
             }
         }
         return minPosition;
