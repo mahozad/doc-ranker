@@ -55,7 +55,7 @@ public class DocumentProcessor {
     }
 
     /**
-     * Positions of a word for every attribute has a large offset.
+     * Positions of a word for every other attribute starts with a large offset.
      *
      * @param tokens
      * @param positionOffset
