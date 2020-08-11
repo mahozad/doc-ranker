@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ public class DistanceRanker {
     private static final int WORDS_DISTANCE_IN_DIFFERENT_ATTRIBUTES = 8;
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
-    public static List<Doc> rankByWordsDistance(Map<Query.QueryType, Query> queries, List<Doc> docs) {
+    public static List<Doc> rankByWordsDistance(Map<Query.QueryType, Query> queries, List<Doc> docs) throws IOException {
         for (Doc doc : docs) {
             Doc.MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
@@ -38,8 +39,8 @@ public class DistanceRanker {
         return docs;
     }
 
-    public static int calculateDocDistanceFromQuery(Doc doc, Query query) {
-        List<String> qWords = DocumentProcessor.tokenizeText(query.getText());
+    public static int calculateDocDistanceFromQuery(Doc doc, Query query) throws IOException {
+        List<String> qWords = DocumentProcessor.normalizeText(query.getText());
         int i = 0;
         int totalDistance = 0;
         String word1;
@@ -103,7 +104,7 @@ public class DistanceRanker {
         }
     }
 
-    public static Doc.MinDistance getDocMinDistanceFromQueries(Doc doc, Map<Query.QueryType, Query> queries) {
+    public static Doc.MinDistance getDocMinDistanceFromQueries(Doc doc, Map<Query.QueryType, Query> queries) throws IOException {
         int minDistance = Integer.MAX_VALUE;
         Query.QueryType selectedQueryType = Query.QueryType.ORIGINAL;
         for (Query.QueryType queryType : queries.keySet()) {

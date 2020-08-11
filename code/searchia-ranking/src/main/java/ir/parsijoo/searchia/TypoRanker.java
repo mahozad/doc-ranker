@@ -4,6 +4,7 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 
 public class TypoRanker {
 
-    public static List<Doc> rankByTypo(Map<QueryType, Query> queries, List<Doc> docs) {
+    public static List<Doc> rankByTypo(Map<QueryType, Query> queries, List<Doc> docs) throws IOException {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
         long topGroupCount = 0;
 
@@ -46,12 +47,13 @@ public class TypoRanker {
         return docs.stream().sorted(Comparator.comparingInt(Doc::getNumberOfTypos).reversed()).collect(toList());
     }
 
-    public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
-        List<String> tokens = DocumentProcessor.tokenizeText(query.getText());
-        for (String token : tokens) {
-            if (query.getType() == WILDCARD && token.endsWith("*")) {
-                String tokenStem = token.replace("*", "");
-                boolean noMatches = doc.getTokens().keySet().stream().noneMatch(s -> s.startsWith(tokenStem));
+    public static boolean isDocMatchedWithQuery(Doc doc, Query query) throws IOException {
+        List<String> tokens = DocumentProcessor.normalizeText(query.getText());
+        for (int i = 0; i < tokens.size(); i++) {
+            String token = tokens.get(i);
+            // If queryType is WILDCARD, the last word should be considered as prefix
+            if (query.getType() == WILDCARD && i == tokens.size() - 1) {
+                boolean noMatches = doc.getTokens().keySet().stream().noneMatch(s -> s.startsWith(token));
                 if (noMatches) {
                     return false;
                 }

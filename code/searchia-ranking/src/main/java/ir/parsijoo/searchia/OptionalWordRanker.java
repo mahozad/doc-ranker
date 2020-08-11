@@ -3,6 +3,7 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -20,16 +21,16 @@ public class OptionalWordRanker {
      * @param docs
      * @return
      */
-    public static List<Doc> rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) {
+    public static List<Doc> rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) throws IOException {
         Query originalQuery = queries.get(QueryType.ORIGINAL);
-        int lengthOfOriginalQuery = DocumentProcessor.tokenizeText(originalQuery.getText()).size();
+        int lengthOfOriginalQuery = DocumentProcessor.normalizeText(originalQuery.getText()).size();
         if (!queries.containsKey(QueryType.OPTIONAL)) {
             for (Doc doc : docs) {
                 doc.setNumberOfMatches(lengthOfOriginalQuery);
             }
         } else {
             Query optionalQuery = queries.get(QueryType.OPTIONAL);
-            int lengthOfOptionalQuery = DocumentProcessor.tokenizeText(optionalQuery.getText()).size();
+            int lengthOfOptionalQuery = DocumentProcessor.normalizeText(optionalQuery.getText()).size();
             SortedMap<Long, List<Doc>> docGroups = groupDocsByRank(docs);
 
             int rank = 0; // Rank starts from 0 (top doc has rank of 0)

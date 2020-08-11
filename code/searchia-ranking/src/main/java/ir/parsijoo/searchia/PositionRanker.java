@@ -4,6 +4,7 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
 public class PositionRanker {
 
-    public static List<Doc> rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) {
+    public static List<Doc> rankByWordPosition(List<Doc> docs, Map<QueryType, Query> queries) throws IOException {
         for (Doc doc : docs) {
             int minPosition = Integer.MAX_VALUE;
             for (QueryType queryType : queries.keySet()) {
@@ -47,9 +48,9 @@ public class PositionRanker {
         return docs;
     }
 
-    public static int getDocMinWordPositionByQuery(Doc doc, Query query) {
+    public static int getDocMinWordPositionByQuery(Doc doc, Query query) throws IOException {
         int minPosition = Integer.MAX_VALUE;
-        List<String> qWords = DocumentProcessor.tokenizeText(query.getText());
+        List<String> qWords = DocumentProcessor.normalizeText(query.getText());
         for (String qWord : qWords) {
             if (doc.getTokens().containsKey(qWord)) {
                 List<Integer> tokenPositions = doc.getTokens().get(qWord).getPositions();

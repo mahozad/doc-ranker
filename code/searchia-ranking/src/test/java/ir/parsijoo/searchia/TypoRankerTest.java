@@ -173,7 +173,7 @@ class TypoRankerTest {
     }
 
     @Test
-    void isDocMatchingWithQuery() {
+    void isDocMatchingWithQuery() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
@@ -184,7 +184,7 @@ class TypoRankerTest {
     }
 
     @Test
-    void isDocMatchingWithQuery_wildcardQuery() {
+    void isDocMatchingWithQuery_wildcardQuery() throws IOException {
         Query query = new Query("dodge charter*", QueryType.WILDCARD);
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
@@ -195,7 +195,7 @@ class TypoRankerTest {
     }
 
     @Test
-    void isDocMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() {
+    void isDocMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() throws IOException {
         Query query = new Query("dodge charter", QueryType.WILDCARD);
         Doc doc = docs.get(1);
         doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));

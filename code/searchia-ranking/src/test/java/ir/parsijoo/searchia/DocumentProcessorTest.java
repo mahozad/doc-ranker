@@ -105,9 +105,9 @@ class DocumentProcessorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"hello world", "hello.world", "hello world.", "hello,world."})
-    void tokenizeText_english(String text) {
-        List<String> tokens = DocumentProcessor.tokenizeText(text);
+    @ValueSource(strings = {"Hello WoRld", "hElLo.world", "hello world.", "hello,world."})
+    void normalizeText_english(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.normalizeText(text);
 
         assertEquals(2, tokens.size());
         assertEquals("hello", tokens.get(0));
@@ -115,19 +115,19 @@ class DocumentProcessorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"hello world*", "hello.world*", "hello world*", "hello,world*"})
-    void tokenizeText_english_withWildcard(String text) {
-        List<String> tokens = DocumentProcessor.tokenizeText(text);
+    @ValueSource(strings = {"hello world*", "hello.world*", "hElLo WoRld*", "hello,world*"})
+    void normalizeText_english_withWildcard(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.normalizeText(text);
 
         assertEquals(2, tokens.size());
         assertEquals("hello", tokens.get(0));
-        assertEquals("world*", tokens.get(1));
+        assertEquals("world", tokens.get(1));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"سلام دنیا", "سلام‌دنیا", "سلام، دنیا", "سلام، دنیا."})
-    void tokenizeText_farsi(String text) {
-        List<String> tokens = DocumentProcessor.tokenizeText(text);
+    @ValueSource(strings = {"سلام دنیا", "سلآم‌دنيآ", "سلام، دنيا", "سلآم، دنیأ."})
+    void normalizeText_farsi(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.normalizeText(text);
 
         assertEquals(2, tokens.size());
         assertEquals("سلام", tokens.get(0));
@@ -135,13 +135,43 @@ class DocumentProcessorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"سلام دنیا*", "سلام‌دنیا*", "سلام، دنیا*", "سلام، دنیا*"})
-    void tokenizeText_farsi_withWildcard(String text) {
-        List<String> tokens = DocumentProcessor.tokenizeText(text);
+    @ValueSource(strings = {"سلام دنیا*", "سلام‌دنيآ*", "سلام، دنیأ*", "سلآم، دنیا*"})
+    void normalizeText_farsi_withWildcard(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.normalizeText(text);
 
         assertEquals(2, tokens.size());
         assertEquals("سلام", tokens.get(0));
-        assertEquals("دنیا*", tokens.get(1));
+        assertEquals("دنیا", tokens.get(1));
+    }
+
+    @Test
+    void normalizeText_farsi_oneWord() throws IOException {
+        String text = "آبي";
+        List<String> expectedTokens = List.of("ابی");
+
+        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
+
+        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
+    }
+
+    @Test
+    void normalizeText_english_oneWord() throws IOException {
+        String text = "Dodge";
+        List<String> expectedTokens = List.of("dodge");
+
+        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
+
+        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
+    }
+
+    @Test
+    void normalizeText_multiWordText() throws IOException {
+        String text = "گل‌های آبي 1 ۲";
+        List<String> expectedTokens = List.of("گل", "های", "ابی", "1", "2");
+
+        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
+
+        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
 
     @Test
@@ -176,36 +206,6 @@ class DocumentProcessorTest {
         Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings, attributeOffset);
 
         assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
-    }
-
-    @Test
-    void normalizeText() throws IOException {
-        String text = "آبي";
-        List<String> expectedTokens = List.of("ابی");
-
-        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
-
-        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
-    }
-
-    @Test
-    void normalizeText_english() throws IOException {
-        String text = "Dodge";
-        List<String> expectedTokens = List.of("dodge");
-
-        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
-
-        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
-    }
-
-    @Test
-    void normalizeText_multiWordText() throws IOException {
-        String text = "گل‌های آبي 1 ۲";
-        List<String> expectedTokens = List.of("گل", "های", "ابی", "1", "2");
-
-        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
-
-        assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
 
     @Test
