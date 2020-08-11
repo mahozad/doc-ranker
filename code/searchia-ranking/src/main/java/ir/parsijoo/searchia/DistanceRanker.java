@@ -1,21 +1,24 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Doc.MinDistance;
+import ir.parsijoo.searchia.Query.QueryType;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
-
 
 public class DistanceRanker {
 
     private static final int WORDS_DISTANCE_IN_DIFFERENT_ATTRIBUTES = 8;
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
-    public static List<Doc> rankByWordsDistance(Map<Query.QueryType, Query> queries, List<Doc> docs) throws IOException {
+    public static List<Doc> rankByWordsDistance(Map<QueryType, Query> queries, List<Doc> docs) {
         for (Doc doc : docs) {
-            Doc.MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
+            MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
         }
         SortedMap<Long, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
@@ -39,13 +42,26 @@ public class DistanceRanker {
         return docs;
     }
 
+    public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {
+        int minDistance = Integer.MAX_VALUE;
+        QueryType selectedQueryType = QueryType.ORIGINAL;
+        for (Query query : queries.values()) {
+            int distance = calculateDocDistanceFromQuery(doc, query);
+            if (distance < minDistance) {
+                minDistance = distance;
+                selectedQueryType = query.getType();
+            }
+        }
+        return new MinDistance(minDistance, selectedQueryType);
+    }
+
     public static int calculateDocDistanceFromQuery(Doc doc, Query query) {
         List<String> qWords = query.getTokens();
         int i = 0;
         int totalDistance = 0;
         String word1;
         String word2;
-        while (i + 1 < qWords.size()) {
+        while (i < qWords.size() - 1) {
             word1 = qWords.get(i);
             word2 = qWords.get(i + 1);
             if (!doc.getTokens().containsKey(word1) || !doc.getTokens().containsKey(word2)) {
@@ -79,16 +95,13 @@ public class DistanceRanker {
         while (i < positions1.size() && j < positions2.size()) {
             int position1 = positions1.get(i);
             int position2 = positions2.get(j);
-
             if (position1 < position2) {
                 penalty = 0; // first word has occurred before the second word in the text
             } else {
                 penalty = 1; // first word has occurred after the second word in the text
             }
-
             int distance = Math.abs(position1 - position2) + penalty;
             minDistance = Math.min(minDistance, distance);
-
             if (position1 < position2 && i < positions1.size() - 1) {
                 i++;
             } else {
@@ -102,19 +115,5 @@ public class DistanceRanker {
         } else {
             return Math.min(minDistance, MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE);
         }
-    }
-
-    public static Doc.MinDistance getDocMinDistanceFromQueries(Doc doc, Map<Query.QueryType, Query> queries) throws IOException {
-        int minDistance = Integer.MAX_VALUE;
-        Query.QueryType selectedQueryType = Query.QueryType.ORIGINAL;
-        for (Query.QueryType queryType : queries.keySet()) {
-            Query query = queries.get(queryType);
-            int distance = calculateDocDistanceFromQuery(doc, query);
-            if (distance < minDistance) {
-                minDistance = distance;
-                selectedQueryType = queryType;
-            }
-        }
-        return new Doc.MinDistance(minDistance, selectedQueryType);
     }
 }
