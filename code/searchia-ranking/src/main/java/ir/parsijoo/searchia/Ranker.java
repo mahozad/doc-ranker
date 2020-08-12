@@ -3,8 +3,8 @@ package ir.parsijoo.searchia;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static ir.parsijoo.searchia.OptionalWordRanker.groupDocsByRank;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
@@ -84,5 +84,10 @@ public class Ranker {
             }
             rank++;
         }
+    }
+
+    public static SortedMap<Integer, List<Doc>> groupDocsByRank(List<Doc> docs) {
+        Map<Integer, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getRank));
+        return new TreeMap<>(map);
     }
 }

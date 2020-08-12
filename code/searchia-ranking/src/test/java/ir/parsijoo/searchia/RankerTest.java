@@ -23,6 +23,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class RankerTest {
@@ -90,6 +91,19 @@ class RankerTest {
         assertEquals(4, docs.get(docs.size()-3).getRank());
         assertEquals(3, docs.get(docs.size()-4).getRank());
         assertEquals(1, docs.subList(0, docs.size()-5).stream().map(Doc::getRank).collect(toSet()).size());
+    }
+
+    @Test
+    void groupDocsByRank() {
+        // Set rank of two docs to size - 2 and the rest have default rank of 0 (so two rank groups)
+        docs.get(1).setRank(docs.size() - 2);
+        docs.get(11).setRank(docs.size() - 2);
+        Set<Integer> expectedGroupSizes = Set.of(2, docs.size() - 2);
+
+        SortedMap<Integer, List<Doc>> groups = Ranker.groupDocsByRank(docs);
+
+        Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
+        assertTrue(groupSizes.containsAll(expectedGroupSizes));
     }
 
     @Test

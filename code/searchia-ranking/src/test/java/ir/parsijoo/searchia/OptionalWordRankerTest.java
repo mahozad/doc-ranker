@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparingInt;
@@ -84,19 +83,6 @@ class OptionalWordRankerTest {
 
         // The set contains one number; in other words all the docs have the same numberOfMatches
         assertEquals(1, docs.stream().map(Doc::getNumberOfMatches).collect(toSet()).size());
-    }
-
-    @Test
-    void groupDocsByRank() {
-        // Set rank of two docs to size - 2 and the rest have default rank of 0 (so two rank groups)
-        docs.get(1).setRank(docs.size() - 2);
-        docs.get(11).setRank(docs.size() - 2);
-        Set<Integer> expectedGroupSizes = Set.of(2, docs.size() - 2);
-
-        SortedMap<Integer, List<Doc>> groups = OptionalWordRanker.groupDocsByRank(docs);
-
-        Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
-        assertTrue(groupSizes.containsAll(expectedGroupSizes));
     }
 
     @Test

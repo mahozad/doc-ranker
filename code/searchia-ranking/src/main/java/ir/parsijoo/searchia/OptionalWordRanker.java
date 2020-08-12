@@ -1,10 +1,10 @@
 package ir.parsijoo.searchia;
 
-
 import ir.parsijoo.searchia.Query.QueryType;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static ir.parsijoo.searchia.Query.QueryType.OPTIONAL;
 import static ir.parsijoo.searchia.Query.QueryType.ORIGINAL;
@@ -39,10 +39,5 @@ public class OptionalWordRanker {
             }
             Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
         }
-    }
-
-    public static SortedMap<Integer, List<Doc>> groupDocsByRank(List<Doc> docs) {
-        Map<Integer, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getRank));
-        return new TreeMap<>(map);
     }
 }
