@@ -46,6 +46,19 @@ public class Ranker {
                     CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());
                     break;
             }
+
+//            if (docs.size() > limit) {
+//                docs.sort(comparingInt(Doc::getRank));
+//                int previousRank = docs.get(offset).getRank();
+//                for (int i = 0; i < log2(docs.size()) + 1; i++) {
+//                    int endIndex = Math.min((int) (offset + limit + Math.pow(2, i) - 1), docs.size() - 1);
+//                    int rank = docs.get(endIndex).getRank();
+//                    if (rank > previousRank) {
+//                        docs = docs.subList(offset, endIndex);
+//                        break;
+//                    }
+//                }
+//            }
         }
 
         docs.sort(Doc::compareTo);
