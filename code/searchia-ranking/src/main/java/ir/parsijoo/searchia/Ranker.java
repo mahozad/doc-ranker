@@ -66,11 +66,11 @@ public class Ranker {
     public static <T extends Comparable<T>> void updateRanks(List<Doc> docs, Function<Doc, T> function, boolean reversed) {
         SortedMap<Integer, List<Doc>> groups = groupDocsByRank(docs);
         int rank = 0; // Rank starts from 0 (top doc has rank of 0)
+        Comparator<Doc> comparator = Comparator.comparing(function);
+        if (reversed) {
+            comparator = comparator.reversed();
+        }
         for (List<Doc> group : groups.values()) {
-            Comparator<Doc> comparator = Comparator.comparing(function);
-            if (reversed) {
-                comparator = comparator.reversed();
-            }
             List<Doc> sortedGroup = group.stream().sorted(comparator).collect(toList());
             T currentValue = function.apply(sortedGroup.get(0));
             for (Doc doc : sortedGroup) {
