@@ -1,67 +1,119 @@
 package ir.parsijoo.searchia.dto;
 
-import ir.parsijoo.searchia.Query;
-
+import java.io.Serializable;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static ir.parsijoo.searchia.dto.RankDTO.RankingPhase.NUMBER_OF_WORDS;
-import static ir.parsijoo.searchia.dto.RankDTO.RankingPhase.TYPO;
+public class RankDTO implements Serializable {
 
-public class RankDTO {
+    private EnumMap<RankingPhaseDTO, Integer> phaseOrders = new EnumMap<>(RankingPhaseDTO.class); // phases.put(TYPO, 0); phases.put(...
+    private List<DocDTO> docs;
+    private Map<QueryDTO.QueryTypeDTO, QueryDTO> queries;
+    private Map<String, SortDirectionDTO> customRankingAttrs; // Map from attribute name to its sort direction. Example: "viewCount" -> ASCENDING
+    private Set<String> searchableAttrs; // Set of attribute names. Example: "title"
+    private List<PromotionDTO> promotions;
+    private boolean typoPhaseEnabled = true; // default == true
+    private boolean removeDuplicates = false; // default == false
+    private int duplicateTolerance = 1;
+    private String attributeNameToComputeDuplicates; // example: "title"
+    private boolean debugMode = false; // default == false
+    private int distanceOfWordsInDifferentFields = 8; // default == 8, minimum = 8
 
-    public enum RankingPhase {
-        TYPO(0), NUMBER_OF_WORDS(1), WORDS_DISTANCE(2), WORDS_POSITION(3), EXACT_MATCH(4), CUSTOM(5);
-
-        private final int order;
-
-        RankingPhase(int order) {
-            this.order = order;
-        }
-
-        public int getOrder() {
-            return order;
-        }
+    public boolean isTypoPhaseEnabled() {
+        return typoPhaseEnabled;
     }
 
-    enum SortDirection {
-        ASCENDING, DESCENDING
+    public void setTypoPhaseEnabled(boolean typoPhaseEnabled) {
+        this.typoPhaseEnabled = typoPhaseEnabled;
     }
 
-    // T should be either Boolean or Double
-    class Attribute<T> {
-        String name;
-        SortDirection sortType = SortDirection.DESCENDING; // default == DESCENDING
-        T value;
+    public EnumMap<RankingPhaseDTO, Integer> getPhaseOrders() {
+        return phaseOrders;
     }
 
-    class Promotion {
-        Doc doc; // or int docId;
-        int positionInResult;
+    public void setPhaseOrders(EnumMap<RankingPhaseDTO, Integer> phaseOrders) {
+        this.phaseOrders = phaseOrders;
     }
 
-    enum QueryType {
-        ORIGINAL, WILDCARD, CORRECTED, SUGGESTED, SPACED, EQUIVALENT, STEM, OPTIONAL
+    public Map<String, SortDirectionDTO> getCustomRankingAttrs() {
+        return customRankingAttrs;
     }
 
-    class Doc {
-        int id; // optional
-        double elasticScore; // optional
-        Map<String, ?> customRankingAttrs; // map from attribute name to its value. example: "title" -> "Coronavirus"
-        List<Attribute<String>> searchableAttrs; // attributes that we use their text for ranking
+    public void setCustomRankingAttrs(Map<String, SortDirectionDTO> customRankingAttrs) {
+        this.customRankingAttrs = customRankingAttrs;
     }
 
-    boolean typoPhaseEnabled = true; // default == true
-    Set<RankingPhase> phases = Set.of(TYPO, NUMBER_OF_WORDS /*,...*/); // changing default orders: TYPO.order = 4; EXACT_MATCH.order = 0;
-    Set<Attribute<?>> customRankingAttrs; // type of attribute should be either Boolean or Double
-    Set<String> searchableAttrs; // List of attribute names. example: "title"
-    List<Promotion> promotions;
-    boolean removeDuplicates = false; // default == false
-    int duplicateTolerance = 1;
-    String attributeNameToComputeDuplicates; // example: "title"
-    boolean debugMode = false; // default == false
-    int distanceOfWordsInDifferentFields = 8; // default == 8, minimum = 8
-    Map<QueryType, Query> queries;
-    List<Doc> docs;
+    public Set<String> getSearchableAttrs() {
+        return searchableAttrs;
+    }
+
+    public void setSearchableAttrs(Set<String> searchableAttrs) {
+        this.searchableAttrs = searchableAttrs;
+    }
+
+    public List<PromotionDTO> getPromotions() {
+        return promotions;
+    }
+
+    public void setPromotions(List<PromotionDTO> promotions) {
+        this.promotions = promotions;
+    }
+
+    public boolean isRemoveDuplicates() {
+        return removeDuplicates;
+    }
+
+    public void setRemoveDuplicates(boolean removeDuplicates) {
+        this.removeDuplicates = removeDuplicates;
+    }
+
+    public int getDuplicateTolerance() {
+        return duplicateTolerance;
+    }
+
+    public void setDuplicateTolerance(int duplicateTolerance) {
+        this.duplicateTolerance = duplicateTolerance;
+    }
+
+    public String getAttributeNameToComputeDuplicates() {
+        return attributeNameToComputeDuplicates;
+    }
+
+    public void setAttributeNameToComputeDuplicates(String attributeNameToComputeDuplicates) {
+        this.attributeNameToComputeDuplicates = attributeNameToComputeDuplicates;
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
+
+    public int getDistanceOfWordsInDifferentFields() {
+        return distanceOfWordsInDifferentFields;
+    }
+
+    public void setDistanceOfWordsInDifferentFields(int distanceOfWordsInDifferentFields) {
+        this.distanceOfWordsInDifferentFields = distanceOfWordsInDifferentFields;
+    }
+
+    public Map<QueryDTO.QueryTypeDTO, QueryDTO> getQueries() {
+        return queries;
+    }
+
+    public void setQueries(Map<QueryDTO.QueryTypeDTO, QueryDTO> queries) {
+        this.queries = queries;
+    }
+
+    public List<DocDTO> getDocs() {
+        return docs;
+    }
+
+    public void setDocs(List<DocDTO> docs) {
+        this.docs = docs;
+    }
 }
