@@ -16,6 +16,7 @@ import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
 public class DocumentProcessor {
 
     public static final int ATTRIBUTES_DISTANCE = 1_000_000;
+    private static ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
 
     public static void processDocs(List<Doc> docs) {
         docs.parallelStream().forEach(doc -> {
@@ -66,8 +67,6 @@ public class DocumentProcessor {
     }
 
     public static List<String> normalizeText(String text) throws IOException {
-        // TODO: Extract this object creation
-        ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
         TokenStream tokenStream = parsiAnalyzer.tokenStream(null, text);
         tokenStream.reset();
 
@@ -77,6 +76,7 @@ public class DocumentProcessor {
             normalizedTokens.add(attribute.toString());
         }
 
+        tokenStream.close();
         return normalizedTokens;
     }
 
