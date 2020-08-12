@@ -1,7 +1,5 @@
 package ir.parsijoo.searchia;
 
-import ir.parsijoo.searchia.dto.RankDTO.RankingPhase;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -17,20 +15,20 @@ public class Ranker {
             List<Doc> docs,
             List<Promotion> promotions,
             RankConfiguration configuration,
-            List<RankingPhase> rankingPhases,
+            EnumMap<RankingPhase, Integer> phaseOrders,
             int offset,
             int limit) throws IOException {
 
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<RankingPhase> phases = rankingPhases.stream().sorted(comparingInt(RankingPhase::getOrder)).collect(toList());
-        for (RankingPhase rankingPhase : phases) {
-            switch (rankingPhase) {
+        List<RankingPhase> phases = phaseOrders.entrySet().stream().sorted(comparingInt(Map.Entry::getValue)).map(Map.Entry::getKey).collect(toList());
+        for (RankingPhase phase : phases) {
+            switch (phase) {
                 case TYPO:
                     TypoRanker.rankByTypo(queries, docs);
                     break;
-                case NUMBER_OF_WORDS:
+                case OPTIONAL_WORDS:
                     OptionalWordRanker.rankByOptionalWords(queries, docs);
                     break;
                 case WORDS_DISTANCE:
