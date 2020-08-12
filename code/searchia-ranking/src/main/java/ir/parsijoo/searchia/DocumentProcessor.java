@@ -17,10 +17,14 @@ public class DocumentProcessor {
 
     public static final int ATTRIBUTES_DISTANCE = 1_000_000;
 
-    public static void processDocs(List<Doc> docs) throws IOException {
-        for (Doc doc : docs) {
-            processDoc(doc);
-        }
+    public static void processDocs(List<Doc> docs) {
+        docs.parallelStream().forEach(doc -> {
+            try {
+                processDoc(doc);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static Doc processDoc(Doc doc) throws IOException {
