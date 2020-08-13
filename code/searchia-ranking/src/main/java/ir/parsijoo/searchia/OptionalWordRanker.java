@@ -37,7 +37,7 @@ public class OptionalWordRanker {
                 }
                 doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
             }
-            Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
+            RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, true);
         }
     }
 }

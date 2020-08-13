@@ -18,7 +18,7 @@ public class TypoRanker {
             computeNumberOfTypos(rankQueries, doc);
         }
         if (queriesContainCorrectedOrSuggested) {
-            Ranker.updateRanks(docs, Doc::getNumberOfTypos, false);
+            RankingExecutor.updateRanks(docs, Doc::getNumberOfTypos, false);
         }
         docs.sort(comparingInt(Doc::getNumberOfTypos));
     }

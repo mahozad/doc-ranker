@@ -100,7 +100,7 @@ class RankerTest {
         docs.get(11).setRank(docs.size() - 2);
         Set<Integer> expectedGroupSizes = Set.of(2, docs.size() - 2);
 
-        SortedMap<Integer, List<Doc>> groups = Ranker.groupDocsByRank(docs);
+        SortedMap<Integer, List<Doc>> groups = RankingExecutor.groupDocsByRank(docs);
 
         Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
         assertTrue(groupSizes.containsAll(expectedGroupSizes));
@@ -112,7 +112,7 @@ class RankerTest {
         docs.stream().filter(doc -> doc.getId() % 2 == 0).forEach(doc -> doc.setNumberOfMatches(1));
         List<Integer> expectedRanks = List.of(3, 2, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1);
 
-        Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
+        RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, true);
 
         assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
@@ -124,7 +124,7 @@ class RankerTest {
         docs.stream().filter(doc -> doc.getId() > 10).forEach(doc -> doc.setNumberOfMatches(Integer.MAX_VALUE));
         List<Integer> expectedRanks = List.of(4, 3, 4, 3, 2, 1, 2, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0);
 
-        Ranker.updateRanks(docs, Doc::getNumberOfMatches, true);
+        RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, true);
 
         assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
@@ -146,7 +146,7 @@ class RankerTest {
         List<Integer> expectedDocIdOrder =
                 List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
-        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, phaseOrders, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, configuration, phaseOrders, offset, limit);
 
         assertThat(result.stream().map(Doc::getId).collect(toList()), is(equalTo(expectedDocIdOrder)));
     }
@@ -168,7 +168,7 @@ class RankerTest {
         phaseOrders.putAll(Map.of(TYPO, 0, OPTIONAL_WORDS, 1, WORDS_DISTANCE, 2, WORDS_POSITION, 3, EXACT_MATCH, 4, CUSTOM, 5));
 
         Instant startTime = Instant.now();
-        Ranker.rank(queries, docs, promotions, configuration, phaseOrders, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, promotions, configuration, phaseOrders, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -189,7 +189,7 @@ class RankerTest {
         EnumMap<RankingPhase, Integer> phaseOrders = new EnumMap<>(RankingPhase.class);
         phaseOrders.putAll(Map.of(TYPO, 0, OPTIONAL_WORDS, 1, WORDS_DISTANCE, 2, WORDS_POSITION, 3, EXACT_MATCH, 4, CUSTOM, 5));
 
-        List<Doc> result = Ranker.rank(queries, docs, promotions, configuration, phaseOrders, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, configuration, phaseOrders, offset, limit);
 
         assertEquals(limit, result.size());
     }
@@ -249,7 +249,7 @@ class RankerTest {
 
         long timeThreshold = 20/*ms*/;
         Instant startTime = Instant.now();
-        Ranker.rank(queries, docs, promotions, configuration, phaseOrders, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, promotions, configuration, phaseOrders, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -310,7 +310,7 @@ class RankerTest {
 
         double timeThreshold = 50.0/*ms*/;
         Instant startTime = Instant.now();
-        Ranker.rank(queries, docs, promotions, configuration, phaseOrders, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, promotions, configuration, phaseOrders, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
         totalDuration += duration;
         maxDuration = Math.max(maxDuration, duration);

@@ -23,7 +23,7 @@ public class PositionRanker {
             // FIXME: The attribute name is set to a constant value
             doc.setMinPosition(new Doc.MinPosition(minPosition, "title"));
         }
-        Ranker.updateRanks(docs, doc -> doc.getMinPosition().value, false);
+        RankingExecutor.updateRanks(docs, doc -> doc.getMinPosition().value, false);
     }
 
     public static int getDocMinWordPositionByQuery(Doc doc, Query query) {

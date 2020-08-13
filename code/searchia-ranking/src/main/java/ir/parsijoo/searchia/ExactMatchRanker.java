@@ -30,6 +30,6 @@ public class ExactMatchRanker {
                 }
             }
         }
-        Ranker.updateRanks(docs, Doc::getNumberOfExactMatches, true);
+        RankingExecutor.updateRanks(docs, Doc::getNumberOfExactMatches, true);
     }
 }

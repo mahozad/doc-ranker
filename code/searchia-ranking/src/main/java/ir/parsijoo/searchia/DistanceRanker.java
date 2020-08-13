@@ -18,7 +18,7 @@ public class DistanceRanker {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
         }
-        Ranker.updateRanks(docs, doc -> doc.getMinDistance().value, false);
+        RankingExecutor.updateRanks(docs, doc -> doc.getMinDistance().value, false);
     }
 
     public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {

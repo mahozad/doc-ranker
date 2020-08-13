@@ -10,10 +10,10 @@ public class CustomRanker {
             Object attr = docs.get(0).getCustomRankingAttrs().get(attrName);
             if (attr instanceof Boolean) {
                 Function<Doc, Boolean> function = doc -> (Boolean) doc.getCustomRankingAttrs().get(attrName);
-                Ranker.updateRanks(docs, function, true);
+                RankingExecutor.updateRanks(docs, function, true);
             } else if (attr instanceof Double) {
                 Function<Doc, Double> function = doc -> (Double) doc.getCustomRankingAttrs().get(attrName);
-                Ranker.updateRanks(docs, function, true);
+                RankingExecutor.updateRanks(docs, function, true);
             } else {
                 throw new RuntimeException("The attribute \"" + attrName + "\" provided for custom ranking is not of type Boolean or Double");
             }

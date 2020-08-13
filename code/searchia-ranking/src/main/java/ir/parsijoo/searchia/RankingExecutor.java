@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
-public class Ranker {
+public class RankingExecutor {
 
-    public static List<Doc> rank(
+    public static List<Doc> executeRanking(
             Map<Query.QueryType, Query> queries,
             List<Doc> docs,
             List<Promotion> promotions,
