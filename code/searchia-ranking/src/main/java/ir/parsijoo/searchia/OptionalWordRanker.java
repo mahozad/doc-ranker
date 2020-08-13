@@ -28,10 +28,12 @@ public class OptionalWordRanker implements Ranker {
             docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));
         } else {
             int lengthOfOptionalQuery = queries.get(OPTIONAL).getTokens().size();
-            Set<Query> rankQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
+            Set<Map.Entry<QueryType, Query>> rankQueries = queries.entrySet().stream().filter(q -> q.getKey() != OPTIONAL).collect(toSet());
             for (Doc doc : docs) {
-                for (Query query : rankQueries) {
-                    if (TypoRanker.isDocMatchedWithQuery(doc, query)) {
+                for (Map.Entry<QueryType, Query> entry : rankQueries) {
+                    QueryType queryType = entry.getKey();
+                    Query query = entry.getValue();
+                    if (doc.getQueryToNumberOfMatches().get(queryType) == query.getTokens().size()) {
                         doc.setNumberOfMatches(lengthOfOriginalQuery);
                         break;
                     }

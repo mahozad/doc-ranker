@@ -93,8 +93,7 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.OPTIONAL, query3
         );
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
 
         ranker.rank(queries, docs);
 
@@ -112,8 +111,7 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.OPTIONAL, query3
         );
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
         Set<Integer> expectedIds = Set.of(2, 16, 17);
 
         ranker.rank(queries, docs);
@@ -132,8 +130,8 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
 
         ranker.rank(queries, docs);
 
@@ -151,8 +149,7 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
 
         ranker.rank(queries, docs);
 

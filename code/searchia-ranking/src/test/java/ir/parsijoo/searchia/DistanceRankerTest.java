@@ -80,8 +80,7 @@ class DistanceRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
 
         ranker.rank(queries, docs);
 
@@ -103,8 +102,7 @@ class DistanceRankerTest {
                 QueryType.SUGGESTED, query3
         );
         Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDoc(doc);
+        DocumentProcessor.processDoc(doc, QueryProcessor.processQueries(queries));
 
         MinDistance minDistance = DistanceRanker.getDocMinDistanceFromQueries(doc, queries);
 
@@ -117,7 +115,7 @@ class DistanceRankerTest {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        DocumentProcessor.processDoc(doc);
+        DocumentProcessor.processDoc(doc, null);
 
         int distance = DistanceRanker.calculateDocDistanceFromQuery(doc, query);
 
@@ -129,7 +127,7 @@ class DistanceRankerTest {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
         Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        DocumentProcessor.processDoc(doc);
+        DocumentProcessor.processDoc(doc, null);
 
         int distance = DistanceRanker.calculateDocDistanceFromQuery(doc, query);
 

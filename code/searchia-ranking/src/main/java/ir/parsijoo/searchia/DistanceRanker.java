@@ -44,9 +44,6 @@ public class DistanceRanker implements Ranker {
         while (i < qWords.size() - 1) {
             word1 = qWords.get(i);
             word2 = qWords.get(i + 1);
-            if (!doc.getTokens().containsKey(word1) || !doc.getTokens().containsKey(word2)) {
-                return Integer.MAX_VALUE;
-            }
             List<Integer> positions1 = doc.getTokens().get(word1);
             List<Integer> positions2 = doc.getTokens().get(word2);
             int minDistance = calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
@@ -71,6 +68,10 @@ public class DistanceRanker implements Ranker {
         int j = 0;
         int minDistance = Integer.MAX_VALUE;
         int penalty = 0;
+
+        if (positions1 == null || positions2 == null) {
+            return minDistance;
+        }
 
         while (i < positions1.size() && j < positions2.size()) {
             int position1 = positions1.get(i);

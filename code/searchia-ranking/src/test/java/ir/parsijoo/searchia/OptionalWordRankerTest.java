@@ -79,8 +79,7 @@ class OptionalWordRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
 
         ranker.rank(queries, docs);
 
@@ -98,8 +97,7 @@ class OptionalWordRankerTest {
                 QueryType.SUGGESTED, query2,
                 QueryType.OPTIONAL, query3
         );
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
         Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 10, 11, 12, 16, 17);
 
         ranker.rank(queries, docs);

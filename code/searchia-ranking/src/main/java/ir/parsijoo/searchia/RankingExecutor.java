@@ -19,8 +19,7 @@ public class RankingExecutor {
             int offset,
             int limit) throws IOException {
 
-        QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        DocumentProcessor.processDocs(docs, QueryProcessor.processQueries(queries));
 
         List<RankingPhase> phases = phaseOrders.entrySet().stream().sorted(comparingInt(Map.Entry::getValue)).map(Map.Entry::getKey).collect(toList());
         for (RankingPhase phase : phases) {

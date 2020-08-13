@@ -1,5 +1,7 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +10,9 @@ public class Doc implements Comparable<Doc> {
 
     static class MinDistance {
         public final int value;
-        public final Query.QueryType query;
+        public final QueryType query;
 
-        public MinDistance(int value, Query.QueryType query) {
+        public MinDistance(int value, QueryType query) {
             this.value = value;
             this.query = query;
         }
@@ -38,6 +40,7 @@ public class Doc implements Comparable<Doc> {
     private int numberOfMatches;
     private int numberOfExactMatches;
     private int rank = 0;
+    private Map<QueryType, Integer> queryToNumberOfMatches = new HashMap<>();
 
     public Doc(int id, Map<String, ?> customRankingAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
         this.id = id;
@@ -45,6 +48,10 @@ public class Doc implements Comparable<Doc> {
         this.elasticScore = elasticScore;
         this.searchableAttrs = searchableAttrs;
         this.filterableAttrs = Map.of();
+    }
+
+    public Map<QueryType, Integer> getQueryToNumberOfMatches() {
+        return queryToNumberOfMatches;
     }
 
     public int getId() {

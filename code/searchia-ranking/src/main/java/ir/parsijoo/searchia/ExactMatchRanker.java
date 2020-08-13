@@ -16,10 +16,12 @@ public class ExactMatchRanker implements Ranker {
     @Override
     public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
-        Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
+        Set<Map.Entry<QueryType, Query>> rankQueries = queries.entrySet().stream().filter(q -> queryTypes.contains(q.getKey())).collect(toSet());
         for (Doc doc : docs) {
-            for (Query query : rankQueries) {
-                int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
+            for (Map.Entry<QueryType, Query> entry : rankQueries) {
+                QueryType queryType = entry.getKey();
+                Query query = entry.getValue();
+                int numberOfMatches = doc.getQueryToNumberOfMatches().get(queryType);
                 numberOfMatches = Math.min(numberOfMatches, lengthOfOriginalQuery);
                 if (query.getType() == WILDCARD) {
                     doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches - 1));
