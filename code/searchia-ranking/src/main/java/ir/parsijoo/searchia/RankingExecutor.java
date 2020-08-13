@@ -29,7 +29,7 @@ public class RankingExecutor {
                     TypoRanker.rankByTypo(queries, docs);
                     break;
                 case OPTIONAL_WORDS:
-                    OptionalWordRanker.rankByOptionalWords(queries, docs);
+                    new OptionalWordRanker().rank(queries, docs);
                     break;
                 case WORDS_DISTANCE:
                     new DistanceRanker().rank(queries, docs);

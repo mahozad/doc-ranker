@@ -26,6 +26,7 @@ class OptionalWordRankerTest {
     List<Doc> docs;
     List<Promotion> promotions;
     RankConfiguration configuration;
+    OptionalWordRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -60,6 +61,8 @@ class OptionalWordRankerTest {
                 List.of("viewCount", "creationDate"),
                 Set.of("dodge")
         );
+
+        ranker = new OptionalWordRanker();
     }
 
     @AfterEach
@@ -79,7 +82,7 @@ class OptionalWordRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        OptionalWordRanker.rankByOptionalWords(queries, docs);
+        ranker.rank(queries, docs);
 
         // The set contains one number; in other words all the docs have the same numberOfMatches
         assertEquals(1, docs.stream().map(Doc::getNumberOfMatches).collect(toSet()).size());
@@ -99,7 +102,7 @@ class OptionalWordRankerTest {
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 10, 11, 12, 16, 17);
 
-        OptionalWordRanker.rankByOptionalWords(queries, docs);
+        ranker.rank(queries, docs);
 
         docs.sort(comparingInt(Doc::getRank));
         List<Doc> nonOptionalMatches = docs.subList(0, expectedNonOptionalMatchIds.size());

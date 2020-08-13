@@ -10,7 +10,7 @@ import static ir.parsijoo.searchia.Query.QueryType.OPTIONAL;
 import static ir.parsijoo.searchia.Query.QueryType.ORIGINAL;
 import static java.util.stream.Collectors.toSet;
 
-public class OptionalWordRanker {
+public class OptionalWordRanker implements Ranker {
 
     /**
      * If we do not have optional query then number of matches in all the docs is same and is equal
@@ -21,7 +21,8 @@ public class OptionalWordRanker {
      * @param docs
      * @return
      */
-    public static void rankByOptionalWords(Map<QueryType, Query> queries, List<Doc> docs) {
+    @Override
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         if (!queries.containsKey(OPTIONAL)) {
             docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));
