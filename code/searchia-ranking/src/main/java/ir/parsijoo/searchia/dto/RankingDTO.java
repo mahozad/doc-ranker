@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class RankDTO implements Serializable {
+public class RankingDTO implements Serializable {
 
     private EnumMap<RankingPhaseDTO, Integer> phaseOrders = new EnumMap<>(RankingPhaseDTO.class); // phases.put(TYPO, 0); phases.put(...
     private List<DocDTO> docs;
