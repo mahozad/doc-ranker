@@ -46,8 +46,8 @@ public class DistanceRanker {
             if (!doc.getTokens().containsKey(word1) || !doc.getTokens().containsKey(word2)) {
                 return Integer.MAX_VALUE;
             }
-            List<Integer> positions1 = doc.getTokens().get(word1).getPositions();
-            List<Integer> positions2 = doc.getTokens().get(word2).getPositions();
+            List<Integer> positions1 = doc.getTokens().get(word1);
+            List<Integer> positions2 = doc.getTokens().get(word2);
             int minDistance = calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
             totalDistance += minDistance;
             i++;

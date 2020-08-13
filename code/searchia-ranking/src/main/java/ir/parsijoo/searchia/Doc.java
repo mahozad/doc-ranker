@@ -31,7 +31,7 @@ public class Doc implements Comparable<Doc> {
     private double elasticScore;
     private Map<String, ?> filterableAttrs;
     private Map<String, ?> customRankingAttrs;
-    private Map<String, TokenInfo> tokens = new HashMap<>();
+    private Map<String, List<Integer>> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
     private MinDistance minDistance;
     private MinPosition minPosition;
@@ -71,11 +71,11 @@ public class Doc implements Comparable<Doc> {
         this.filterableAttrs = filterableAttrs;
     }
 
-    public Map<String, TokenInfo> getTokens() {
+    public Map<String, List<Integer>> getTokens() {
         return tokens;
     }
 
-    public void setTokens(Map<String, TokenInfo> tokens) {
+    public void setTokens(Map<String, List<Integer>> tokens) {
         this.tokens = tokens;
     }
 

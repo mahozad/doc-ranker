@@ -8,7 +8,7 @@ public class QueryProcessor {
 
     public static void processQueries(Map<Query.QueryType, Query> queries) throws IOException {
         for (Query query : queries.values()) {
-            List<String> tokens = DocumentProcessor.normalizeText(query.getText());
+            List<String> tokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(query.getText());
             query.setTokens(tokens);
         }
     }

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DocumentProcessorTest {
 
@@ -99,15 +99,15 @@ class DocumentProcessorTest {
         String targetToken = "charger";
 
         DocumentProcessor.processDoc(doc);
-        List<Integer> expectedTokenPositions = doc.getTokens().get(targetToken).getPositions();
+        List<Integer> expectedTokenPositions = doc.getTokens().get(targetToken);
 
         assertThat(expectedTokenPositions, is(equalTo(List.of(1, 1_000_004))));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"Hello WoRld", "hElLo.world", "hello world.", "hello,world."})
-    void normalizeText_english(String text) throws IOException {
-        List<String> tokens = DocumentProcessor.normalizeText(text);
+    void tokenizeText_english(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("hello", tokens.get(0));
@@ -116,8 +116,8 @@ class DocumentProcessorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"hello world*", "hello.world*", "hElLo WoRld*", "hello,world*"})
-    void normalizeText_english_withWildcard(String text) throws IOException {
-        List<String> tokens = DocumentProcessor.normalizeText(text);
+    void tokenizeText_english_withWildcard(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("hello", tokens.get(0));
@@ -126,8 +126,8 @@ class DocumentProcessorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"سلام دنیا", "سلآم‌دنيآ", "سلام، دنيا", "سلآم، دنیأ."})
-    void normalizeText_farsi(String text) throws IOException {
-        List<String> tokens = DocumentProcessor.normalizeText(text);
+    void tokenizeText_farsi(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("سلام", tokens.get(0));
@@ -136,8 +136,8 @@ class DocumentProcessorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"سلام دنیا*", "سلام‌دنيآ*", "سلام، دنیأ*", "سلآم، دنیا*"})
-    void normalizeText_farsi_withWildcard(String text) throws IOException {
-        List<String> tokens = DocumentProcessor.normalizeText(text);
+    void tokenizeText_farsi_withWildcard(String text) throws IOException {
+        List<String> tokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("سلام", tokens.get(0));
@@ -145,67 +145,59 @@ class DocumentProcessorTest {
     }
 
     @Test
-    void normalizeText_farsi_oneWord() throws IOException {
+    void tokenizeText_farsi_oneWord() throws IOException {
         String text = "آبي";
         List<String> expectedTokens = List.of("ابی");
 
-        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
+        List<String> normalizedTokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(text);
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
 
     @Test
-    void normalizeText_english_oneWord() throws IOException {
+    void tokenizeText_english_oneWord() throws IOException {
         String text = "Dodge";
         List<String> expectedTokens = List.of("dodge");
 
-        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
+        List<String> normalizedTokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(text);
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
 
     @Test
-    void normalizeText_multiWordText() throws IOException {
+    void tokenizeText_multiWordText() throws IOException {
         String text = "گل‌های آبي 1 ۲";
         List<String> expectedTokens = List.of("گل", "های", "ابی", "1", "2");
 
-        List<String> normalizedTokens = DocumentProcessor.normalizeText(text);
+        List<String> normalizedTokens = DocumentProcessor.tokenizeTextWithoutAddingPositions(text);
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
 
     @Test
-    void populateTokenInfo_resultSize() {
-        List<String> strings = List.of("dodge", "new", "dodge", "red", "charger");
-        int attributeOffset = 0;
+    void tokenizeTextWithPosition() throws IOException {
+        String text = "Doc is a doc that is a good document";
+        int positionOffset = 0;
+        Set<String> expectedTokens = Set.of("doc", "is", "a", "that", "good", "document");
 
-        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings, attributeOffset);
+        Map<String, List<Integer>> tokens = DocumentProcessor.tokenizeTextWithPosition(text, positionOffset);
 
-        assertEquals(4, tokens.size());
+        assertThat(tokens.keySet(), is(equalTo(expectedTokens)));
+        assertThat(tokens.get("doc"), is(equalTo(List.of(positionOffset, 3 + positionOffset))));
+        assertThat(tokens.get("that"), is(equalTo(List.of(4 + positionOffset))));
     }
 
     @Test
-    void populateTokenInfo_tokenPositions() {
-        List<String> strings = List.of("dodge", "new", "red", "dodge", "charger");
-        String targetToken = "dodge";
-        int attributeOffset = 1_000_000;
-        List<Integer> expectedPositions = List.of(attributeOffset, attributeOffset + 3);
+    void tokenizeTextWithPosition_offsetIsNotZero() throws IOException {
+        String text = "Doc is a doc that is a good document";
+        int positionOffset = 1_000_000;
+        Set<String> expectedTokens = Set.of("doc", "is", "a", "that", "good", "document");
 
-        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings, attributeOffset);
+        Map<String, List<Integer>> tokens = DocumentProcessor.tokenizeTextWithPosition(text, positionOffset);
 
-        assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
-    }
-
-    @Test
-    void populateTokenInfo_tokenRepeated3Times() {
-        List<String> strings = List.of("dodge", "new", "red", "dodge", "charger", "dodge");
-        String targetToken = "dodge";
-        int attributeOffset = 1_000_000;
-        List<Integer> expectedPositions = List.of(attributeOffset, attributeOffset + 3, attributeOffset + 5);
-
-        Map<String, TokenInfo> tokens = DocumentProcessor.populateTokenInfo(strings, attributeOffset);
-
-        assertThat(tokens.get(targetToken).getPositions(), is(equalTo(expectedPositions)));
+        assertThat(tokens.keySet(), is(equalTo(expectedTokens)));
+        assertThat(tokens.get("doc"), is(equalTo(List.of(positionOffset, 3 + positionOffset))));
+        assertThat(tokens.get("that"), is(equalTo(List.of(4 + positionOffset))));
     }
 
     @Test

@@ -30,12 +30,11 @@ public class DocumentProcessor {
 
     public static Doc processDoc(Doc doc) throws IOException {
         int offset = 0;
-        for (Attribute<String> searchableAttr : doc.getSearchableAttrs()) {
-            List<String> tokens = normalizeText(searchableAttr.getValue());
-            Map<String, TokenInfo> tokensMap = populateTokenInfo(tokens, offset);
-            for (Entry<String, TokenInfo> token : tokensMap.entrySet()) {
+        for (Attribute<String> attr : doc.getSearchableAttrs()) {
+            Map<String, List<Integer>> tokens = tokenizeTextWithPosition(attr.getValue(), offset);
+            for (Entry<String, List<Integer>> token : tokens.entrySet()) {
                 doc.getTokens().merge(token.getKey(), token.getValue(), (v1, v2) -> {
-                    v1.getPositions().addAll(v2.getPositions());
+                    v1.addAll(v2);
                     return v1;
                 });
             }
@@ -44,40 +43,42 @@ public class DocumentProcessor {
         return doc;
     }
 
-    /**
-     * Positions of a word for every other attribute starts with a large offset.
-     *
-     * @param tokens
-     * @param positionOffset
-     * @return
-     */
-    public static Map<String, TokenInfo> populateTokenInfo(List<String> tokens, int positionOffset) {
-        Map<String, TokenInfo> tokensMap = new HashMap<>();
-        for (int i = 0; i < tokens.size(); i++) {
-            String token = tokens.get(i);
-            TokenInfo tokenInfo = new TokenInfo();
-            int position = positionOffset + i;
-            tokenInfo.getPositions().add(position);
-            tokensMap.merge(token, tokenInfo, (oldInfo, newInfo) -> {
-                oldInfo.getPositions().addAll(newInfo.getPositions());
-                return oldInfo;
-            });
-        }
-        return tokensMap;
-    }
-
-    public static List<String> normalizeText(String text) throws IOException {
+    public static List<String> tokenizeTextWithoutAddingPositions(String text) throws IOException {
         TokenStream tokenStream = parsiAnalyzer.tokenStream(null, text);
         tokenStream.reset();
 
         List<String> normalizedTokens = new ArrayList<>();
         while (tokenStream.incrementToken()) {
-            CharTermAttribute attribute = tokenStream.getAttribute(CharTermAttribute.class);
-            normalizedTokens.add(attribute.toString());
+            String attribute = tokenStream.getAttribute(CharTermAttribute.class).toString();
+            normalizedTokens.add(attribute);
         }
 
         tokenStream.close();
         return normalizedTokens;
+    }
+
+    public static Map<String, List<Integer>> tokenizeTextWithPosition(String text, int offset) throws IOException {
+        Map<String, List<Integer>> tokensMap = new HashMap<>();
+        TokenStream tokenStream = parsiAnalyzer.tokenStream(null, text);
+        tokenStream.reset();
+
+        int i = 0;
+        while (tokenStream.incrementToken()) {
+            String token = tokenStream.getAttribute(CharTermAttribute.class).toString();
+            int position = offset + i;
+            // instead of this if-else can also use map#merge but performance-wise it seems worse
+            if (tokensMap.containsKey(token)) {
+                tokensMap.get(token).add(position);
+            } else {
+                List<Integer> positions = new ArrayList<>();
+                positions.add(position);
+                tokensMap.put(token, positions);
+            }
+            i++;
+        }
+
+        tokenStream.close();
+        return tokensMap;
     }
 
     public static int getNumberOfMatches(Doc doc, Query query) {
@@ -95,14 +96,5 @@ public class DocumentProcessor {
             }
         }
         return numberOfMatches;
-    }
-}
-
-class TokenInfo {
-
-    private final List<Integer> positions = new ArrayList<>();
-
-    public List<Integer> getPositions() {
-        return positions;
     }
 }

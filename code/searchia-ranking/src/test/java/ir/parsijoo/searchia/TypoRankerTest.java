@@ -180,7 +180,7 @@ class TypoRankerTest {
     void isDocMatchingWithQuery() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Doc doc = docs.get(1);
-        doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+        doc.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
 
         boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
@@ -192,7 +192,7 @@ class TypoRankerTest {
     void isDocMatchingWithQuery_wildcardQuery() throws IOException {
         Query query = new Query("dodge charter*", QueryType.WILDCARD);
         Doc doc = docs.get(1);
-        doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+        doc.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
         QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
 
         boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
@@ -204,7 +204,7 @@ class TypoRankerTest {
     void isDocMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() throws IOException {
         Query query = new Query("dodge charter", QueryType.WILDCARD);
         Doc doc = docs.get(1);
-        doc.setTokens(Map.of("dodge", new TokenInfo(), "charter", new TokenInfo()));
+        doc.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
         QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
 
         boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
