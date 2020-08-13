@@ -16,7 +16,7 @@ import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
 public class DocumentProcessor {
 
     public static final int ATTRIBUTES_DISTANCE = 1_000_000;
-    private static ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
+    private static final ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
 
     public static void processDocs(List<Doc> docs) {
         docs.parallelStream().forEach(doc -> {
@@ -85,13 +85,13 @@ public class DocumentProcessor {
         List<String> qWords = query.getTokens();
         int numberOfMatches = 0;
         for (int i = 0; i < qWords.size(); i++) {
+            String qWord = qWords.get(i);
             if (query.getType() == WILDCARD && i == qWords.size() - 1) {
-                String qWordStem = qWords.get(i).replace("*", "");
-                boolean matches = doc.getTokens().keySet().stream().anyMatch(s -> s.startsWith(qWordStem));
+                boolean matches = doc.getTokens().keySet().stream().anyMatch(s -> s.startsWith(qWord));
                 if (matches) {
                     numberOfMatches++;
                 }
-            } else if (doc.getTokens().containsKey(qWords.get(i))) {
+            } else if (doc.getTokens().containsKey(qWord)) {
                 numberOfMatches++;
             }
         }
