@@ -38,7 +38,7 @@ public class RankingExecutor {
                     PositionRanker.rankByWordPosition(queries, docs);
                     break;
                 case EXACT_MATCH:
-                    ExactMatchRanker.rankByExactMatch(queries, docs);
+                    new ExactMatchRanker().rank(queries, docs);
                     break;
                 case CUSTOM:
                     CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());

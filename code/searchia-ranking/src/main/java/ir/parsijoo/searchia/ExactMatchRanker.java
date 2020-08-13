@@ -9,11 +9,12 @@ import java.util.Set;
 import static ir.parsijoo.searchia.Query.QueryType.*;
 import static java.util.stream.Collectors.toSet;
 
-public class ExactMatchRanker {
+public class ExactMatchRanker implements Ranker {
 
     private static final Set<QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
 
-    public static void rankByExactMatch(Map<QueryType, Query> queries, List<Doc> docs) {
+    @Override
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
         for (Doc doc : docs) {
