@@ -9,15 +9,15 @@ public class CustomRankingPhaseDTO extends RankingPhaseDTO implements Serializab
      */
     private final String attributeName;
 
-    public CustomRankingPhaseDTO(PhaseType type, boolean enabled, int order, SortDirection sortDirection, String attributeName) {
+    public CustomRankingPhaseDTO(RankingPhaseType type, boolean enabled, int order, SortDirection sortDirection, String attributeName) {
         super(type, enabled, order, sortDirection);
         this.attributeName = attributeName;
         validateType(type);
     }
 
-    private void validateType(PhaseType type) {
-        if (type != PhaseType.CUSTOM) {
-            throw new IllegalArgumentException("The type for a CustomPhaseDTO should be PhaseType.CUSTOM but was " + type);
+    private void validateType(RankingPhaseType type) {
+        if (type != RankingPhaseType.CUSTOM) {
+            throw new IllegalArgumentException("The type for a custom phase should be CUSTOM but was " + type);
         }
     }
 
