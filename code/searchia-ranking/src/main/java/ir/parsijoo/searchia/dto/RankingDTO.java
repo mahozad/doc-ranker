@@ -11,7 +11,7 @@ public class RankingDTO implements Serializable {
     private EnumMap<RankingPhaseDTO, Integer> phaseOrders = new EnumMap<>(RankingPhaseDTO.class); // phases.put(TYPO, 0); phases.put(...
     private List<DocDTO> docs;
     private Map<QueryDTO.QueryTypeDTO, QueryDTO> queries;
-    private Map<String, SortDirectionDTO> customRankingAttrs; // Map from attribute name to its sort direction. Example: "viewCount" -> ASCENDING
+    private Map<String, SortDirection> customRankingAttrs; // Map from attribute name to its sort direction. Example: "viewCount" -> ASCENDING
     private Set<String> searchableAttrs; // Set of attribute names. Example: "title"
     private List<PromotionDTO> promotions;
     private boolean typoPhaseEnabled = true; // default == true
@@ -37,11 +37,11 @@ public class RankingDTO implements Serializable {
         this.phaseOrders = phaseOrders;
     }
 
-    public Map<String, SortDirectionDTO> getCustomRankingAttrs() {
+    public Map<String, SortDirection> getCustomRankingAttrs() {
         return customRankingAttrs;
     }
 
-    public void setCustomRankingAttrs(Map<String, SortDirectionDTO> customRankingAttrs) {
+    public void setCustomRankingAttrs(Map<String, SortDirection> customRankingAttrs) {
         this.customRankingAttrs = customRankingAttrs;
     }
 

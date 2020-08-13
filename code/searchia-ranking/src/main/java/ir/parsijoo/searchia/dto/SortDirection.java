@@ -1,5 +1,5 @@
 package ir.parsijoo.searchia.dto;
 
-public enum SortDirectionDTO {
+public enum SortDirection {
     ASCENDING, DESCENDING
 }

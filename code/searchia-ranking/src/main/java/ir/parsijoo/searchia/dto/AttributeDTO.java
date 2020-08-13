@@ -8,9 +8,9 @@ public class AttributeDTO<T extends Comparable<T>> implements Serializable {
     private Class<T> type;
     private String name;
     private T value;
-    private SortDirectionDTO sortDirection = SortDirectionDTO.DESCENDING; // default == DESCENDING
+    private SortDirection sortDirection = SortDirection.DESCENDING; // default == DESCENDING
 
-    public AttributeDTO(Class<T> type, String name, T value, SortDirectionDTO sortDirection) {
+    public AttributeDTO(Class<T> type, String name, T value, SortDirection sortDirection) {
         this.type = type;
         this.name = name;
         this.value = value;
@@ -29,7 +29,7 @@ public class AttributeDTO<T extends Comparable<T>> implements Serializable {
         return value;
     }
 
-    public SortDirectionDTO getSortDirection() {
+    public SortDirection getSortDirection() {
         return sortDirection;
     }
 }
