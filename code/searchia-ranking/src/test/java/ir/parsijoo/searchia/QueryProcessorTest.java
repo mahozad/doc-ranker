@@ -1,10 +1,12 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,7 +20,30 @@ class QueryProcessorTest {
         Query query1 = new Query("Dodge charter", ORIGINAL);
         Query query2 = new Query("dodge charter*", WILDCARD);
         Query query3 = new Query("Red dodge Charger", SUGGESTED);
-        Map<Query.QueryType, Query> queries = Map.of(
+        Map<QueryType, Query> queries = Map.of(
+                ORIGINAL, query1,
+                WILDCARD, query2,
+                SUGGESTED, query3
+        );
+        Map<String, Set<QueryType>> expectedResult = Map.of(
+                "dodge", Set.of(ORIGINAL, WILDCARD, SUGGESTED),
+                "charter", Set.of(ORIGINAL),
+                "charter*", Set.of(WILDCARD),
+                "red", Set.of(SUGGESTED),
+                "charger", Set.of(SUGGESTED)
+        );
+
+        Map<String, Set<QueryType>> tokenToQuery = QueryProcessor.processQueries(queries);
+
+        assertThat(tokenToQuery, is(equalTo(expectedResult)));
+    }
+
+    @Test
+    void processQueries_ensureTokensAreUpdated() throws IOException {
+        Query query1 = new Query("Dodge charter", ORIGINAL);
+        Query query2 = new Query("dodge charter*", WILDCARD);
+        Query query3 = new Query("Red dodge Charger", SUGGESTED);
+        Map<QueryType, Query> queries = Map.of(
                 ORIGINAL, query1,
                 WILDCARD, query2,
                 SUGGESTED, query3
