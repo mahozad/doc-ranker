@@ -35,7 +35,7 @@ public class RankingExecutor {
                     new DistanceRanker().rank(queries, docs);
                     break;
                 case WORDS_POSITION:
-                    PositionRanker.rankByWordPosition(queries, docs);
+                    new PositionRanker().rank(queries, docs);
                     break;
                 case EXACT_MATCH:
                     new ExactMatchRanker().rank(queries, docs);

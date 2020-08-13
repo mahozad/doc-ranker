@@ -24,6 +24,7 @@ class PositionRankerTest {
     List<Doc> docs;
     List<Promotion> promotions;
     RankConfiguration configuration;
+    PositionRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -58,6 +59,8 @@ class PositionRankerTest {
                 List.of("viewCount", "creationDate"),
                 Set.of("dodge")
         );
+
+        ranker = new PositionRanker();
     }
 
     @AfterEach
@@ -77,7 +80,7 @@ class PositionRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        PositionRanker.rankByWordPosition(queries, docs);
+        ranker.rank(queries, docs);
         docs.sort(comparingInt(Doc::getRank));
 
         assertEquals(0, docs.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
