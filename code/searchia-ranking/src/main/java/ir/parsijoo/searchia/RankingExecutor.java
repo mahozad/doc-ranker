@@ -32,7 +32,7 @@ public class RankingExecutor {
                     OptionalWordRanker.rankByOptionalWords(queries, docs);
                     break;
                 case WORDS_DISTANCE:
-                    DistanceRanker.rankByWordsDistance(queries, docs);
+                    new DistanceRanker().rank(queries, docs);
                     break;
                 case WORDS_POSITION:
                     PositionRanker.rankByWordPosition(queries, docs);

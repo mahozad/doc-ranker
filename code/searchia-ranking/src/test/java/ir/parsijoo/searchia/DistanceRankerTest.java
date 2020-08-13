@@ -27,6 +27,7 @@ class DistanceRankerTest {
     List<Doc> docs;
     List<Promotion> promotions;
     RankConfiguration configuration;
+    DistanceRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -61,6 +62,8 @@ class DistanceRankerTest {
                 List.of("viewCount", "creationDate"),
                 Set.of("dodge")
         );
+
+        ranker = new DistanceRanker();
     }
 
     @AfterEach
@@ -80,7 +83,7 @@ class DistanceRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        DistanceRanker.rankByWordsDistance(queries, docs);
+        ranker.rank(queries, docs);
 
         docs.sort(comparingInt(Doc::getRank));
         assertTrue(docs.get(0).getId() == 2 && docs.get(0).getRank() == 0);

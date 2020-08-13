@@ -8,12 +8,13 @@ import java.util.Map;
 
 import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
-public class DistanceRanker {
+public class DistanceRanker implements Ranker {
 
     private static final int WORDS_DISTANCE_IN_DIFFERENT_ATTRIBUTES = 8;
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
-    public static void rankByWordsDistance(Map<QueryType, Query> queries, List<Doc> docs) {
+    @Override
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
         for (Doc doc : docs) {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
