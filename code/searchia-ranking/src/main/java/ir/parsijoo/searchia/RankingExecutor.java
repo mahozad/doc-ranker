@@ -26,7 +26,7 @@ public class RankingExecutor {
         for (RankingPhase phase : phases) {
             switch (phase) {
                 case TYPO:
-                    TypoRanker.rankByTypo(queries, docs);
+                    new TypoRanker().rank(queries, docs);
                     break;
                 case OPTIONAL_WORDS:
                     new OptionalWordRanker().rank(queries, docs);
