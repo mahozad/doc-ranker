@@ -34,8 +34,7 @@ public class RankingExecutor {
             List<Record> records,
             List<Promotion> promotions,
             RankingConfig rankingConfig,
-            int offset,
-            int limit) throws IOException {
+            int offset, int limit) throws IOException {
 
         QueryProcessor.processQueries(queries);
         RecordProcessor.processRecords(records);
@@ -59,7 +58,7 @@ public class RankingExecutor {
             comparator = comparator.reversed();
         }
 
-        int rank = 0; // Rank starts from 0 (top record has rank of 0)
+        int rank = 0; // Rank starts from 0 (i.e. top record has rank of 0)
         SortedMap<Integer, List<Record>> groups = groupRecordsByRank(records);
         for (List<Record> group : groups.values()) {
             List<Record> sortedGroup = group.stream().sorted(comparator).collect(toList());
