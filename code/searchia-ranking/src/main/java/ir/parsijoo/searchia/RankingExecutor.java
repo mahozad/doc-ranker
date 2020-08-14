@@ -1,62 +1,50 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.dto.RankingDTO;
+import ir.parsijoo.searchia.dto.RankingPhaseDTO;
+import ir.parsijoo.searchia.dto.RankingPhaseType;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.Comparator.comparingInt;
+import static ir.parsijoo.searchia.dto.RankingPhaseType.*;
 import static java.util.stream.Collectors.toList;
 
 public class RankingExecutor {
+
+    private static final Map<RankingPhaseType, Ranker> rankers = Map.of(
+            TYPO, new TypoRanker(),
+            OPTIONAL_WORDS, new OptionalWordRanker(),
+            WORDS_DISTANCE, new DistanceRanker(),
+            WORDS_POSITION, new PositionRanker(),
+            EXACT_MATCH, new ExactMatchRanker(),
+            CUSTOM, new CustomRanker()
+    );
 
     public static List<Doc> executeRanking(
             Map<Query.QueryType, Query> queries,
             List<Doc> docs,
             List<Promotion> promotions,
             RankConfiguration configuration,
-            EnumMap<RankingPhase, Integer> phaseOrders,
+            RankingDTO rankingDTO,
             int offset,
             int limit) throws IOException {
 
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<RankingPhase> phases = phaseOrders.entrySet().stream().sorted(comparingInt(Map.Entry::getValue)).map(Map.Entry::getKey).collect(toList());
-        for (RankingPhase phase : phases) {
-            switch (phase) {
-                case TYPO:
-                    new TypoRanker().rank(queries, docs, configuration);
-                    break;
-                case OPTIONAL_WORDS:
-                    new OptionalWordRanker().rank(queries, docs, configuration);
-                    break;
-                case WORDS_DISTANCE:
-                    new DistanceRanker().rank(queries, docs, configuration);
-                    break;
-                case WORDS_POSITION:
-                    new PositionRanker().rank(queries, docs, configuration);
-                    break;
-                case EXACT_MATCH:
-                    new ExactMatchRanker().rank(queries, docs, configuration);
-                    break;
-                case CUSTOM:
-                    new CustomRanker().rank(queries, docs, configuration);
-                    break;
-            }
+        List<RankingPhaseDTO> phases = rankingDTO
+                .getPhases()
+                .stream()
+                .filter(RankingPhaseDTO::isEnabled)
+                .sorted()
+                .collect(toList());
 
-//            if (docs.size() > limit) {
-//                docs.sort(comparingInt(Doc::getRank));
-//                int previousRank = docs.get(offset).getRank();
-//                for (int i = 0; i < log2(docs.size()) + 1; i++) {
-//                    int endIndex = Math.min((int) (offset + limit + Math.pow(2, i) - 1), docs.size() - 1);
-//                    int rank = docs.get(endIndex).getRank();
-//                    if (rank > previousRank) {
-//                        docs = docs.subList(offset, endIndex);
-//                        break;
-//                    }
-//                }
-//            }
+        for (RankingPhaseDTO phase : phases) {
+            Ranker ranker = rankers.get(phase.getType());
+            ranker.rank(queries, docs, configuration);
         }
 
         docs.sort(Doc::compareTo);
