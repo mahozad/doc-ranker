@@ -270,8 +270,7 @@ class RankerTest {
                 new RankingPhaseDTO(OPTIONAL_WORDS, true, 1, DESCENDING, null),
                 new RankingPhaseDTO(WORDS_DISTANCE, true, 2, ASCENDING, null),
                 new RankingPhaseDTO(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null),
-                new RankingPhaseDTO(CUSTOM, true, 5, DESCENDING, "viewCount")
+                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null)
         ));
 
         long timeThreshold = 20/*ms*/;
@@ -337,8 +336,7 @@ class RankerTest {
                 new RankingPhaseDTO(OPTIONAL_WORDS, true, 1, DESCENDING, null),
                 new RankingPhaseDTO(WORDS_DISTANCE, true, 2, ASCENDING, null),
                 new RankingPhaseDTO(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null),
-                new RankingPhaseDTO(CUSTOM, true, 5, DESCENDING, "viewCount")
+                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null)
         ));
 
         double timeThreshold = 50.0/*ms*/;
