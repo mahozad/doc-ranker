@@ -51,23 +51,23 @@ public class RankingExecutor {
     }
 
     public static <T extends Comparable<T>> void updateRanks(List<Doc> docs, Function<Doc, T> function, boolean reversed) {
-        SortedMap<Integer, List<Doc>> groups = groupDocsByRank(docs);
-        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
         Comparator<Doc> comparator = Comparator.comparing(function);
         if (reversed) {
             comparator = comparator.reversed();
         }
+
+        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
+        SortedMap<Integer, List<Doc>> groups = groupDocsByRank(docs);
         for (List<Doc> group : groups.values()) {
             List<Doc> sortedGroup = group.stream().sorted(comparator).collect(toList());
             T currentValue = function.apply(sortedGroup.get(0));
             for (Doc doc : sortedGroup) {
-                if (function.apply(doc).compareTo(currentValue) != 0) {
+                T attributeValue = function.apply(doc);
+                if (attributeValue.compareTo(currentValue) != 0) {
                     rank++;
-                    doc.setRank(rank);
-                    currentValue = function.apply(doc);
-                } else {
-                    doc.setRank(rank);
+                    currentValue = attributeValue;
                 }
+                doc.setRank(rank);
             }
             rank++;
         }
