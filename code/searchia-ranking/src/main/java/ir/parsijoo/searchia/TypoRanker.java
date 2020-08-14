@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +13,7 @@ import static java.util.Comparator.comparingInt;
 public class TypoRanker implements Ranker {
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhaseDTO phaseInfo) {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
         List<Query> rankQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
         for (Doc doc : docs) {

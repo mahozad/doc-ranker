@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -19,11 +20,11 @@ public class OptionalWordRanker implements Ranker {
      *
      * @param queries
      * @param docs
-     * @param config
+     * @param phaseInfo
      * @return
      */
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhaseDTO phaseInfo) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         if (!queries.containsKey(OPTIONAL)) {
             docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));

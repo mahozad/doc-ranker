@@ -42,9 +42,9 @@ public class RankingExecutor {
                 .sorted()
                 .collect(toList());
 
-        for (RankingPhaseDTO phase : phases) {
-            Ranker ranker = rankers.get(phase.getType());
-            ranker.rank(queries, docs, configuration);
+        for (RankingPhaseDTO phaseInfo : phases) {
+            Ranker ranker = rankers.get(phaseInfo.getType());
+            ranker.rank(queries, docs, phaseInfo);
         }
 
         docs.sort(Doc::compareTo);

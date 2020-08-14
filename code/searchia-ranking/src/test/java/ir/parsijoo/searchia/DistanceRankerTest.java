@@ -3,6 +3,7 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Doc.MinDistance;
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ir.parsijoo.searchia.dto.RankingPhaseType.WORDS_DISTANCE;
+import static ir.parsijoo.searchia.dto.SortDirection.ASCENDING;
 import static java.util.Comparator.comparingInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -82,8 +85,9 @@ class DistanceRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
+        RankingPhaseDTO phase = new RankingPhaseDTO(WORDS_DISTANCE, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, configuration);
+        ranker.rank(queries, docs, phase);
 
         docs.sort(comparingInt(Doc::getRank));
         assertTrue(docs.get(0).getId() == 2 && docs.get(0).getRank() == 0);

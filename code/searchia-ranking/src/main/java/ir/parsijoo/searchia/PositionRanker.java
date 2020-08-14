@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,7 +13,7 @@ import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 public class PositionRanker implements Ranker {
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhaseDTO phaseInfo) {
         for (Doc doc : docs) {
             int minPosition = Integer.MAX_VALUE;
             for (Query query : queries.values()) {

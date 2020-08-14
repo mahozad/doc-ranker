@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ir.parsijoo.searchia.dto.RankingPhaseType.TYPO;
+import static ir.parsijoo.searchia.dto.SortDirection.ASCENDING;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,8 +98,9 @@ class TypoRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
+        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, configuration);
+        ranker.rank(queries, docs, phase);
 
         // The set contains one number; in other words all the docs have the same rank
         assertEquals(1, docs.stream().map(Doc::getRank).collect(toSet()).size());
@@ -115,8 +119,9 @@ class TypoRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedIds = Set.of(2, 16, 17);
+        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, configuration);
+        ranker.rank(queries, docs, phase);
 
         List<Integer> resultIds = docs.stream().map(Doc::getId).collect(toList());
         assertTrue(resultIds.subList(0, 3).containsAll(expectedIds));
@@ -134,8 +139,9 @@ class TypoRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
+        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, configuration);
+        ranker.rank(queries, docs, phase);
 
         // The set contains two numbers; in other words there are 2 different scores
         assertEquals(2, docs.stream().map(Doc::getRank).collect(toSet()).size());
@@ -153,8 +159,9 @@ class TypoRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
+        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, configuration);
+        ranker.rank(queries, docs, phase);
 
         docs = docs.stream().sorted().collect(toList());
         Set<Integer> group1Ranks = docs.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
