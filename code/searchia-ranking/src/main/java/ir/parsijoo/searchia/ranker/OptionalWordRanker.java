@@ -5,6 +5,7 @@ import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class OptionalWordRanker implements Ranker {
             Set<Query> rankQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
             for (Record record : records) {
                 for (Query query : rankQueries) {
-                    if (TypoRanker.isRecordMatchedWithQuery(record, query)) {
+                    if (RecordProcessor.isRecordMatchedWithQuery(record, query)) {
                         record.setNumberOfMatches(lengthOfOriginalQuery);
                         break;
                     }

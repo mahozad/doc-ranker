@@ -145,40 +145,4 @@ class TypoRankerTest {
 
         assertFalse(containsCorrectedOrSuggested);
     }
-
-    @Test
-    void isRecordMatchingWithQuery() throws IOException {
-        Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Record record = records.get(1);
-        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
-        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-
-        boolean isMatching = TypoRanker.isRecordMatchedWithQuery(record, query);
-
-        assertTrue(isMatching);
-    }
-
-    @Test
-    void isRecordMatchingWithQuery_wildcardQuery() throws IOException {
-        Query query = new Query("dodge charter*", QueryType.WILDCARD);
-        Record record = records.get(1);
-        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
-        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
-
-        boolean isMatching = TypoRanker.isRecordMatchedWithQuery(record, query);
-
-        assertTrue(isMatching);
-    }
-
-    @Test
-    void isRecordMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() throws IOException {
-        Query query = new Query("dodge charter", QueryType.WILDCARD);
-        Record record = records.get(1);
-        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
-        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
-
-        boolean isMatching = TypoRanker.isRecordMatchedWithQuery(record, query);
-
-        assertTrue(isMatching);
-    }
 }

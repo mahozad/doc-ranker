@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RecordProcessorTest {
 
@@ -161,6 +162,42 @@ class RecordProcessorTest {
         assertThat(tokens.keySet(), is(equalTo(expectedTokens)));
         assertThat(tokens.get("doc"), is(equalTo(List.of(positionOffset, 3 + positionOffset))));
         assertThat(tokens.get("that"), is(equalTo(List.of(4 + positionOffset))));
+    }
+
+    @Test
+    void isRecordMatchingWithQuery() throws IOException {
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        Record record = records.get(1);
+        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
+        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
+
+        boolean isMatching = RecordProcessor.isRecordMatchedWithQuery(record, query);
+
+        assertTrue(isMatching);
+    }
+
+    @Test
+    void isRecordMatchingWithQuery_wildcardQuery() throws IOException {
+        Query query = new Query("dodge charter*", QueryType.WILDCARD);
+        Record record = records.get(1);
+        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
+        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
+
+        boolean isMatching = RecordProcessor.isRecordMatchedWithQuery(record, query);
+
+        assertTrue(isMatching);
+    }
+
+    @Test
+    void isRecordMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() throws IOException {
+        Query query = new Query("dodge charter", QueryType.WILDCARD);
+        Record record = records.get(1);
+        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
+        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
+
+        boolean isMatching = RecordProcessor.isRecordMatchedWithQuery(record, query);
+
+        assertTrue(isMatching);
     }
 
     @Test

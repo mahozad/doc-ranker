@@ -7,10 +7,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.elasticsearch.analyzer.ParsiAnalyzer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
@@ -81,6 +78,23 @@ public class RecordProcessor {
 
         tokenStream.close();
         return tokensMap;
+    }
+
+    public static boolean isRecordMatchedWithQuery(Record record, Query query) {
+        Iterator<String> tokens = query.getTokens().iterator();
+        while (tokens.hasNext()) {
+            String token = tokens.next();
+            // If queryType is WILDCARD, the last word should be considered as prefix
+            if (query.getType() == WILDCARD && !tokens.hasNext()) {
+                boolean noMatches = record.getTokens().keySet().stream().noneMatch(s -> s.startsWith(token));
+                if (noMatches) {
+                    return false;
+                }
+            } else if (!record.getTokens().containsKey(token)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static int getNumberOfMatches(Record record, Query query) {
