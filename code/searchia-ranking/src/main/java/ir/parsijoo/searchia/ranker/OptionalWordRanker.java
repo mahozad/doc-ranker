@@ -19,7 +19,7 @@ public class OptionalWordRanker implements Ranker {
 
     /**
      * If we do not have optional query then number of matches in all the records is same and is equal
-     * to number of words of the original query even if there is a longer query and a records
+     * to number of words of the original query even if there is a longer query and a record
      * has matched all its words.
      *
      * @param queries
@@ -30,21 +30,21 @@ public class OptionalWordRanker implements Ranker {
     @Override
     public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
-        if (!queries.containsKey(OPTIONAL)) {
-            records.forEach(record -> record.setNumberOfMatches(lengthOfOriginalQuery));
-        } else {
+        if (queries.containsKey(OPTIONAL)) {
             int lengthOfOptionalQuery = queries.get(OPTIONAL).getTokens().size();
-            Set<Query> rankQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
+            Set<Query> neededQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
             for (Record record : records) {
-                for (Query query : rankQueries) {
+                record.setNumberOfMatches(lengthOfOptionalQuery);
+                for (Query query : neededQueries) {
                     if (RecordProcessor.isRecordMatchedWithQuery(record, query)) {
                         record.setNumberOfMatches(lengthOfOriginalQuery);
                         break;
                     }
                 }
-                record.setNumberOfMatches(Math.max(record.getNumberOfMatches(), lengthOfOptionalQuery));
             }
             RankingExecutor.updateRanks(records, Record::getNumberOfMatches, phase.getSortDirection());
+        } else {
+            records.forEach(record -> record.setNumberOfMatches(lengthOfOriginalQuery));
         }
     }
 }
