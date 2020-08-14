@@ -40,17 +40,11 @@ tasks {
     test {
         // Enable running Junit5 tests.
         useJUnitPlatform()
-    }
 
-    /**
-     * If the tests are built and run using gradle (either executing the gradle task directly or when Intellij is set
-     * to build and run the tests using 'gradle' in settings -> build -> gradle), the gradle default encoding seems
-     * to be something other than 'UTF-8', so the tests that contain UTF characters do not run correctly.
-     */
-    compileTestJava {
-        options.encoding = "UTF-8"
-    }
-    compileJava {
-        options.encoding = "UTF-8"
+        // NOTE: If the tests are built and run using gradle (either executing the gradle task directly or when Intellij is set
+        //  to build and run the tests using 'gradle' in settings -> build -> gradle), the gradle default encoding seems
+        //  to be something other than 'UTF-8', so the tests that contain UTF characters do not run correctly.
+        //  To fix it set gradle java argument org.gradle.jvmargs=-Dfile.encoding=UTF-8 in gradle.properties file.
+        //  See https://stackoverflow.com/q/21267234 for more info.
     }
 }
