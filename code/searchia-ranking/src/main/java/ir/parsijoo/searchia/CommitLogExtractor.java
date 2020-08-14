@@ -23,7 +23,7 @@ public class CommitLogExtractor {
 
     private final static LocalDateTime targetDay = LocalDateTime.of(2020, 8, 13, 0, 0);
     private final static String COMMAND_BASE = "git log --pretty=format:\"%%s\" --after=\"%s\" --before=\"%s\"";
-    private final static String OUTPUT_DIRECTORY = "../../commit-logs/";
+    private final static String OUTPUT_DIRECTORY = "../../report/commit-logs/";
 
     public static void main(String[] args) throws IOException {
         String start = targetDay.format(ISO_LOCAL_DATE_TIME);
