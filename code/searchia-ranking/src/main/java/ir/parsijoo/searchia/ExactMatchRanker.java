@@ -1,7 +1,6 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,7 @@ public class ExactMatchRanker implements Ranker {
     private static final Set<QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhaseDTO phaseInfo) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhase phase) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
         for (Doc doc : docs) {
@@ -32,6 +31,6 @@ public class ExactMatchRanker implements Ranker {
                 }
             }
         }
-        RankingExecutor.updateRanks(docs, Doc::getNumberOfExactMatches, phaseInfo.getSortDirection());
+        RankingExecutor.updateRanks(docs, Doc::getNumberOfExactMatches, phase.getSortDirection());
     }
 }

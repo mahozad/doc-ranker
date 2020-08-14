@@ -1,8 +1,6 @@
 package ir.parsijoo.searchia;
 
-
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -16,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ir.parsijoo.searchia.dto.RankingPhaseType.EXACT_MATCH;
-import static ir.parsijoo.searchia.dto.SortDirection.DESCENDING;
+import static ir.parsijoo.searchia.RankingPhaseType.EXACT_MATCH;
+import static ir.parsijoo.searchia.SortDirection.DESCENDING;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -78,7 +76,7 @@ class ExactMatchRankerTest {
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
-        RankingPhaseDTO phase = new RankingPhaseDTO(EXACT_MATCH, true, 0, DESCENDING, null);
+        RankingPhase phase = new RankingPhase(EXACT_MATCH, true, 0, DESCENDING, null);
 
         ranker.rank(queries, docs, phase);
 
@@ -103,7 +101,7 @@ class ExactMatchRankerTest {
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
-        RankingPhaseDTO phase = new RankingPhaseDTO(EXACT_MATCH, true, 0, DESCENDING, null);
+        RankingPhase phase = new RankingPhase(EXACT_MATCH, true, 0, DESCENDING, null);
 
         ranker.rank(queries, docs, phase);
 
@@ -125,7 +123,7 @@ class ExactMatchRankerTest {
         Set<Integer> expectedGroup1Ids = Set.of(2, 3, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 13);
-        RankingPhaseDTO phase = new RankingPhaseDTO(EXACT_MATCH, true, 0, DESCENDING, null);
+        RankingPhase phase = new RankingPhase(EXACT_MATCH, true, 0, DESCENDING, null);
 
         ranker.rank(queries, docs, phase);
 

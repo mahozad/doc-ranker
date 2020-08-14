@@ -1,7 +1,6 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ir.parsijoo.searchia.dto.RankingPhaseType.WORDS_POSITION;
-import static ir.parsijoo.searchia.dto.SortDirection.ASCENDING;
+import static ir.parsijoo.searchia.RankingPhaseType.WORDS_POSITION;
+import static ir.parsijoo.searchia.SortDirection.ASCENDING;
 import static java.util.Comparator.comparingInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -72,7 +71,7 @@ class PositionRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
-        RankingPhaseDTO phase = new RankingPhaseDTO(WORDS_POSITION, true, 0, ASCENDING, null);
+        RankingPhase phase = new RankingPhase(WORDS_POSITION, true, 0, ASCENDING, null);
 
         ranker.rank(queries, docs, phase);
         docs.sort(comparingInt(Doc::getRank));

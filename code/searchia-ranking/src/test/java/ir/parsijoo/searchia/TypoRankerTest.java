@@ -1,7 +1,6 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ir.parsijoo.searchia.dto.RankingPhaseType.TYPO;
-import static ir.parsijoo.searchia.dto.SortDirection.ASCENDING;
+import static ir.parsijoo.searchia.RankingPhaseType.TYPO;
+import static ir.parsijoo.searchia.SortDirection.ASCENDING;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,7 +88,7 @@ class TypoRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
-        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
+        RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, docs, phase);
 
@@ -110,7 +109,7 @@ class TypoRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
         Set<Integer> expectedIds = Set.of(2, 16, 17);
-        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
+        RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, docs, phase);
 
@@ -130,7 +129,7 @@ class TypoRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
-        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
+        RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, docs, phase);
 
@@ -150,7 +149,7 @@ class TypoRankerTest {
         );
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
-        RankingPhaseDTO phase = new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null);
+        RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, docs, phase);
 

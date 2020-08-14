@@ -1,16 +1,11 @@
 package ir.parsijoo.searchia;
 
-import ir.parsijoo.searchia.dto.RankingDTO;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
-import ir.parsijoo.searchia.dto.RankingPhaseType;
-import ir.parsijoo.searchia.dto.SortDirection;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static ir.parsijoo.searchia.dto.RankingPhaseType.*;
+import static ir.parsijoo.searchia.RankingPhaseType.*;
 import static java.util.stream.Collectors.toList;
 
 public class RankingExecutor {
@@ -28,23 +23,23 @@ public class RankingExecutor {
             Map<Query.QueryType, Query> queries,
             List<Doc> docs,
             List<Promotion> promotions,
-            RankingDTO rankingDTO,
+            RankingConfig rankingConfig,
             int offset,
             int limit) throws IOException {
 
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        List<RankingPhaseDTO> phases = rankingDTO
+        List<RankingPhase> phases = rankingConfig
                 .getPhases()
                 .stream()
-                .filter(RankingPhaseDTO::isEnabled)
+                .filter(RankingPhase::isEnabled)
                 .sorted()
                 .collect(toList());
 
-        for (RankingPhaseDTO phaseInfo : phases) {
-            Ranker ranker = rankers.get(phaseInfo.getType());
-            ranker.rank(queries, docs, phaseInfo);
+        for (RankingPhase phase : phases) {
+            Ranker ranker = rankers.get(phase.getType());
+            ranker.rank(queries, docs, phase);
         }
 
         docs.sort(Doc::compareTo);

@@ -2,7 +2,6 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Doc.MinDistance;
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -15,12 +14,12 @@ public class DistanceRanker implements Ranker {
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhaseDTO phaseInfo) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhase phase) {
         for (Doc doc : docs) {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
         }
-        RankingExecutor.updateRanks(docs, doc -> doc.getMinDistance().value, phaseInfo.getSortDirection());
+        RankingExecutor.updateRanks(docs, doc -> doc.getMinDistance().value, phase.getSortDirection());
     }
 
     public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {

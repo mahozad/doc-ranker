@@ -5,8 +5,6 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
-import ir.parsijoo.searchia.dto.RankingDTO;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -19,9 +17,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
-import static ir.parsijoo.searchia.dto.RankingPhaseType.*;
-import static ir.parsijoo.searchia.dto.SortDirection.ASCENDING;
-import static ir.parsijoo.searchia.dto.SortDirection.DESCENDING;
+import static ir.parsijoo.searchia.RankingPhaseType.*;
+import static ir.parsijoo.searchia.SortDirection.ASCENDING;
+import static ir.parsijoo.searchia.SortDirection.DESCENDING;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -136,18 +134,18 @@ class RankingExecutorTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
-        RankingDTO rankingDTO = new RankingDTO(Set.of(
-                new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null),
-                new RankingPhaseDTO(OPTIONAL_WORDS, true, 1, DESCENDING, null),
-                new RankingPhaseDTO(WORDS_DISTANCE, true, 2, ASCENDING, null),
-                new RankingPhaseDTO(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null),
-                new RankingPhaseDTO(CUSTOM, true, 5, DESCENDING, "viewCount")
+        RankingConfig rankingConfig = new RankingConfig(Set.of(
+                new RankingPhase(TYPO, true, 0, ASCENDING, null),
+                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
+                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
+                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
+                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
+                new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
         ));
         List<Integer> expectedDocIdOrder =
                 List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
-        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingConfig, offset, limit);
 
         assertThat(result.stream().map(Doc::getId).collect(toList()), is(equalTo(expectedDocIdOrder)));
     }
@@ -165,17 +163,17 @@ class RankingExecutorTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
-        RankingDTO rankingDTO = new RankingDTO(Set.of(
-                new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null),
-                new RankingPhaseDTO(OPTIONAL_WORDS, true, 1, DESCENDING, null),
-                new RankingPhaseDTO(WORDS_DISTANCE, true, 2, ASCENDING, null),
-                new RankingPhaseDTO(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null),
-                new RankingPhaseDTO(CUSTOM, true, 5, DESCENDING, "viewCount")
+        RankingConfig rankingConfig = new RankingConfig(Set.of(
+                new RankingPhase(TYPO, true, 0, ASCENDING, null),
+                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
+                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
+                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
+                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
+                new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
         ));
 
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, promotions, rankingConfig, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -193,16 +191,16 @@ class RankingExecutorTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.SUGGESTED, query3
         );
-        RankingDTO rankingDTO = new RankingDTO(Set.of(
-                new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null),
-                new RankingPhaseDTO(OPTIONAL_WORDS, true, 1, DESCENDING, null),
-                new RankingPhaseDTO(WORDS_DISTANCE, true, 2, ASCENDING, null),
-                new RankingPhaseDTO(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null),
-                new RankingPhaseDTO(CUSTOM, true, 5, DESCENDING, "viewCount")
+        RankingConfig rankingConfig = new RankingConfig(Set.of(
+                new RankingPhase(TYPO, true, 0, ASCENDING, null),
+                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
+                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
+                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
+                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
+                new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
         ));
 
-        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingConfig, offset, limit);
 
         assertEquals(limit, result.size());
     }
@@ -248,12 +246,12 @@ class RankingExecutorTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.CORRECTED, query3
         );
-        RankingDTO rankingDTO = new RankingDTO(Set.of(
-                new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null),
-                new RankingPhaseDTO(OPTIONAL_WORDS, true, 1, DESCENDING, null),
-                new RankingPhaseDTO(WORDS_DISTANCE, true, 2, ASCENDING, null),
-                new RankingPhaseDTO(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null)
+        RankingConfig rankingDTO = new RankingConfig(Set.of(
+                new RankingPhase(TYPO, true, 0, ASCENDING, null),
+                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
+                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
+                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
+                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null)
         ));
 
         long timeThreshold = 20/*ms*/;
@@ -306,12 +304,12 @@ class RankingExecutorTest {
                 Query.QueryType.CORRECTED, query3
         );
 
-        RankingDTO rankingDTO = new RankingDTO(Set.of(
-                new RankingPhaseDTO(TYPO, true, 0, ASCENDING, null),
-                new RankingPhaseDTO(OPTIONAL_WORDS, true, 1, DESCENDING, null),
-                new RankingPhaseDTO(WORDS_DISTANCE, true, 2, ASCENDING, null),
-                new RankingPhaseDTO(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhaseDTO(EXACT_MATCH, true, 4, DESCENDING, null)
+        RankingConfig rankingDTO = new RankingConfig(Set.of(
+                new RankingPhase(TYPO, true, 0, ASCENDING, null),
+                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
+                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
+                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
+                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null)
         ));
 
         double timeThreshold = 50.0/*ms*/;

@@ -1,7 +1,6 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 
 import java.util.Comparator;
 import java.util.List;
@@ -13,7 +12,7 @@ import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 public class PositionRanker implements Ranker {
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhaseDTO phaseInfo) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhase phase) {
         for (Doc doc : docs) {
             int minPosition = Integer.MAX_VALUE;
             for (Query query : queries.values()) {
@@ -25,7 +24,7 @@ public class PositionRanker implements Ranker {
             // FIXME: The attribute name is set to a constant value
             doc.setMinPosition(new Doc.MinPosition(minPosition, "title"));
         }
-        RankingExecutor.updateRanks(docs, doc -> doc.getMinPosition().value, phaseInfo.getSortDirection());
+        RankingExecutor.updateRanks(docs, doc -> doc.getMinPosition().value, phase.getSortDirection());
     }
 
     public static int getDocMinWordPositionByQuery(Doc doc, Query query) {
