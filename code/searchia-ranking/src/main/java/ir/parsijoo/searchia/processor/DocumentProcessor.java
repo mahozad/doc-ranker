@@ -1,5 +1,8 @@
-package ir.parsijoo.searchia;
+package ir.parsijoo.searchia.processor;
 
+import ir.parsijoo.searchia.Attribute;
+import ir.parsijoo.searchia.Doc;
+import ir.parsijoo.searchia.Query;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.elasticsearch.analyzer.ParsiAnalyzer;

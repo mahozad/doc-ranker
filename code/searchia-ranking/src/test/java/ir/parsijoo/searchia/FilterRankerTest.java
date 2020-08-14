@@ -1,5 +1,8 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.ranker.FilterRanker;
+import ir.parsijoo.searchia.ranker.FilterRanker.Filter;
+import ir.parsijoo.searchia.ranker.FilterRanker.Operator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,8 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.config.RankingPhase;
+import ir.parsijoo.searchia.processor.DocumentProcessor;
+import ir.parsijoo.searchia.ranker.CustomRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +13,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import static ir.parsijoo.searchia.RankingPhaseType.CUSTOM;
-import static ir.parsijoo.searchia.SortDirection.DESCENDING;
+import static ir.parsijoo.searchia.config.RankingPhaseType.CUSTOM;
+import static ir.parsijoo.searchia.config.SortDirection.DESCENDING;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

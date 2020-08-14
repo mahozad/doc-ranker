@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Query {
 
-    enum QueryType {
+    public enum QueryType {
         ORIGINAL, WILDCARD, CORRECTED, SUGGESTED, SPACED, EQUIVALENT, STEM, OPTIONAL
     }
 

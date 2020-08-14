@@ -1,12 +1,16 @@
-package ir.parsijoo.searchia;
+package ir.parsijoo.searchia.ranker;
 
+import ir.parsijoo.searchia.Doc;
 import ir.parsijoo.searchia.Doc.MinDistance;
+import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.RankingExecutor;
+import ir.parsijoo.searchia.config.RankingPhase;
 
 import java.util.List;
 import java.util.Map;
 
-import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.processor.DocumentProcessor.ATTRIBUTES_DISTANCE;
 
 public class DistanceRanker implements Ranker {
 

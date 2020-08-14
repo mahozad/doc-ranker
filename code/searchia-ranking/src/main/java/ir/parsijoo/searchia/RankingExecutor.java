@@ -1,11 +1,19 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.config.RankingConfig;
+import ir.parsijoo.searchia.config.RankingPhase;
+import ir.parsijoo.searchia.config.RankingPhaseType;
+import ir.parsijoo.searchia.config.SortDirection;
+import ir.parsijoo.searchia.processor.DocumentProcessor;
+import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.ranker.*;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static ir.parsijoo.searchia.RankingPhaseType.*;
+import static ir.parsijoo.searchia.config.RankingPhaseType.*;
 import static java.util.stream.Collectors.toList;
 
 public class RankingExecutor {

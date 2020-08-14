@@ -1,4 +1,6 @@
-package ir.parsijoo.searchia;
+package ir.parsijoo.searchia.processor;
+
+import ir.parsijoo.searchia.Query;
 
 import java.io.IOException;
 import java.util.List;

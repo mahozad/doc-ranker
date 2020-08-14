@@ -5,6 +5,8 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import ir.parsijoo.searchia.config.RankingConfig;
+import ir.parsijoo.searchia.config.RankingPhase;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -17,9 +19,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
-import static ir.parsijoo.searchia.RankingPhaseType.*;
-import static ir.parsijoo.searchia.SortDirection.ASCENDING;
-import static ir.parsijoo.searchia.SortDirection.DESCENDING;
+import static ir.parsijoo.searchia.config.RankingPhaseType.*;
+import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
+import static ir.parsijoo.searchia.config.SortDirection.DESCENDING;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;

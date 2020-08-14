@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Doc implements Comparable<Doc> {
 
-    static class MinDistance {
+    public static class MinDistance {
         public final int value;
         public final Query.QueryType query;
 
@@ -16,7 +16,7 @@ public class Doc implements Comparable<Doc> {
         }
     }
 
-    static class MinPosition {
+    public static class MinPosition {
         public final int value;
         public final String attributeName;
 

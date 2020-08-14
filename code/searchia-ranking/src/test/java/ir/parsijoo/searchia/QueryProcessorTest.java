@@ -1,5 +1,6 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.processor.QueryProcessor;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

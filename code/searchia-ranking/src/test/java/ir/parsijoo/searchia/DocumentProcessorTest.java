@@ -1,5 +1,7 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.processor.DocumentProcessor;
+import ir.parsijoo.searchia.processor.QueryProcessor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

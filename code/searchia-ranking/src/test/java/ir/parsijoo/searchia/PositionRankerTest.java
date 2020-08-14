@@ -1,6 +1,10 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.config.RankingPhase;
+import ir.parsijoo.searchia.processor.DocumentProcessor;
+import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.ranker.PositionRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ir.parsijoo.searchia.RankingPhaseType.WORDS_POSITION;
-import static ir.parsijoo.searchia.SortDirection.ASCENDING;
+import static ir.parsijoo.searchia.config.RankingPhaseType.WORDS_POSITION;
+import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
 import static java.util.Comparator.comparingInt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
