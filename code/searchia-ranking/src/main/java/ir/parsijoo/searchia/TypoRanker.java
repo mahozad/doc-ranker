@@ -12,7 +12,7 @@ import static java.util.Comparator.comparingInt;
 public class TypoRanker implements Ranker {
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
         List<Query> rankQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
         for (Doc doc : docs) {

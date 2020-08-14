@@ -26,19 +26,19 @@ public class RankingExecutor {
         for (RankingPhase phase : phases) {
             switch (phase) {
                 case TYPO:
-                    new TypoRanker().rank(queries, docs);
+                    new TypoRanker().rank(queries, docs, configuration);
                     break;
                 case OPTIONAL_WORDS:
-                    new OptionalWordRanker().rank(queries, docs);
+                    new OptionalWordRanker().rank(queries, docs, configuration);
                     break;
                 case WORDS_DISTANCE:
-                    new DistanceRanker().rank(queries, docs);
+                    new DistanceRanker().rank(queries, docs, configuration);
                     break;
                 case WORDS_POSITION:
-                    new PositionRanker().rank(queries, docs);
+                    new PositionRanker().rank(queries, docs, configuration);
                     break;
                 case EXACT_MATCH:
-                    new ExactMatchRanker().rank(queries, docs);
+                    new ExactMatchRanker().rank(queries, docs, configuration);
                     break;
                 case CUSTOM:
                     CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());

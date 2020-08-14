@@ -83,7 +83,7 @@ class DistanceRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        ranker.rank(queries, docs);
+        ranker.rank(queries, docs, configuration);
 
         docs.sort(comparingInt(Doc::getRank));
         assertTrue(docs.get(0).getId() == 2 && docs.get(0).getRank() == 0);

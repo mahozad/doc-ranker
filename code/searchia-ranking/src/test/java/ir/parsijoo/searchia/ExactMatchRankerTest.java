@@ -85,7 +85,7 @@ class ExactMatchRankerTest {
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
 
-        ranker.rank(queries, docs);
+        ranker.rank(queries, docs, configuration);
 
         assertThat(docs.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
         assertThat(docs.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
@@ -109,7 +109,7 @@ class ExactMatchRankerTest {
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
 
-        ranker.rank(queries, docs);
+        ranker.rank(queries, docs, configuration);
 
         assertThat(docs.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
         assertThat(docs.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
@@ -130,7 +130,7 @@ class ExactMatchRankerTest {
         Set<Integer> expectedGroup2Ids = Set.of(1, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 13);
 
-        ranker.rank(queries, docs);
+        ranker.rank(queries, docs, configuration);
 
         assertThat(docs.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
         assertThat(docs.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));

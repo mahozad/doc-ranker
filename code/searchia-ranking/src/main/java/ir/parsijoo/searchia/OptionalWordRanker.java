@@ -19,10 +19,11 @@ public class OptionalWordRanker implements Ranker {
      *
      * @param queries
      * @param docs
+     * @param config
      * @return
      */
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         if (!queries.containsKey(OPTIONAL)) {
             docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));

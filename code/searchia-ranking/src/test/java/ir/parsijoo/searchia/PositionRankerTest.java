@@ -80,7 +80,7 @@ class PositionRankerTest {
         QueryProcessor.processQueries(queries);
         DocumentProcessor.processDocs(docs);
 
-        ranker.rank(queries, docs);
+        ranker.rank(queries, docs, configuration);
         docs.sort(comparingInt(Doc::getRank));
 
         assertEquals(0, docs.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());

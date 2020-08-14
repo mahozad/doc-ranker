@@ -5,5 +5,5 @@ import java.util.Map;
 
 public interface Ranker {
 
-    void rank(Map<Query.QueryType, Query> queries, List<Doc> docs);
+    void rank(Map<Query.QueryType, Query> queries, List<Doc> docs, RankConfiguration config);
 }

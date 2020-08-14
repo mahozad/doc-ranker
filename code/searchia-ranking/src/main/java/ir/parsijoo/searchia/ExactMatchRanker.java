@@ -14,7 +14,7 @@ public class ExactMatchRanker implements Ranker {
     private static final Set<QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
         for (Doc doc : docs) {

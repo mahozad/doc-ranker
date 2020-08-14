@@ -12,7 +12,7 @@ import static ir.parsijoo.searchia.DocumentProcessor.ATTRIBUTES_DISTANCE;
 public class PositionRanker implements Ranker {
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
         for (Doc doc : docs) {
             int minPosition = Integer.MAX_VALUE;
             for (Query query : queries.values()) {

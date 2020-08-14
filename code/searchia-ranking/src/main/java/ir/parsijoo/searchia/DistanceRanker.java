@@ -14,7 +14,7 @@ public class DistanceRanker implements Ranker {
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs) {
+    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
         for (Doc doc : docs) {
             MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
             doc.setMinDistance(minDistance);
