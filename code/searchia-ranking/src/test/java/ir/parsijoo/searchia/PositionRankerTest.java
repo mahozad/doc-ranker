@@ -10,11 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.config.RankingPhaseType.WORDS_POSITION;
 import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
@@ -23,45 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PositionRankerTest {
 
-    Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
-
-    String query;
     List<Doc> docs;
-    List<Promotion> promotions;
     PositionRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        query = "dodge charger";
-
-        docs = Files
-                .lines(samplesPath)
-                .filter(line -> !line.startsWith("#"))
-                .map(line -> {
-                    String[] attrs = line.split("\\|");
-                    int id = Integer.parseInt(attrs[0].split("=")[1]);
-                    double score = Math.random();
-                    long creationDate = Long.parseLong(attrs[1].split("=")[1]);
-                    long viewCount = Long.parseLong(attrs[2].split("=")[1]);
-                    String title = attrs[3].split("=")[1];
-                    String description = attrs[4].split("=")[1];
-                    Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
-                    Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
-                    return new Doc(id, customAttrs, score, searchableAttrs);
-                })
-                .collect(Collectors.toList());
-
-        promotions = List.of(
-                new Promotion(),
-                new Promotion()
-        );
-
+        docs = TestUtil.createSampleDocs();
         ranker = new PositionRanker();
     }
 
     @AfterEach
-    void tearDown() {
-    }
+    void tearDown() {}
 
     @Test
     void rankByWordPosition() throws IOException {

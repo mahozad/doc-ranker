@@ -1,29 +1,24 @@
 package ir.parsijoo.searchia;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
 
 import static ir.parsijoo.searchia.config.RankingPhaseType.*;
 import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
 import static ir.parsijoo.searchia.config.SortDirection.DESCENDING;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,45 +27,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(Lifecycle.PER_CLASS)
 class RankingExecutorTest {
 
-    Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
-
-    String query;
     List<Doc> docs;
-    List<Promotion> promotions;
-
     double totalDuration = 0;
     long maxDuration = 0;
 
     @BeforeEach
     void setUp() throws IOException {
-        query = "dodge charger";
-
-        docs = Files
-                .lines(samplesPath)
-                .filter(line -> !line.startsWith("#"))
-                .map(line -> {
-                    String[] attrs = line.split("\\|");
-                    int id = Integer.parseInt(attrs[0].split("=")[1]);
-                    double score = Math.random();
-                    double creationDate = Long.parseLong(attrs[1].split("=")[1]);
-                    double viewCount = Long.parseLong(attrs[2].split("=")[1]);
-                    String title = attrs[3].split("=")[1];
-                    String description = attrs[4].split("=")[1];
-                    Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
-                    Map<String, Double> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
-                    return new Doc(id, customAttrs, score, searchableAttrs);
-                })
-                .collect(toList());
-
-        promotions = List.of(
-                new Promotion(),
-                new Promotion()
-        );
+        docs = TestUtil.createSampleDocs();
     }
 
     @AfterEach
-    void tearDown() {
-    }
+    void tearDown() {}
 
     @Test
     void sortDocs() {
@@ -147,7 +114,7 @@ class RankingExecutorTest {
         List<Integer> expectedDocIdOrder =
                 List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
-        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingConfig, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, null, rankingConfig, offset, limit);
 
         assertThat(result.stream().map(Doc::getId).collect(toList()), is(equalTo(expectedDocIdOrder)));
     }
@@ -175,7 +142,7 @@ class RankingExecutorTest {
         ));
 
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, docs, promotions, rankingConfig, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, null, rankingConfig, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -202,42 +169,14 @@ class RankingExecutorTest {
                 new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
         ));
 
-        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingConfig, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, null, rankingConfig, offset, limit);
 
         assertEquals(limit, result.size());
     }
 
     @Test
     void executeRanking_useRealData_executionTime() throws IOException, CsvException {
-        File file = new File("src/test/resources/real-docs.csv");
-        CSVParser csvParser = new CSVParserBuilder().withIgnoreQuotations(true).build();
-        CSVReader csvReader = new CSVReaderBuilder(new FileReader(file))
-                .withSkipLines(1)
-                .withCSVParser(csvParser)
-                .build();
-        List<String[]> records = csvReader.readAll();
-
-        List<Doc> docs = records.stream()
-                .map(fields -> {
-                    Map<String, String> attributes = Arrays.stream(fields)
-                            .filter(field -> field.startsWith("{\"anchorText\":") || field.startsWith("\"title\":\""))
-                            .map(field -> {
-                                if (field.startsWith("{\"")) {
-                                    field = field.substring(1);
-                                } else if (field.endsWith("\"}")) {
-                                    field = field.substring(0, field.length() - 1);
-                                }
-                                String[] fieldParts = field.split("\":\"");
-                                String attrName = fieldParts[0].substring(1);
-                                String attrValue = fieldParts[1].substring(0, fieldParts[1].length() - 1);
-
-                                return new SimpleEntry<String, String>(attrName, attrValue);
-                            })
-                            .collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
-                    return new Doc(0, Map.of(), 0, attributes);
-                })
-                .collect(toList());
-
+        List<Doc> docs = TestUtil.createRealDocs();
         int offset = 0;
         int limit = 10;
         Query query1 = new Query("معرفی فیل", Query.QueryType.ORIGINAL);
@@ -248,7 +187,7 @@ class RankingExecutorTest {
                 Query.QueryType.WILDCARD, query2,
                 Query.QueryType.CORRECTED, query3
         );
-        RankingConfig rankingDTO = new RankingConfig(Set.of(
+        RankingConfig rankingConfig = new RankingConfig(Set.of(
                 new RankingPhase(TYPO, true, 0, ASCENDING, null),
                 new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
                 new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
@@ -258,7 +197,7 @@ class RankingExecutorTest {
 
         long timeThreshold = 20/*ms*/;
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, null, rankingConfig, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -266,35 +205,7 @@ class RankingExecutorTest {
 
     @RepeatedTest(100)
     void executeRanking_useRealData_averageTimeOf100Executions(RepetitionInfo repetitionInfo) throws IOException, CsvException {
-        File file = new File("src/test/resources/real-docs.csv");
-        CSVParser csvParser = new CSVParserBuilder().withIgnoreQuotations(true).build();
-        CSVReader csvReader = new CSVReaderBuilder(new FileReader(file))
-                .withSkipLines(1)
-                .withCSVParser(csvParser)
-                .build();
-        List<String[]> records = csvReader.readAll();
-
-        List<Doc> docs = records.stream()
-                .map(fields -> {
-                    Map<String, String> attributes = Arrays.stream(fields)
-                            .filter(field -> field.startsWith("{\"anchorText\":") || field.startsWith("\"title\":\""))
-                            .map(field -> {
-                                if (field.startsWith("{\"")) {
-                                    field = field.substring(1);
-                                } else if (field.endsWith("\"}")) {
-                                    field = field.substring(0, field.length() - 1);
-                                }
-                                String[] fieldParts = field.split("\":\"");
-                                String attrName = fieldParts[0].substring(1);
-                                String attrValue = fieldParts[1].substring(0, fieldParts[1].length() - 1);
-
-                                return new SimpleEntry<String, String>(attrName, attrValue);
-                            })
-                            .collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
-                    return new Doc(0, Map.of(), 0, attributes);
-                })
-                .collect(toList());
-
+        List<Doc> docs = TestUtil.createRealDocs();
         int offset = 0;
         int limit = 10;
         Query query1 = new Query("معرفی فیل", Query.QueryType.ORIGINAL);
@@ -306,7 +217,7 @@ class RankingExecutorTest {
                 Query.QueryType.CORRECTED, query3
         );
 
-        RankingConfig rankingDTO = new RankingConfig(Set.of(
+        RankingConfig rankingConfig = new RankingConfig(Set.of(
                 new RankingPhase(TYPO, true, 0, ASCENDING, null),
                 new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
                 new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
@@ -316,7 +227,7 @@ class RankingExecutorTest {
 
         double timeThreshold = 50.0/*ms*/;
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, null, rankingConfig, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
         totalDuration += duration;
         maxDuration = Math.max(maxDuration, duration);

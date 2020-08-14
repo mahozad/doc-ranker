@@ -11,8 +11,6 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,45 +24,17 @@ import static org.hamcrest.Matchers.is;
 
 class ExactMatchRankerTest {
 
-    Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
-
-    String query;
     List<Doc> docs;
-    List<Promotion> promotions;
     ExactMatchRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        query = "dodge charger";
-
-        docs = Files
-                .lines(samplesPath)
-                .filter(line -> !line.startsWith("#"))
-                .map(line -> {
-                    String[] attrs = line.split("\\|");
-                    int id = Integer.parseInt(attrs[0].split("=")[1]);
-                    double score = Math.random();
-                    long creationDate = Long.parseLong(attrs[1].split("=")[1]);
-                    long viewCount = Long.parseLong(attrs[2].split("=")[1]);
-                    String title = attrs[3].split("=")[1];
-                    String description = attrs[4].split("=")[1];
-                    Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
-                    Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
-                    return new Doc(id, customAttrs, score, searchableAttrs);
-                })
-                .collect(Collectors.toList());
-
-        promotions = List.of(
-                new Promotion(),
-                new Promotion()
-        );
-
+        docs = TestUtil.createSampleDocs();
         ranker = new ExactMatchRanker();
     }
 
     @AfterEach
-    void tearDown() {
-    }
+    void tearDown() {}
 
     @RepeatedTest(5) // Order of reading queries in rankByExactMatch may differ in each execution
     void rankByExactMatch() throws IOException {
