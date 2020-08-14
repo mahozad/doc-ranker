@@ -128,7 +128,7 @@ public class Doc implements Comparable<Doc> {
     }
 
     @Override
-    public int compareTo(Doc other) {
-        return rank - other.rank;
+    public int compareTo(Doc otherDoc) {
+        return this.rank - otherDoc.rank;
     }
 }
