@@ -41,10 +41,6 @@ public class PositionRanker implements Ranker {
                     minPosition = min.get() % ATTRIBUTES_DISTANCE;
                 }
             }
-            // A slight optimization: because the best position is 0 we do not continue the loop
-            if (minPosition == 0) {
-                break;
-            }
         }
         return minPosition;
     }
