@@ -18,27 +18,32 @@ public class TypoRanker implements Ranker {
     @Override
     public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
         List<Query> neededQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
+        boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
+
         for (Record record : records) {
-            computeNumberOfTypos(neededQueries, record);
+            int typos = computeNumberOfTypos(neededQueries, record);
+            record.setNumberOfTypos(typos);
         }
 
-        boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
         if (queriesContainCorrectedOrSuggested) {
             RankingExecutor.updateRanks(records, Record::getNumberOfTypos, phase.getSortDirection());
+        } else {
+            records.sort(comparingInt(Record::getNumberOfTypos));
+            records.forEach(record -> record.setNumberOfTypos(0));
         }
-        records.sort(comparingInt(Record::getNumberOfTypos));
     }
 
-    private static void computeNumberOfTypos(List<Query> queries, Record record) {
+    private static int computeNumberOfTypos(List<Query> queries, Record record) {
+        int numberOfTypos = 0;
         for (Query query : queries) {
             boolean isRecordMatched = RecordProcessor.isRecordMatchedWithQuery(record, query);
             if (isRecordMatched) {
-                record.setNumberOfTypos(0);
-                break;
+                return 0;
             } else {
-                record.setNumberOfTypos(1);
+                numberOfTypos = 1;
             }
         }
+        return numberOfTypos;
     }
 
     public static boolean queriesContainCorrectedOrSuggested(Map<QueryType, Query> queries) {

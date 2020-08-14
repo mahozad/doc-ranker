@@ -67,6 +67,27 @@ class TypoRankerTest {
     }
 
     @Test
+    void rankByTypo_emptyCorrectQueryAndSuggestQuery_allRecordsShouldHaveNoTypos() throws IOException {
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.OPTIONAL, query3
+        );
+        QueryProcessor.processQueries(queries);
+        RecordProcessor.processRecords(records);
+        RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
+
+        ranker.rank(queries, records, phase);
+
+        // The set contains one number; in other words all the records have the same number of typo
+        assertEquals(1, records.stream().map(Record::getNumberOfTypos).collect(toSet()).size());
+        assertEquals(0, records.stream().map(Record::getNumberOfTypos).collect(toList()).get(0));
+    }
+
+    @Test
     void rankByTypo_emptyCorrectQueryAndSuggestQuery_topResultsShouldMatchOriginalOrWildcard() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge charter*", QueryType.WILDCARD);

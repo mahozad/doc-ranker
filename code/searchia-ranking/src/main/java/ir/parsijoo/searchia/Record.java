@@ -29,7 +29,7 @@ public class Record implements Comparable<Record> {
     }
 
     private int id;
-    private int numberOfTypos;
+    private int numberOfTypos = 0; // NOTE: The default value should be 0
     private double elasticScore;
     private Map<String, ?> filterableAttrs;
     private Map<String, ? extends Comparable<?>> customRankingAttrs;
