@@ -43,12 +43,12 @@ class DistanceRankerTest {
                 .map(line -> {
                     String[] attrs = line.split("\\|");
                     int id = Integer.parseInt(attrs[0].split("=")[1]);
+                    double score = Math.random();
                     long creationDate = Long.parseLong(attrs[1].split("=")[1]);
                     long viewCount = Long.parseLong(attrs[2].split("=")[1]);
-                    double score = Math.random();
-                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[1]);
-                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[1]);
-                    List<Attribute<String>> searchableAttrs = List.of(title, description);
+                    String title = attrs[3].split("=")[1];
+                    String description = attrs[4].split("=")[1];
+                    Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
                     Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })

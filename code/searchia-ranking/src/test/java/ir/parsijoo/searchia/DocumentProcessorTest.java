@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ir.parsijoo.searchia.processor.DocumentProcessor.ATTRIBUTES_DISTANCE;
+import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,16 +40,13 @@ class DocumentProcessorTest {
                 .map(line -> {
                     String[] attrs = line.split("\\|");
                     int id = Integer.parseInt(attrs[0].split("=")[1]);
+                    double score = Math.random();
                     long creationDate = Long.parseLong(attrs[1].split("=")[1]);
                     long viewCount = Long.parseLong(attrs[2].split("=")[1]);
-                    double score = Math.random();
-                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0],
-                            attrs[3].split("=")[1]);
-                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0],
-                            attrs[4].split("=")[1]);
-                    List<Attribute<String>> searchableAttrs = List.of(title, description);
-                    Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate"
-                            , creationDate);
+                    String title = attrs[3].split("=")[1];
+                    String description = attrs[4].split("=")[1];
+                    Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
+                    Map<String, Long> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })
                 .collect(Collectors.toList());
@@ -74,10 +73,10 @@ class DocumentProcessorTest {
 
     @Test
     void processDoc() throws IOException {
-        Doc doc = new Doc(1, null, 0, List.of(
-                new Attribute<>("title", "dodge charger"),
-                new Attribute<>("description", "new red dodge charger*"))
-        );
+        Doc doc = new Doc(1, null, 0, Map.of(
+                "title", "dodge charger",
+                "description", "new red dodge charger*"
+        ));
         Set<String> expectedTokenStrings = Set.of("dodge", "charger", "new", "red");
 
         Doc result = DocumentProcessor.processDoc(doc);
@@ -92,9 +91,9 @@ class DocumentProcessorTest {
         String targetToken = "charger";
 
         DocumentProcessor.processDoc(doc);
-        List<Integer> expectedTokenPositions = doc.getTokens().get(targetToken);
+        Set<Integer> expectedTokenPositions = doc.getTokens().get(targetToken).stream().map(position -> position % ATTRIBUTES_DISTANCE).collect(toSet());
 
-        assertThat(expectedTokenPositions, is(equalTo(List.of(1, 1_000_004))));
+        assertThat(expectedTokenPositions, is(equalTo(Set.of(1, 4))));
     }
 
     @ParameterizedTest

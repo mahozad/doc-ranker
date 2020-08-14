@@ -1,6 +1,5 @@
 package ir.parsijoo.searchia.processor;
 
-import ir.parsijoo.searchia.Attribute;
 import ir.parsijoo.searchia.Doc;
 import ir.parsijoo.searchia.Query;
 import org.apache.lucene.analysis.TokenStream;
@@ -33,8 +32,8 @@ public class DocumentProcessor {
 
     public static Doc processDoc(Doc doc) throws IOException {
         int offset = 0;
-        for (Attribute<String> attr : doc.getSearchableAttrs()) {
-            Map<String, List<Integer>> tokens = tokenizeTextWithPosition(attr.getValue(), offset);
+        for (String attr : doc.getSearchableAttrs().values()) {
+            Map<String, List<Integer>> tokens = tokenizeTextWithPosition(attr, offset);
             for (Entry<String, List<Integer>> token : tokens.entrySet()) {
                 doc.getTokens().merge(token.getKey(), token.getValue(), (v1, v2) -> {
                     v1.addAll(v2);

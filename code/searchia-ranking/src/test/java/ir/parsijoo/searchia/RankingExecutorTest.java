@@ -17,13 +17,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 
 import static ir.parsijoo.searchia.config.RankingPhaseType.*;
 import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
 import static ir.parsijoo.searchia.config.SortDirection.DESCENDING;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,12 +51,12 @@ class RankingExecutorTest {
                 .map(line -> {
                     String[] attrs = line.split("\\|");
                     int id = Integer.parseInt(attrs[0].split("=")[1]);
+                    double score = Math.random();
                     double creationDate = Long.parseLong(attrs[1].split("=")[1]);
                     double viewCount = Long.parseLong(attrs[2].split("=")[1]);
-                    double score = Math.random();
-                    Attribute<String> title = new Attribute<>(attrs[3].split("=")[0], attrs[3].split("=")[1]);
-                    Attribute<String> description = new Attribute<>(attrs[4].split("=")[0], attrs[4].split("=")[1]);
-                    List<Attribute<String>> searchableAttrs = List.of(title, description);
+                    String title = attrs[3].split("=")[1];
+                    String description = attrs[4].split("=")[1];
+                    Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
                     Map<String, Double> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })
@@ -219,7 +219,7 @@ class RankingExecutorTest {
 
         List<Doc> docs = records.stream()
                 .map(fields -> {
-                    List<Attribute<String>> attributes = Arrays.stream(fields)
+                    Map<String, String> attributes = Arrays.stream(fields)
                             .filter(field -> field.startsWith("{\"anchorText\":") || field.startsWith("\"title\":\""))
                             .map(field -> {
                                 if (field.startsWith("{\"")) {
@@ -228,12 +228,12 @@ class RankingExecutorTest {
                                     field = field.substring(0, field.length() - 1);
                                 }
                                 String[] fieldParts = field.split("\":\"");
-                                fieldParts[0] = fieldParts[0].substring(1);
-                                fieldParts[1] = fieldParts[1].substring(0, fieldParts[1].length() - 1);
+                                String attrName = fieldParts[0].substring(1);
+                                String attrValue = fieldParts[1].substring(0, fieldParts[1].length() - 1);
 
-                                return new Attribute<>(fieldParts[0], fieldParts[1]);
+                                return new SimpleEntry<String, String>(attrName, attrValue);
                             })
-                            .collect(toList());
+                            .collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
                     return new Doc(0, Map.of(), 0, attributes);
                 })
                 .collect(toList());
@@ -276,7 +276,7 @@ class RankingExecutorTest {
 
         List<Doc> docs = records.stream()
                 .map(fields -> {
-                    List<Attribute<String>> attributes = Arrays.stream(fields)
+                    Map<String, String> attributes = Arrays.stream(fields)
                             .filter(field -> field.startsWith("{\"anchorText\":") || field.startsWith("\"title\":\""))
                             .map(field -> {
                                 if (field.startsWith("{\"")) {
@@ -285,12 +285,12 @@ class RankingExecutorTest {
                                     field = field.substring(0, field.length() - 1);
                                 }
                                 String[] fieldParts = field.split("\":\"");
-                                fieldParts[0] = fieldParts[0].substring(1);
-                                fieldParts[1] = fieldParts[1].substring(0, fieldParts[1].length() - 1);
+                                String attrName = fieldParts[0].substring(1);
+                                String attrValue = fieldParts[1].substring(0, fieldParts[1].length() - 1);
 
-                                return new Attribute<>(fieldParts[0], fieldParts[1]);
+                                return new SimpleEntry<String, String>(attrName, attrValue);
                             })
-                            .collect(toList());
+                            .collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
                     return new Doc(0, Map.of(), 0, attributes);
                 })
                 .collect(toList());
