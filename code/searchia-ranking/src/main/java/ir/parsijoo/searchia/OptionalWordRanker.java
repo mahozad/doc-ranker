@@ -40,7 +40,7 @@ public class OptionalWordRanker implements Ranker {
                 }
                 doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
             }
-            RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, true);
+            RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, phaseInfo.getSortDirection());
         }
     }
 }

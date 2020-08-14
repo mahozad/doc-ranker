@@ -107,7 +107,7 @@ class RankingExecutorTest {
         docs.stream().filter(doc -> doc.getId() % 2 == 0).forEach(doc -> doc.setNumberOfMatches(1));
         List<Integer> expectedRanks = List.of(3, 2, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1);
 
-        RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, true);
+        RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, DESCENDING);
 
         assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
@@ -119,7 +119,7 @@ class RankingExecutorTest {
         docs.stream().filter(doc -> doc.getId() > 10).forEach(doc -> doc.setNumberOfMatches(Integer.MAX_VALUE));
         List<Integer> expectedRanks = List.of(4, 3, 4, 3, 2, 1, 2, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0);
 
-        RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, true);
+        RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, DESCENDING);
 
         assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }

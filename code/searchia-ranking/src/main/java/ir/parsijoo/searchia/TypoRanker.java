@@ -20,7 +20,7 @@ public class TypoRanker implements Ranker {
             computeNumberOfTypos(rankQueries, doc);
         }
         if (queriesContainCorrectedOrSuggested) {
-            RankingExecutor.updateRanks(docs, Doc::getNumberOfTypos, false);
+            RankingExecutor.updateRanks(docs, Doc::getNumberOfTypos, phaseInfo.getSortDirection());
         }
         docs.sort(comparingInt(Doc::getNumberOfTypos));
     }

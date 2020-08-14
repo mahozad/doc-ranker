@@ -32,6 +32,6 @@ public class ExactMatchRanker implements Ranker {
                 }
             }
         }
-        RankingExecutor.updateRanks(docs, Doc::getNumberOfExactMatches, true);
+        RankingExecutor.updateRanks(docs, Doc::getNumberOfExactMatches, phaseInfo.getSortDirection());
     }
 }

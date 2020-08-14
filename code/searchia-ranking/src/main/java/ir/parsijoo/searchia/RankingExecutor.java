@@ -3,6 +3,7 @@ package ir.parsijoo.searchia;
 import ir.parsijoo.searchia.dto.RankingDTO;
 import ir.parsijoo.searchia.dto.RankingPhaseDTO;
 import ir.parsijoo.searchia.dto.RankingPhaseType;
+import ir.parsijoo.searchia.dto.SortDirection;
 
 import java.io.IOException;
 import java.util.*;
@@ -50,9 +51,11 @@ public class RankingExecutor {
         return docs.subList(offset, limit);
     }
 
-    public static <T extends Comparable<T>> void updateRanks(List<Doc> docs, Function<Doc, T> function, boolean reversed) {
+    public static <T extends Comparable<T>> void updateRanks(List<Doc> docs,
+                                                             Function<Doc, T> function,
+                                                             SortDirection sortDirection) {
         Comparator<Doc> comparator = Comparator.comparing(function);
-        if (reversed) {
+        if (sortDirection == SortDirection.DESCENDING) {
             comparator = comparator.reversed();
         }
 

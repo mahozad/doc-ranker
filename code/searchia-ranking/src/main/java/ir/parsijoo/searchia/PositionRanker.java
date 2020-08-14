@@ -25,7 +25,7 @@ public class PositionRanker implements Ranker {
             // FIXME: The attribute name is set to a constant value
             doc.setMinPosition(new Doc.MinPosition(minPosition, "title"));
         }
-        RankingExecutor.updateRanks(docs, doc -> doc.getMinPosition().value, false);
+        RankingExecutor.updateRanks(docs, doc -> doc.getMinPosition().value, phaseInfo.getSortDirection());
     }
 
     public static int getDocMinWordPositionByQuery(Doc doc, Query query) {
