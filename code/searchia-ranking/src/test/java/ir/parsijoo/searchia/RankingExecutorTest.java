@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(Lifecycle.PER_CLASS)
-class RankerTest {
+class RankingExecutorTest {
 
     Path samplesPath = Path.of("src/test/resources/sample-docs.txt");
 
@@ -134,7 +134,7 @@ class RankerTest {
     }
 
     @Test
-    void rank() throws IOException {
+    void executeRanking() throws IOException {
         int offset = 0;
         int limit = 10;
         Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
@@ -162,7 +162,7 @@ class RankerTest {
     }
 
     @Test
-    void rank_executionTime() throws IOException {
+    void executeRanking_executionTime() throws IOException {
         long timeThreshold = 50/*ms*/;
         int offset = 0;
         int limit = 10;
@@ -191,7 +191,7 @@ class RankerTest {
     }
 
     @Test
-    void rank_resultSize() throws IOException {
+    void executeRanking_resultSize() throws IOException {
         int offset = 0;
         int limit = 10;
         Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
@@ -217,7 +217,7 @@ class RankerTest {
     }
 
     @Test
-    void rank_useRealData_executionTime() throws IOException, CsvException {
+    void executeRanking_useRealData_executionTime() throws IOException, CsvException {
         File file = new File("src/test/resources/real-docs.csv");
         CSVParser csvParser = new CSVParserBuilder().withIgnoreQuotations(true).build();
         CSVReader csvReader = new CSVReaderBuilder(new FileReader(file))
@@ -282,7 +282,7 @@ class RankerTest {
     }
 
     @RepeatedTest(100)
-    void rank_useRealData_averageTimeOf100Executions(RepetitionInfo repetitionInfo) throws IOException, CsvException {
+    void executeRanking_useRealData_averageTimeOf100Executions(RepetitionInfo repetitionInfo) throws IOException, CsvException {
         File file = new File("src/test/resources/real-docs.csv");
         CSVParser csvParser = new CSVParserBuilder().withIgnoreQuotations(true).build();
         CSVReader csvReader = new CSVReaderBuilder(new FileReader(file))
