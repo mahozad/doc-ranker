@@ -30,7 +30,7 @@ public class Doc implements Comparable<Doc> {
     private int numberOfTypos;
     private double elasticScore;
     private Map<String, ?> filterableAttrs;
-    private Map<String, ?> customRankingAttrs;
+    private Map<String, ? extends Comparable<?>> customRankingAttrs;
     private Map<String, List<Integer>> tokens = new HashMap<>();
     private List<Attribute<String>> searchableAttrs;
     private MinDistance minDistance;
@@ -39,7 +39,7 @@ public class Doc implements Comparable<Doc> {
     private int numberOfExactMatches;
     private int rank = 0;
 
-    public Doc(int id, Map<String, ?> customRankingAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
+    public Doc(int id, Map<String, ? extends Comparable<?>> customRankingAttrs, double elasticScore, List<Attribute<String>> searchableAttrs) {
         this.id = id;
         this.customRankingAttrs = customRankingAttrs;
         this.elasticScore = elasticScore;
@@ -119,11 +119,11 @@ public class Doc implements Comparable<Doc> {
         this.numberOfExactMatches = numberOfExactMatches;
     }
 
-    public Map<String, ?> getCustomRankingAttrs() {
+    public Map<String, ? extends Comparable<?>> getCustomRankingAttrs() {
         return customRankingAttrs;
     }
 
-    public void setCustomRankingAttrs(Map<String, ?> customRankingAttrs) {
+    public void setCustomRankingAttrs(Map<String, ? extends Comparable<?>> customRankingAttrs) {
         this.customRankingAttrs = customRankingAttrs;
     }
 
