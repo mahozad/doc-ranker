@@ -28,15 +28,15 @@ public class DistanceRanker implements Ranker {
 
     public static MinDistance getRecordMinDistanceFromQueries(Record record, Map<QueryType, Query> queries) {
         int minDistance = Integer.MAX_VALUE;
-        QueryType selectedQueryType = QueryType.ORIGINAL;
+        QueryType theQueryContainingMinDistance = QueryType.ORIGINAL;
         for (Query query : queries.values()) {
             int distance = calculateRecordDistanceFromQuery(record, query);
             if (distance < minDistance) {
                 minDistance = distance;
-                selectedQueryType = query.getType();
+                theQueryContainingMinDistance = query.getType();
             }
         }
-        return new MinDistance(minDistance, selectedQueryType);
+        return new MinDistance(minDistance, theQueryContainingMinDistance);
     }
 
     public static int calculateRecordDistanceFromQuery(Record record, Query query) {
