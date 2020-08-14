@@ -27,7 +27,6 @@ class TypoRankerTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
     TypoRanker ranker;
 
     @BeforeEach
@@ -57,14 +56,6 @@ class TypoRankerTest {
         promotions = List.of(
                 new Promotion(),
                 new Promotion()
-        );
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of()
         );
 
         ranker = new TypoRanker();

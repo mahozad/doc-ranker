@@ -25,7 +25,6 @@ class DocumentProcessorTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -55,14 +54,6 @@ class DocumentProcessorTest {
                 new Promotion(),
                 new Promotion()
         );
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of()
-        );
     }
 
     @AfterEach
@@ -70,7 +61,7 @@ class DocumentProcessorTest {
     }
 
     @Test
-    void processDocs() throws IOException {
+    void processDocs() {
         int initialSize = docs.size();
 
         DocumentProcessor.processDocs(docs);

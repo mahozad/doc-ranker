@@ -28,7 +28,6 @@ class OptionalWordRankerTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
     OptionalWordRanker ranker;
 
     @BeforeEach
@@ -55,14 +54,6 @@ class OptionalWordRankerTest {
         promotions = List.of(
                 new Promotion(),
                 new Promotion()
-        );
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of("dodge")
         );
 
         ranker = new OptionalWordRanker();

@@ -29,7 +29,6 @@ class ExactMatchRankerTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
     ExactMatchRanker ranker;
 
     @BeforeEach
@@ -56,14 +55,6 @@ class ExactMatchRankerTest {
         promotions = List.of(
                 new Promotion(),
                 new Promotion()
-        );
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of("dodge")
         );
 
         ranker = new ExactMatchRanker();

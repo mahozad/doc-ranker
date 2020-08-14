@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.dto.RankingPhaseType.WORDS_POSITION;
@@ -26,7 +25,6 @@ class PositionRankerTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
     PositionRanker ranker;
 
     @BeforeEach
@@ -53,14 +51,6 @@ class PositionRankerTest {
         promotions = List.of(
                 new Promotion(),
                 new Promotion()
-        );
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of("dodge")
         );
 
         ranker = new PositionRanker();

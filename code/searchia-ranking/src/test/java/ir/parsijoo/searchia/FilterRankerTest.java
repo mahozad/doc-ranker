@@ -9,10 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FilterRankerTest {
 
@@ -21,7 +21,6 @@ class FilterRankerTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -48,14 +47,6 @@ class FilterRankerTest {
                 new Promotion(),
                 new Promotion()
         );
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of("dodge")
-        );
     }
 
     @AfterEach
@@ -68,8 +59,7 @@ class FilterRankerTest {
         filter.setValue(50.0);
         filter.setAttributeName("views");
         filter.setOperator(Operator.LT);
-        configuration.setSelectedFilters(Set.of(filter));
-        List<Doc> result = FilterRanker.rankByFilters(docs, configuration.getSelectedFilters());
+        List<Doc> result = FilterRanker.rankByFilters(docs, null);
 
         assertEquals(1, result.get(0).getId());
     }

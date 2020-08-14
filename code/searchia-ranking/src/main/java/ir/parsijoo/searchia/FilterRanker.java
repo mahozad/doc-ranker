@@ -7,14 +7,14 @@ import java.util.Set;
 public class FilterRanker {
 
     public static List<Doc> rankByFilters(List<Doc> docs, Set<Filter<?>> filters) {
-        filters.forEach(filter -> {
-            for (Doc doc : docs) {
+//        filters.forEach(filter -> {
+//            for (Doc doc : docs) {
                 // if (filter.getValue() instanceof Double) {
-                int score = setDocScoreByNumericFilter(doc, filter);
+//                int score = setDocScoreByNumericFilter(doc, filter);
 //                doc.setPhaseScore(doc.getPhaseScore() + score);
                 // }
-            }
-        });
+//            }
+//        });
 
         return docs;
     }

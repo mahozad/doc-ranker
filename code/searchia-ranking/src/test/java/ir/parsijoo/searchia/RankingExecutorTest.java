@@ -37,7 +37,6 @@ class RankingExecutorTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
 
     double totalDuration = 0;
     long maxDuration = 0;
@@ -62,14 +61,6 @@ class RankingExecutorTest {
                     return new Doc(id, customAttrs, score, searchableAttrs);
                 })
                 .collect(toList());
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of("dodge")
-        );
 
         promotions = List.of(
                 new Promotion(),
@@ -156,7 +147,7 @@ class RankingExecutorTest {
         List<Integer> expectedDocIdOrder =
                 List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
-        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, configuration, rankingDTO, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
 
         assertThat(result.stream().map(Doc::getId).collect(toList()), is(equalTo(expectedDocIdOrder)));
     }
@@ -184,7 +175,7 @@ class RankingExecutorTest {
         ));
 
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, docs, promotions, configuration, rankingDTO, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -211,7 +202,7 @@ class RankingExecutorTest {
                 new RankingPhaseDTO(CUSTOM, true, 5, DESCENDING, "viewCount")
         ));
 
-        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, configuration, rankingDTO, offset, limit);
+        List<Doc> result = RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
 
         assertEquals(limit, result.size());
     }
@@ -247,14 +238,6 @@ class RankingExecutorTest {
                 })
                 .collect(toList());
 
-        RankConfiguration configuration = new RankConfiguration(
-                "fake",
-                null,
-                false,
-                List.of(),
-                Set.of("fake")
-        );
-
         int offset = 0;
         int limit = 10;
         Query query1 = new Query("معرفی فیل", Query.QueryType.ORIGINAL);
@@ -275,7 +258,7 @@ class RankingExecutorTest {
 
         long timeThreshold = 20/*ms*/;
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, docs, promotions, configuration, rankingDTO, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -312,14 +295,6 @@ class RankingExecutorTest {
                 })
                 .collect(toList());
 
-        RankConfiguration configuration = new RankConfiguration(
-                "fake",
-                null,
-                false,
-                List.of(),
-                Set.of("fake")
-        );
-
         int offset = 0;
         int limit = 10;
         Query query1 = new Query("معرفی فیل", Query.QueryType.ORIGINAL);
@@ -341,7 +316,7 @@ class RankingExecutorTest {
 
         double timeThreshold = 50.0/*ms*/;
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, docs, promotions, configuration, rankingDTO, offset, limit);
+        RankingExecutor.executeRanking(queries, docs, promotions, rankingDTO, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
         totalDuration += duration;
         maxDuration = Math.max(maxDuration, duration);

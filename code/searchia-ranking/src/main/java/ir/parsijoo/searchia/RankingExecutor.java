@@ -27,7 +27,6 @@ public class RankingExecutor {
             Map<Query.QueryType, Query> queries,
             List<Doc> docs,
             List<Promotion> promotions,
-            RankConfiguration configuration,
             RankingDTO rankingDTO,
             int offset,
             int limit) throws IOException {

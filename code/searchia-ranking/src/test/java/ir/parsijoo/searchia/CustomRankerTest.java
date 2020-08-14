@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static ir.parsijoo.searchia.dto.RankingPhaseType.CUSTOM;
 import static ir.parsijoo.searchia.dto.SortDirection.DESCENDING;
@@ -26,7 +25,6 @@ class CustomRankerTest {
     String query;
     List<Doc> docs;
     List<Promotion> promotions;
-    RankConfiguration configuration;
     CustomRanker ranker;
 
     @BeforeEach
@@ -53,14 +51,6 @@ class CustomRankerTest {
         promotions = List.of(
                 new Promotion(),
                 new Promotion()
-        );
-
-        configuration = new RankConfiguration(
-                "price",
-                null,
-                false,
-                List.of("viewCount", "creationDate"),
-                Set.of("dodge")
         );
 
         ranker = new CustomRanker();
