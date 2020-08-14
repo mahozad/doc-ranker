@@ -1,11 +1,11 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Doc;
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
+import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 
 import java.util.List;
 import java.util.Map;
@@ -19,23 +19,23 @@ public class ExactMatchRanker implements Ranker {
     private static final Set<QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhase phase) {
+    public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
-        for (Doc doc : docs) {
+        for (Record record : records) {
             for (Query query : rankQueries) {
-                int numberOfMatches = DocumentProcessor.getNumberOfMatches(doc, query);
+                int numberOfMatches = RecordProcessor.getNumberOfMatches(record, query);
                 numberOfMatches = Math.min(numberOfMatches, lengthOfOriginalQuery);
                 if (query.getType() == WILDCARD) {
-                    doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches - 1));
+                    record.setNumberOfExactMatches(Math.max(record.getNumberOfExactMatches(), numberOfMatches - 1));
                 } else if (numberOfMatches == lengthOfOriginalQuery) {
-                    doc.setNumberOfExactMatches(numberOfMatches);
+                    record.setNumberOfExactMatches(numberOfMatches);
                     break;
                 } else {
-                    doc.setNumberOfExactMatches(Math.max(doc.getNumberOfExactMatches(), numberOfMatches));
+                    record.setNumberOfExactMatches(Math.max(record.getNumberOfExactMatches(), numberOfMatches));
                 }
             }
         }
-        RankingExecutor.updateRanks(docs, Doc::getNumberOfExactMatches, phase.getSortDirection());
+        RankingExecutor.updateRanks(records, Record::getNumberOfExactMatches, phase.getSortDirection());
     }
 }

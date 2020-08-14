@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
 import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.TypoRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TypoRankerTest {
 
-    List<Doc> docs;
+    List<Record> records;
     TypoRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        docs = TestUtil.createSampleDocs();
+        records = TestUtil.createSampleRecords();
         ranker = new TypoRanker();
     }
 
@@ -43,7 +43,7 @@ class TypoRankerTest {
     //     Query query5 = new Query("dodge challenger", QueryType.OPTIONAL);
     //     List<Query> queries = List.of(query1, query2, query3, query4, query5);
     //
-    //     List<Doc> result = TypoRanker.rankByTypo(queries, docs);
+    //     List<Record> result = TypoRanker.rankByTypo(queries, records);
     // }
 
     @Test
@@ -57,13 +57,13 @@ class TypoRankerTest {
                 QueryType.OPTIONAL, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        // The set contains one number; in other words all the docs have the same rank
-        assertEquals(1, docs.stream().map(Doc::getRank).collect(toSet()).size());
+        // The set contains one number; in other words all the records have the same rank
+        assertEquals(1, records.stream().map(Record::getRank).collect(toSet()).size());
     }
 
     @Test
@@ -77,13 +77,13 @@ class TypoRankerTest {
                 QueryType.OPTIONAL, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         Set<Integer> expectedIds = Set.of(2, 16, 17);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        List<Integer> resultIds = docs.stream().map(Doc::getId).collect(toList());
+        List<Integer> resultIds = records.stream().map(Record::getId).collect(toList());
         assertTrue(resultIds.subList(0, 3).containsAll(expectedIds));
     }
 
@@ -98,13 +98,13 @@ class TypoRankerTest {
                 QueryType.SUGGESTED, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
         // The set contains two numbers; in other words there are 2 different scores
-        assertEquals(2, docs.stream().map(Doc::getRank).collect(toSet()).size());
+        assertEquals(2, records.stream().map(Record::getRank).collect(toSet()).size());
     }
 
     @Test
@@ -118,14 +118,14 @@ class TypoRankerTest {
                 QueryType.SUGGESTED, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        docs = docs.stream().sorted().collect(toList());
-        Set<Integer> group1Ranks = docs.subList(0, 3).stream().map(Doc::getRank).collect(toSet());
-        Set<Integer> group2Ranks = docs.subList(3, docs.size()).stream().map(Doc::getRank).collect(toSet());
+        records = records.stream().sorted().collect(toList());
+        Set<Integer> group1Ranks = records.subList(0, 3).stream().map(Record::getRank).collect(toSet());
+        Set<Integer> group2Ranks = records.subList(3, records.size()).stream().map(Record::getRank).collect(toSet());
         assertEquals(1, group1Ranks.size());
         assertEquals(1, group2Ranks.size());
     }
@@ -147,37 +147,37 @@ class TypoRankerTest {
     }
 
     @Test
-    void isDocMatchingWithQuery() throws IOException {
+    void isRecordMatchingWithQuery() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Doc doc = docs.get(1);
-        doc.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
+        Record record = records.get(1);
+        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
 
-        boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
+        boolean isMatching = TypoRanker.isRecordMatchedWithQuery(record, query);
 
         assertTrue(isMatching);
     }
 
     @Test
-    void isDocMatchingWithQuery_wildcardQuery() throws IOException {
+    void isRecordMatchingWithQuery_wildcardQuery() throws IOException {
         Query query = new Query("dodge charter*", QueryType.WILDCARD);
-        Doc doc = docs.get(1);
-        doc.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
+        Record record = records.get(1);
+        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
         QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
 
-        boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
+        boolean isMatching = TypoRanker.isRecordMatchedWithQuery(record, query);
 
         assertTrue(isMatching);
     }
 
     @Test
-    void isDocMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() throws IOException {
+    void isRecordMatchingWithQuery_wildcardQuery_withoutAsteriskAtEnd() throws IOException {
         Query query = new Query("dodge charter", QueryType.WILDCARD);
-        Doc doc = docs.get(1);
-        doc.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
+        Record record = records.get(1);
+        record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
         QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
 
-        boolean isMatching = TypoRanker.isDocMatchedWithQuery(doc, query);
+        boolean isMatching = TypoRanker.isRecordMatchedWithQuery(record, query);
 
         assertTrue(isMatching);
     }

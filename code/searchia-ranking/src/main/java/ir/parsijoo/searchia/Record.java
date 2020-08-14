@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Doc implements Comparable<Doc> {
+public class Record implements Comparable<Record> {
 
     public static class MinDistance {
         public final int value;
@@ -39,7 +39,7 @@ public class Doc implements Comparable<Doc> {
     private int numberOfExactMatches;
     private int rank = 0;
 
-    public Doc(int id, Map<String, ? extends Comparable<?>> customRankingAttrs, double elasticScore, Map<String, String> searchableAttrs) {
+    public Record(int id, Map<String, ? extends Comparable<?>> customRankingAttrs, double elasticScore, Map<String, String> searchableAttrs) {
         this.id = id;
         this.customRankingAttrs = customRankingAttrs;
         this.elasticScore = elasticScore;
@@ -128,7 +128,7 @@ public class Doc implements Comparable<Doc> {
     }
 
     @Override
-    public int compareTo(Doc otherDoc) {
-        return this.rank - otherDoc.rank;
+    public int compareTo(Record otherRecord) {
+        return this.rank - otherRecord.rank;
     }
 }

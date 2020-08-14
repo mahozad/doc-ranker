@@ -1,16 +1,16 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Doc;
-import ir.parsijoo.searchia.Doc.MinDistance;
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
+import ir.parsijoo.searchia.Record;
+import ir.parsijoo.searchia.Record.MinDistance;
 import ir.parsijoo.searchia.config.RankingPhase;
 
 import java.util.List;
 import java.util.Map;
 
-import static ir.parsijoo.searchia.processor.DocumentProcessor.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.processor.RecordProcessor.ATTRIBUTES_DISTANCE;
 
 public class DistanceRanker implements Ranker {
 
@@ -18,19 +18,19 @@ public class DistanceRanker implements Ranker {
     private static final int MAX_WORDS_DISTANCE_IN_SAME_ATTRIBUTE = 7;
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhase phase) {
-        for (Doc doc : docs) {
-            MinDistance minDistance = getDocMinDistanceFromQueries(doc, queries);
-            doc.setMinDistance(minDistance);
+    public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
+        for (Record record : records) {
+            MinDistance minDistance = getRecordMinDistanceFromQueries(record, queries);
+            record.setMinDistance(minDistance);
         }
-        RankingExecutor.updateRanks(docs, doc -> doc.getMinDistance().value, phase.getSortDirection());
+        RankingExecutor.updateRanks(records, record -> record.getMinDistance().value, phase.getSortDirection());
     }
 
-    public static MinDistance getDocMinDistanceFromQueries(Doc doc, Map<QueryType, Query> queries) {
+    public static MinDistance getRecordMinDistanceFromQueries(Record record, Map<QueryType, Query> queries) {
         int minDistance = Integer.MAX_VALUE;
         QueryType selectedQueryType = QueryType.ORIGINAL;
         for (Query query : queries.values()) {
-            int distance = calculateDocDistanceFromQuery(doc, query);
+            int distance = calculateRecordDistanceFromQuery(record, query);
             if (distance < minDistance) {
                 minDistance = distance;
                 selectedQueryType = query.getType();
@@ -39,7 +39,7 @@ public class DistanceRanker implements Ranker {
         return new MinDistance(minDistance, selectedQueryType);
     }
 
-    public static int calculateDocDistanceFromQuery(Doc doc, Query query) {
+    public static int calculateRecordDistanceFromQuery(Record record, Query query) {
         List<String> qWords = query.getTokens();
         int i = 0;
         int totalDistance = 0;
@@ -48,11 +48,11 @@ public class DistanceRanker implements Ranker {
         while (i < qWords.size() - 1) {
             word1 = qWords.get(i);
             word2 = qWords.get(i + 1);
-            if (!doc.getTokens().containsKey(word1) || !doc.getTokens().containsKey(word2)) {
+            if (!record.getTokens().containsKey(word1) || !record.getTokens().containsKey(word2)) {
                 return Integer.MAX_VALUE;
             }
-            List<Integer> positions1 = doc.getTokens().get(word1);
-            List<Integer> positions2 = doc.getTokens().get(word2);
+            List<Integer> positions1 = record.getTokens().get(word1);
+            List<Integer> positions2 = record.getTokens().get(word2);
             int minDistance = calculateMinDistanceBetweenTwoPositionLists(positions1, positions2);
             totalDistance += minDistance;
             i++;

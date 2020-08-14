@@ -1,9 +1,9 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Doc;
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
+import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
 
 import java.util.List;
@@ -17,33 +17,33 @@ import static java.util.stream.Collectors.toSet;
 public class OptionalWordRanker implements Ranker {
 
     /**
-     * If we do not have optional query then number of matches in all the docs is same and is equal
-     * to number of words of the original query even if there is a longer query and a doc
+     * If we do not have optional query then number of matches in all the records is same and is equal
+     * to number of words of the original query even if there is a longer query and a records
      * has matched all its words.
      *
      * @param queries
-     * @param docs
+     * @param records
      * @param phase
      * @return
      */
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhase phase) {
+    public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
         int lengthOfOriginalQuery = queries.get(ORIGINAL).getTokens().size();
         if (!queries.containsKey(OPTIONAL)) {
-            docs.forEach(doc -> doc.setNumberOfMatches(lengthOfOriginalQuery));
+            records.forEach(record -> record.setNumberOfMatches(lengthOfOriginalQuery));
         } else {
             int lengthOfOptionalQuery = queries.get(OPTIONAL).getTokens().size();
             Set<Query> rankQueries = queries.values().stream().filter(q -> q.getType() != OPTIONAL).collect(toSet());
-            for (Doc doc : docs) {
+            for (Record record : records) {
                 for (Query query : rankQueries) {
-                    if (TypoRanker.isDocMatchedWithQuery(doc, query)) {
-                        doc.setNumberOfMatches(lengthOfOriginalQuery);
+                    if (TypoRanker.isRecordMatchedWithQuery(record, query)) {
+                        record.setNumberOfMatches(lengthOfOriginalQuery);
                         break;
                     }
                 }
-                doc.setNumberOfMatches(Math.max(doc.getNumberOfMatches(), lengthOfOptionalQuery));
+                record.setNumberOfMatches(Math.max(record.getNumberOfMatches(), lengthOfOptionalQuery));
             }
-            RankingExecutor.updateRanks(docs, Doc::getNumberOfMatches, phase.getSortDirection());
+            RankingExecutor.updateRanks(records, Record::getNumberOfMatches, phase.getSortDirection());
         }
     }
 }

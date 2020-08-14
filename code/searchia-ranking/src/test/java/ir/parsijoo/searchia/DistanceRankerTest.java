@@ -1,11 +1,11 @@
 package ir.parsijoo.searchia;
 
 
-import ir.parsijoo.searchia.Doc.MinDistance;
 import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.Record.MinDistance;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
 import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.DistanceRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DistanceRankerTest {
 
-    List<Doc> docs;
+    List<Record> records;
     DistanceRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        docs = TestUtil.createSampleDocs();
+        records = TestUtil.createSampleRecords();
         ranker = new DistanceRanker();
     }
 
@@ -46,20 +46,20 @@ class DistanceRankerTest {
                 QueryType.SUGGESTED, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         RankingPhase phase = new RankingPhase(WORDS_DISTANCE, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        docs.sort(comparingInt(Doc::getRank));
-        assertTrue(docs.get(0).getId() == 2 && docs.get(0).getRank() == 0);
-        assertTrue(docs.get(1).getId() == 3 && docs.get(1).getRank() == 1);
-        assertTrue(docs.get(2).getId() == 16 && docs.get(2).getRank() == 2);
-        assertEquals(3, docs.get(10).getRank());
+        records.sort(comparingInt(Record::getRank));
+        assertTrue(records.get(0).getId() == 2 && records.get(0).getRank() == 0);
+        assertTrue(records.get(1).getId() == 3 && records.get(1).getRank() == 1);
+        assertTrue(records.get(2).getId() == 16 && records.get(2).getRank() == 2);
+        assertEquals(3, records.get(10).getRank());
     }
 
     @Test
-    void getDocMinDistanceFromQueries() throws IOException {
+    void getRecordMinDistanceFromQueries() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
         Query query2 = new Query("dodge red charger", QueryType.CORRECTED);
         Query query3 = new Query("red dodge charger", QueryType.SUGGESTED);
@@ -68,36 +68,36 @@ class DistanceRankerTest {
                 QueryType.CORRECTED, query2,
                 QueryType.SUGGESTED, query3
         );
-        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        Record record = records.stream().filter(d -> d.getId() == 2).findFirst().get();
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDoc(doc);
+        RecordProcessor.processRecord(record);
 
-        MinDistance minDistance = DistanceRanker.getDocMinDistanceFromQueries(doc, queries);
+        MinDistance minDistance = DistanceRanker.getRecordMinDistanceFromQueries(record, queries);
 
         assertEquals(2, minDistance.value);
         assertEquals(QueryType.CORRECTED, minDistance.query);
     }
 
     @Test
-    void calculateDocDistanceFromQuery() throws IOException {
+    void calculateRecordDistanceFromQuery() throws IOException {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        Record record = records.stream().filter(d -> d.getId() == 2).findFirst().get();
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        DocumentProcessor.processDoc(doc);
+        RecordProcessor.processRecord(record);
 
-        int distance = DistanceRanker.calculateDocDistanceFromQuery(doc, query);
+        int distance = DistanceRanker.calculateRecordDistanceFromQuery(record, query);
 
         assertEquals(4, distance);
     }
 
     @Test
-    void calculateDocDistanceFromQuery_docLacksOneOfQueryWords() throws IOException {
+    void calculateRecordDistanceFromQuery_recordLacksOneOfQueryWords() throws IOException {
         Query query = new Query("red dodge charger", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 1).findFirst().get();
+        Record record = records.stream().filter(d -> d.getId() == 1).findFirst().get();
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        DocumentProcessor.processDoc(doc);
+        RecordProcessor.processRecord(record);
 
-        int distance = DistanceRanker.calculateDocDistanceFromQuery(doc, query);
+        int distance = DistanceRanker.calculateRecordDistanceFromQuery(record, query);
 
         assertEquals(Integer.MAX_VALUE, distance);
     }

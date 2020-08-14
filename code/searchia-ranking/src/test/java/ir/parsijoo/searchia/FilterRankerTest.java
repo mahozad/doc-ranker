@@ -16,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FilterRankerTest {
 
-    List<Doc> docs;
+    List<Record> records;
     FilterRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        docs = TestUtil.createSampleDocs();
+        records = TestUtil.createSampleRecords();
         ranker = new FilterRanker();
     }
 
@@ -34,22 +34,22 @@ class FilterRankerTest {
         filter.setValue(50.0);
         filter.setAttributeName("views");
         filter.setOperator(Operator.LT);
-        List<Doc> result = FilterRanker.rankByFilters(docs, null);
+        List<Record> result = FilterRanker.rankByFilters(records, null);
 
         assertEquals(1, result.get(0).getId());
     }
 
     @Test
-    void setDocScoreByNumericFilter() {
-        Doc doc = docs.get(0);
-        doc.setFilterableAttrs(Map.of("views", 10.0));
+    void setRecordScoreByNumericFilter() {
+        Record record = records.get(0);
+        record.setFilterableAttrs(Map.of("views", 10.0));
         Filter<Double> filter = new Filter<>();
         filter.setAttributeName("views");
         filter.setOperator(Operator.LT);
         filter.setWeight(1);
         filter.setValue(50.0);
 
-        int score = FilterRanker.setDocScoreByNumericFilter(doc, filter);
+        int score = FilterRanker.setRecordScoreByNumericFilter(record, filter);
 
         assertEquals(1, score);
     }

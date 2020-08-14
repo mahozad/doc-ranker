@@ -1,7 +1,7 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.CustomRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +19,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 class CustomRankerTest {
 
-    List<Doc> docs;
+    List<Record> records;
     CustomRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        docs = TestUtil.createSampleDocs();
+        records = TestUtil.createSampleRecords();
         ranker = new CustomRanker();
     }
 
@@ -33,36 +33,36 @@ class CustomRankerTest {
 
     @Test
     void rankByCustomAttributes_viewCount() {
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         List<Integer> expectedRanks = List.of(9, 6, 9, 6, 6, 10, 6, 8, 4, 1, 0, 5, 2, 3, 7, 2, 2);
         RankingPhase phase = new RankingPhase(CUSTOM, true, 0, DESCENDING, "viewCount");
 
-        ranker.rank(null, docs, phase);
+        ranker.rank(null, records, phase);
 
-        assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
+        assertThat(records.stream().map(Record::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 
     @Test
     void rankByCustomAttributes_creationDate() {
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         List<Integer> expectedRanks = List.of(11, 0, 13, 4, 14, 10, 6, 7, 3, 12, 9, 2, 1, 8, 5, 9, 11);
         RankingPhase phase = new RankingPhase(CUSTOM, true, 0, DESCENDING, "creationDate");
 
-        ranker.rank(null, docs, phase);
+        ranker.rank(null, records, phase);
 
-        assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
+        assertThat(records.stream().map(Record::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 
     @Test
     void rankByCustomAttributes_bothAttributes() {
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         List<Integer> expectedRanks = List.of(14, 8, 15, 9, 11, 16, 10, 13, 6, 1, 0, 7, 2, 5, 12, 3, 4);
         RankingPhase phase1 = new RankingPhase(CUSTOM, true, 0, DESCENDING, "viewCount");
         RankingPhase phase2 = new RankingPhase(CUSTOM, true, 0, DESCENDING, "creationDate");
 
-        ranker.rank(null, docs, phase1);
-        ranker.rank(null, docs, phase2);
+        ranker.rank(null, records, phase1);
+        ranker.rank(null, records, phase2);
 
-        assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
+        assertThat(records.stream().map(Record::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 }

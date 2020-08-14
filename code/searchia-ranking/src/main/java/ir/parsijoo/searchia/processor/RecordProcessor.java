@@ -1,7 +1,7 @@
 package ir.parsijoo.searchia.processor;
 
-import ir.parsijoo.searchia.Doc;
 import ir.parsijoo.searchia.Query;
+import ir.parsijoo.searchia.Record;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.elasticsearch.analyzer.ParsiAnalyzer;
@@ -15,34 +15,34 @@ import java.util.Map.Entry;
 
 import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
 
-public class DocumentProcessor {
+public class RecordProcessor {
 
     public static final int ATTRIBUTES_DISTANCE = 1_000_000;
     private static final ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
 
-    public static void processDocs(List<Doc> docs) {
-        docs.parallelStream().forEach(doc -> {
+    public static void processRecords(List<Record> records) {
+        records.parallelStream().forEach(record -> {
             try {
-                processDoc(doc);
+                processRecord(record);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public static Doc processDoc(Doc doc) throws IOException {
+    public static Record processRecord(Record record) throws IOException {
         int offset = 0;
-        for (String attr : doc.getSearchableAttrs().values()) {
+        for (String attr : record.getSearchableAttrs().values()) {
             Map<String, List<Integer>> tokens = tokenizeTextWithPosition(attr, offset);
             for (Entry<String, List<Integer>> token : tokens.entrySet()) {
-                doc.getTokens().merge(token.getKey(), token.getValue(), (v1, v2) -> {
+                record.getTokens().merge(token.getKey(), token.getValue(), (v1, v2) -> {
                     v1.addAll(v2);
                     return v1;
                 });
             }
             offset += ATTRIBUTES_DISTANCE;
         }
-        return doc;
+        return record;
     }
 
     public static List<String> tokenizeTextWithoutAddingPositions(String text) throws IOException {
@@ -83,17 +83,17 @@ public class DocumentProcessor {
         return tokensMap;
     }
 
-    public static int getNumberOfMatches(Doc doc, Query query) {
+    public static int getNumberOfMatches(Record record, Query query) {
         List<String> qWords = query.getTokens();
         int numberOfMatches = 0;
         for (int i = 0; i < qWords.size(); i++) {
             String qWord = qWords.get(i);
             if (query.getType() == WILDCARD && i == qWords.size() - 1) {
-                boolean matches = doc.getTokens().keySet().stream().anyMatch(s -> s.startsWith(qWord));
+                boolean matches = record.getTokens().keySet().stream().anyMatch(s -> s.startsWith(qWord));
                 if (matches) {
                     numberOfMatches++;
                 }
-            } else if (doc.getTokens().containsKey(qWord)) {
+            } else if (record.getTokens().containsKey(qWord)) {
                 numberOfMatches++;
             }
         }

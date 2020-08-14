@@ -4,8 +4,8 @@ import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.config.RankingPhaseType;
 import ir.parsijoo.searchia.config.SortDirection;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
 import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.*;
 
 import java.io.IOException;
@@ -28,16 +28,16 @@ public class RankingExecutor {
             CUSTOM, new CustomRanker()
     );
 
-    public static List<Doc> executeRanking(
+    public static List<Record> executeRanking(
             Map<Query.QueryType, Query> queries,
-            List<Doc> docs,
+            List<Record> records,
             List<Promotion> promotions,
             RankingConfig rankingConfig,
             int offset,
             int limit) throws IOException {
 
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
 
         List<RankingPhase> phases = rankingConfig
                 .getPhases()
@@ -48,40 +48,40 @@ public class RankingExecutor {
 
         for (RankingPhase phase : phases) {
             Ranker ranker = rankers.get(phase.getType());
-            ranker.rank(queries, docs, phase);
+            ranker.rank(queries, records, phase);
         }
 
-        docs.sort(Doc::compareTo);
-        return docs.subList(offset, limit);
+        records.sort(Record::compareTo);
+        return records.subList(offset, limit);
     }
 
-    public static <T extends Comparable<T>> void updateRanks(List<Doc> docs,
-                                                             Function<Doc, T> function,
+    public static <T extends Comparable<T>> void updateRanks(List<Record> records,
+                                                             Function<Record, T> function,
                                                              SortDirection sortDirection) {
-        Comparator<Doc> comparator = Comparator.comparing(function);
+        Comparator<Record> comparator = Comparator.comparing(function);
         if (sortDirection == DESCENDING) {
             comparator = comparator.reversed();
         }
 
-        int rank = 0; // Rank starts from 0 (top doc has rank of 0)
-        SortedMap<Integer, List<Doc>> groups = groupDocsByRank(docs);
-        for (List<Doc> group : groups.values()) {
-            List<Doc> sortedGroup = group.stream().sorted(comparator).collect(toList());
+        int rank = 0; // Rank starts from 0 (top record has rank of 0)
+        SortedMap<Integer, List<Record>> groups = groupRecordsByRank(records);
+        for (List<Record> group : groups.values()) {
+            List<Record> sortedGroup = group.stream().sorted(comparator).collect(toList());
             T currentValue = function.apply(sortedGroup.get(0));
-            for (Doc doc : sortedGroup) {
-                T attributeValue = function.apply(doc);
+            for (Record record : sortedGroup) {
+                T attributeValue = function.apply(record);
                 if (attributeValue.compareTo(currentValue) != 0) {
                     rank++;
                     currentValue = attributeValue;
                 }
-                doc.setRank(rank);
+                record.setRank(rank);
             }
             rank++;
         }
     }
 
-    public static SortedMap<Integer, List<Doc>> groupDocsByRank(List<Doc> docs) {
-        Map<Integer, List<Doc>> map = docs.stream().collect(groupingBy(Doc::getRank));
+    public static SortedMap<Integer, List<Record>> groupRecordsByRank(List<Record> records) {
+        Map<Integer, List<Record>> map = records.stream().collect(groupingBy(Record::getRank));
         return new TreeMap<>(map);
     }
 }

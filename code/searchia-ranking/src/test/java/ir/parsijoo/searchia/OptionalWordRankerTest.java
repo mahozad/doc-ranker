@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
 import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.OptionalWordRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OptionalWordRankerTest {
 
-    List<Doc> docs;
+    List<Record> records;
     OptionalWordRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        docs = TestUtil.createSampleDocs();
+        records = TestUtil.createSampleRecords();
         ranker = new OptionalWordRanker();
     }
 
@@ -46,13 +46,13 @@ class OptionalWordRankerTest {
                 QueryType.SUGGESTED, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         RankingPhase phase = new RankingPhase(OPTIONAL_WORDS, true, 0, DESCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        // The set contains one number; in other words all the docs have the same numberOfMatches
-        assertEquals(1, docs.stream().map(Doc::getNumberOfMatches).collect(toSet()).size());
+        // The set contains one number; in other words all the records have the same numberOfMatches
+        assertEquals(1, records.stream().map(Record::getNumberOfMatches).collect(toSet()).size());
     }
 
     @Test
@@ -66,14 +66,14 @@ class OptionalWordRankerTest {
                 QueryType.OPTIONAL, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 10, 11, 12, 16, 17);
         RankingPhase phase = new RankingPhase(OPTIONAL_WORDS, true, 0, DESCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        docs.sort(comparingInt(Doc::getRank));
-        List<Doc> nonOptionalMatches = docs.subList(0, expectedNonOptionalMatchIds.size());
-        assertTrue(nonOptionalMatches.stream().map(Doc::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));
+        records.sort(comparingInt(Record::getRank));
+        List<Record> nonOptionalMatches = records.subList(0, expectedNonOptionalMatchIds.size());
+        assertTrue(nonOptionalMatches.stream().map(Record::getId).collect(toSet()).containsAll(expectedNonOptionalMatchIds));
     }
 }

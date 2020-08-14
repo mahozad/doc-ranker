@@ -1,9 +1,9 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Doc;
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
+import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
 
 import java.util.Iterator;
@@ -16,41 +16,41 @@ import static java.util.Comparator.comparingInt;
 public class TypoRanker implements Ranker {
 
     @Override
-    public void rank(Map<QueryType, Query> queries, List<Doc> docs, RankingPhase phase) {
+    public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
         List<Query> rankQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
-        for (Doc doc : docs) {
-            computeNumberOfTypos(rankQueries, doc);
+        for (Record record : records) {
+            computeNumberOfTypos(rankQueries, record);
         }
         if (queriesContainCorrectedOrSuggested) {
-            RankingExecutor.updateRanks(docs, Doc::getNumberOfTypos, phase.getSortDirection());
+            RankingExecutor.updateRanks(records, Record::getNumberOfTypos, phase.getSortDirection());
         }
-        docs.sort(comparingInt(Doc::getNumberOfTypos));
+        records.sort(comparingInt(Record::getNumberOfTypos));
     }
 
-    private static void computeNumberOfTypos(List<Query> queries, Doc doc) {
+    private static void computeNumberOfTypos(List<Query> queries, Record record) {
         for (Query query : queries) {
-            boolean isDocMatching = isDocMatchedWithQuery(doc, query);
-            if (isDocMatching) {
-                doc.setNumberOfTypos(0);
+            boolean isRecordMatching = isRecordMatchedWithQuery(record, query);
+            if (isRecordMatching) {
+                record.setNumberOfTypos(0);
                 break;
             } else {
-                doc.setNumberOfTypos(1);
+                record.setNumberOfTypos(1);
             }
         }
     }
 
-    public static boolean isDocMatchedWithQuery(Doc doc, Query query) {
+    public static boolean isRecordMatchedWithQuery(Record record, Query query) {
         Iterator<String> tokens = query.getTokens().iterator();
         while (tokens.hasNext()) {
             String token = tokens.next();
             // If queryType is WILDCARD, the last word should be considered as prefix
             if (query.getType() == WILDCARD && !tokens.hasNext()) {
-                boolean noMatches = doc.getTokens().keySet().stream().noneMatch(s -> s.startsWith(token));
+                boolean noMatches = record.getTokens().keySet().stream().noneMatch(s -> s.startsWith(token));
                 if (noMatches) {
                     return false;
                 }
-            } else if (!doc.getTokens().containsKey(token)) {
+            } else if (!record.getTokens().containsKey(token)) {
                 return false;
             }
         }

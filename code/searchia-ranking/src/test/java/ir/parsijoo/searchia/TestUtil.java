@@ -21,12 +21,12 @@ import static java.util.stream.Collectors.toMap;
 
 public class TestUtil {
 
-    private static final Path sampleDocsPath = Path.of("src/test/resources/sample-docs.txt");
-    private static final Path realDocsPath = Path.of("src/test/resources/real-docs.csv");
+    private static final Path sampleRecordsPath = Path.of("src/test/resources/sample-records.txt");
+    private static final Path realRecordsPath = Path.of("src/test/resources/real-records.csv");
 
-    public static List<Doc> createSampleDocs() throws IOException {
+    public static List<Record> createSampleRecords() throws IOException {
         return Files
-                .lines(sampleDocsPath)
+                .lines(sampleRecordsPath)
                 .filter(line -> !line.startsWith("#"))
                 .map(line -> {
                     String[] attrs = line.split("\\|");
@@ -38,13 +38,13 @@ public class TestUtil {
                     String description = attrs[4].split("=")[1];
                     Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
                     Map<String, Double> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
-                    return new Doc(id, customAttrs, score, searchableAttrs);
+                    return new Record(id, customAttrs, score, searchableAttrs);
                 })
                 .collect(toList());
     }
 
-    public static List<Doc> createRealDocs() throws IOException, CsvException {
-        File file = realDocsPath.toFile();
+    public static List<Record> createRealRecords() throws IOException, CsvException {
+        File file = realRecordsPath.toFile();
         CSVParser csvParser = new CSVParserBuilder().withIgnoreQuotations(true).build();
         CSVReader csvReader = new CSVReaderBuilder(new FileReader(file))
                 .withSkipLines(1)
@@ -69,7 +69,7 @@ public class TestUtil {
                                 return new SimpleEntry<>(attrName, attrValue);
                             })
                             .collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
-                    return new Doc(0, Map.of(), 0, attributes);
+                    return new Record(0, Map.of(), 0, attributes);
                 })
                 .collect(toList());
 

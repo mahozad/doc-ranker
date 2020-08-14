@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
 import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.ExactMatchRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,12 +24,12 @@ import static org.hamcrest.Matchers.is;
 
 class ExactMatchRankerTest {
 
-    List<Doc> docs;
+    List<Record> records;
     ExactMatchRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        docs = TestUtil.createSampleDocs();
+        records = TestUtil.createSampleRecords();
         ranker = new ExactMatchRanker();
     }
 
@@ -46,17 +46,17 @@ class ExactMatchRankerTest {
                 QueryType.WILDCARD, query2
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
         RankingPhase phase = new RankingPhase(EXACT_MATCH, true, 0, DESCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 2).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 0).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 1).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 2).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
     }
 
     @Test
@@ -71,17 +71,17 @@ class ExactMatchRankerTest {
                 QueryType.SUGGESTED, unusedQuery
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
         RankingPhase phase = new RankingPhase(EXACT_MATCH, true, 0, DESCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 2).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 0).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 1).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 2).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
     }
 
     @Test
@@ -93,16 +93,16 @@ class ExactMatchRankerTest {
                 QueryType.EQUIVALENT, query2
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         Set<Integer> expectedGroup1Ids = Set.of(2, 3, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 13);
         RankingPhase phase = new RankingPhase(EXACT_MATCH, true, 0, DESCENDING, null);
 
-        ranker.rank(queries, docs, phase);
+        ranker.rank(queries, records, phase);
 
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 0).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 1).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
-        assertThat(docs.stream().filter(doc -> doc.getRank() == 2).map(Doc::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 0).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup1Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 1).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup2Ids)));
+        assertThat(records.stream().filter(record -> record.getRank() == 2).map(Record::getId).collect(Collectors.toSet()), is(equalTo(expectedGroup3Ids)));
     }
 }

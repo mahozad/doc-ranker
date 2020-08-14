@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.DocumentProcessor;
 import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.PositionRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PositionRankerTest {
 
-    List<Doc> docs;
+    List<Record> records;
     PositionRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
-        docs = TestUtil.createSampleDocs();
+        records = TestUtil.createSampleRecords();
         ranker = new PositionRanker();
     }
 
@@ -43,50 +43,50 @@ class PositionRankerTest {
                 QueryType.SUGGESTED, query3
         );
         QueryProcessor.processQueries(queries);
-        DocumentProcessor.processDocs(docs);
+        RecordProcessor.processRecords(records);
         RankingPhase phase = new RankingPhase(WORDS_POSITION, true, 0, ASCENDING, null);
 
-        ranker.rank(queries, docs, phase);
-        docs.sort(comparingInt(Doc::getRank));
+        ranker.rank(queries, records, phase);
+        records.sort(comparingInt(Record::getRank));
 
-        assertEquals(0, docs.stream().filter(doc -> doc.getId() == 2).findFirst().get().getRank());
-        assertEquals(1, docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().getRank());
-        assertEquals(1, docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().value);
-        assertEquals("title", docs.stream().filter(doc -> doc.getId() == 6).findFirst().get().getMinPosition().attributeName);
+        assertEquals(0, records.stream().filter(record -> record.getId() == 2).findFirst().get().getRank());
+        assertEquals(1, records.stream().filter(record -> record.getId() == 6).findFirst().get().getRank());
+        assertEquals(1, records.stream().filter(record -> record.getId() == 6).findFirst().get().getMinPosition().value);
+        assertEquals("title", records.stream().filter(record -> record.getId() == 6).findFirst().get().getMinPosition().attributeName);
     }
 
     @Test
-    void getDocMinWordPositionByQuery() throws IOException {
+    void getRecordMinWordPositionByQuery() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 2).findFirst().get();
+        Record record = records.stream().filter(d -> d.getId() == 2).findFirst().get();
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        DocumentProcessor.processDoc(doc);
+        RecordProcessor.processRecord(record);
 
-        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+        int minPosition = PositionRanker.getRecordMinWordPositionByQuery(record, query);
 
         assertEquals(0, minPosition);
     }
 
     @Test
-    void getDocMinWordPositionByQuery_docHasMinPositionInSecondAttribute() throws IOException {
+    void getRecordMinWordPositionByQuery_recordHasMinPositionInSecondAttribute() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 3).findFirst().get();
+        Record record = records.stream().filter(d -> d.getId() == 3).findFirst().get();
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        DocumentProcessor.processDoc(doc);
+        RecordProcessor.processRecord(record);
 
-        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+        int minPosition = PositionRanker.getRecordMinWordPositionByQuery(record, query);
 
         assertEquals(0, minPosition);
     }
 
     @Test
-    void getDocMinWordPositionByQuery_aWordIsRepeatedInMultipleAttributesWithDifferentPositions() throws IOException {
+    void getRecordMinWordPositionByQuery_aWordIsRepeatedInMultipleAttributesWithDifferentPositions() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        Doc doc = docs.stream().filter(d -> d.getId() == 6).findFirst().get();
+        Record record = records.stream().filter(d -> d.getId() == 6).findFirst().get();
         QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        DocumentProcessor.processDoc(doc);
+        RecordProcessor.processRecord(record);
 
-        int minPosition = PositionRanker.getDocMinWordPositionByQuery(doc, query);
+        int minPosition = PositionRanker.getRecordMinWordPositionByQuery(record, query);
 
         assertEquals(1, minPosition);
     }

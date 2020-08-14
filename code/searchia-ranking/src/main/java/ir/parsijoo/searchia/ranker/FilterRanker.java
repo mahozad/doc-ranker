@@ -1,28 +1,28 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Doc;
+import ir.parsijoo.searchia.Record;
 
 import java.util.List;
 import java.util.Set;
 
 public class FilterRanker {
 
-    public static List<Doc> rankByFilters(List<Doc> docs, Set<Filter<?>> filters) {
+    public static List<Record> rankByFilters(List<Record> records, Set<Filter<?>> filters) {
 //        filters.forEach(filter -> {
-//            for (Doc doc : docs) {
+//            for (Record record : records) {
                 // if (filter.getValue() instanceof Double) {
-//                int score = setDocScoreByNumericFilter(doc, filter);
-//                doc.setPhaseScore(doc.getPhaseScore() + score);
+//                int score = setRecordScoreByNumericFilter(record, filter);
+//                record.setPhaseScore(record.getPhaseScore() + score);
                 // }
 //            }
 //        });
 
-        return docs;
+        return records;
     }
 
-    public static <T> int setDocScoreByNumericFilter(Doc doc, Filter<T> filter) {
+    public static <T> int setRecordScoreByNumericFilter(Record record, Filter<T> filter) {
         String attributeName = filter.getAttributeName();
-        T attributeValue = ((T) doc.getFilterableAttrs().get(attributeName));
+        T attributeValue = ((T) record.getFilterableAttrs().get(attributeName));
 
         if (attributeValue == null) {
             return 0;
