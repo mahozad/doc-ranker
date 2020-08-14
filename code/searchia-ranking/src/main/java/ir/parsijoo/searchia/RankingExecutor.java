@@ -40,17 +40,12 @@ public class RankingExecutor {
         QueryProcessor.processQueries(queries);
         RecordProcessor.processRecords(records);
 
-        List<RankingPhase> phases = rankingConfig
+        rankingConfig
                 .getPhases()
                 .stream()
                 .filter(RankingPhase::isEnabled)
                 .sorted()
-                .collect(toList());
-
-        for (RankingPhase phase : phases) {
-            Ranker ranker = rankers.get(phase.getType());
-            ranker.rank(queries, records, phase);
-        }
+                .forEach(phase -> rankers.get(phase.getType()).rank(queries, records, phase));
 
         records.sort(Record::compareTo);
         return records.subList(offset, limit);
