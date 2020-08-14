@@ -4,8 +4,9 @@ import com.opencsv.exceptions.CsvException;
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -25,12 +26,9 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@TestInstance(Lifecycle.PER_CLASS)
 class RankingExecutorTest {
 
     List<Record> records;
-    double totalDuration = 0;
-    long maxDuration = 0;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -121,6 +119,32 @@ class RankingExecutorTest {
     }
 
     @Test
+    void executeRanking_resultSize() throws IOException {
+        int offset = 0;
+        int limit = 10;
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
+        );
+        RankingConfig rankingConfig = new RankingConfig(Set.of(
+                new RankingPhase(TYPO, true, 0, ASCENDING, null),
+                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
+                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
+                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
+                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
+                new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
+        ));
+
+        List<Record> result = RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
+
+        assertEquals(limit, result.size());
+    }
+
+    @Test
     void executeRanking_executionTime() throws IOException {
         long timeThreshold = 50/*ms*/;
         int offset = 0;
@@ -150,32 +174,6 @@ class RankingExecutorTest {
     }
 
     @Test
-    void executeRanking_resultSize() throws IOException {
-        int offset = 0;
-        int limit = 10;
-        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
-        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
-        Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
-        Map<QueryType, Query> queries = Map.of(
-                QueryType.ORIGINAL, query1,
-                QueryType.WILDCARD, query2,
-                QueryType.SUGGESTED, query3
-        );
-        RankingConfig rankingConfig = new RankingConfig(Set.of(
-                new RankingPhase(TYPO, true, 0, ASCENDING, null),
-                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
-                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
-                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
-                new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
-        ));
-
-        List<Record> result = RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
-
-        assertEquals(limit, result.size());
-    }
-
-    @Test
     void executeRanking_useRealData_executionTime() throws IOException, CsvException {
         List<Record> records = TestUtil.createRealRecords();
         int offset = 0;
@@ -202,42 +200,5 @@ class RankingExecutorTest {
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
-    }
-
-    @RepeatedTest(100)
-    void executeRanking_useRealData_averageTimeOf100Executions(RepetitionInfo repetitionInfo) throws IOException, CsvException {
-        List<Record> records = TestUtil.createRealRecords();
-        int offset = 0;
-        int limit = 10;
-        Query query1 = new Query("معرفی فیل", QueryType.ORIGINAL);
-        Query query2 = new Query("معرفی فیل*", QueryType.WILDCARD);
-        Query query3 = new Query("معرفی فیلم", QueryType.CORRECTED);
-        Map<QueryType, Query> queries = Map.of(
-                QueryType.ORIGINAL, query1,
-                QueryType.WILDCARD, query2,
-                QueryType.CORRECTED, query3
-        );
-
-        RankingConfig rankingConfig = new RankingConfig(Set.of(
-                new RankingPhase(TYPO, true, 0, ASCENDING, null),
-                new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
-                new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
-                new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null)
-        ));
-
-        double timeThreshold = 50.0/*ms*/;
-        Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
-        long duration = Duration.between(startTime, Instant.now()).toMillis();
-        totalDuration += duration;
-        maxDuration = Math.max(maxDuration, duration);
-
-        assertThat(totalDuration / repetitionInfo.getCurrentRepetition(), is(lessThan(timeThreshold)));
-
-        if (repetitionInfo.getCurrentRepetition() == repetitionInfo.getTotalRepetitions()) {
-            System.out.println("Average execution time: " + totalDuration / repetitionInfo.getTotalRepetitions() + " ms");
-            System.out.println("Max execution time: " + maxDuration + " ms");
-        }
     }
 }
