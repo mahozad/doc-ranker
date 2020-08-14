@@ -1,8 +1,10 @@
 package ir.parsijoo.searchia.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
-public class RankingPhaseDTO implements Serializable {
+public class RankingPhaseDTO implements Comparable<RankingPhaseDTO>, Serializable {
 
     private final RankingPhaseType type;
     private final boolean enabled;
@@ -39,5 +41,10 @@ public class RankingPhaseDTO implements Serializable {
 
     public String getAttributeName() {
         return attributeName;
+    }
+
+    @Override
+    public int compareTo(@NotNull RankingPhaseDTO otherPhase) {
+        return this.order - otherPhase.order;
     }
 }
