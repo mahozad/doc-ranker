@@ -41,7 +41,7 @@ public class RankingExecutor {
                     new ExactMatchRanker().rank(queries, docs, configuration);
                     break;
                 case CUSTOM:
-                    CustomRanker.rankByCustomAttributes(docs, configuration.getCustomRankingAttrs());
+                    new CustomRanker().rank(queries, docs, configuration);
                     break;
             }
 

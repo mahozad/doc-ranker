@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -23,6 +24,7 @@ class CustomRankerTest {
     List<Doc> docs;
     List<Promotion> promotions;
     RankConfiguration configuration;
+    CustomRanker ranker;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -49,6 +51,16 @@ class CustomRankerTest {
                 new Promotion(),
                 new Promotion()
         );
+
+        configuration = new RankConfiguration(
+                "price",
+                null,
+                false,
+                List.of("viewCount", "creationDate"),
+                Set.of("dodge")
+        );
+
+        ranker = new CustomRanker();
     }
 
     @AfterEach
@@ -57,11 +69,10 @@ class CustomRankerTest {
 
     @Test
     void rankByCustomAttributes() throws IOException {
-        List<String> customAttrs = List.of("viewCount", "creationDate");
         DocumentProcessor.processDocs(docs);
         List<Integer> expectedRanks = List.of(14, 8, 15, 9, 11, 16, 10, 13, 6, 1, 0, 7, 2, 5, 12, 3, 4);
 
-        CustomRanker.rankByCustomAttributes(docs, customAttrs);
+        ranker.rank(null, docs, configuration);
 
         assertThat(docs.stream().map(Doc::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }

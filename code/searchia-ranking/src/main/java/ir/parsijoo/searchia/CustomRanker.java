@@ -1,12 +1,14 @@
 package ir.parsijoo.searchia;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
-public class CustomRanker {
+public class CustomRanker implements Ranker {
 
-    public static void rankByCustomAttributes(List<Doc> docs, List<String> customAttrs) {
-        for (String attrName : customAttrs) {
+    @Override
+    public void rank(Map<Query.QueryType, Query> queries, List<Doc> docs, RankConfiguration config) {
+        for (String attrName : config.getCustomRankingAttrs()) {
             Object attr = docs.get(0).getCustomRankingAttrs().get(attrName);
             if (attr instanceof Boolean) {
                 Function<Doc, Boolean> function = doc -> (Boolean) doc.getCustomRankingAttrs().get(attrName);
