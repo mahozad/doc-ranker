@@ -1,5 +1,6 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.processor.QueryProcessor;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class QueryProcessorTest {
         Query query1 = new Query("Dodge charter", ORIGINAL);
         Query query2 = new Query("dodge charter*", WILDCARD);
         Query query3 = new Query("Red dodge Charger", SUGGESTED);
-        Map<Query.QueryType, Query> queries = Map.of(
+        Map<QueryType, Query> queries = Map.of(
                 ORIGINAL, query1,
                 WILDCARD, query2,
                 SUGGESTED, query3

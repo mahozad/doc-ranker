@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia.ranker;
 
 import ir.parsijoo.searchia.Query;
+import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
@@ -12,7 +13,7 @@ import java.util.function.Function;
 public class CustomRanker implements Ranker {
 
     @Override
-    public void rank(Map<Query.QueryType, Query> queries, List<Record> records, RankingPhase phase) {
+    public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
         String attributeName = phase.getAttributeName();
         Object attr = records.get(0).getCustomRankingAttrs().get(attributeName);
         if (attr instanceof Boolean) {

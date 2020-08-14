@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
 import com.opencsv.exceptions.CsvException;
+import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
 import org.junit.jupiter.api.*;
@@ -95,13 +96,13 @@ class RankingExecutorTest {
     void executeRanking() throws IOException {
         int offset = 0;
         int limit = 10;
-        Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
-        Query query2 = new Query("dodge charter*", Query.QueryType.WILDCARD);
-        Query query3 = new Query("dodge charger", Query.QueryType.SUGGESTED);
-        Map<Query.QueryType, Query> queries = Map.of(
-                Query.QueryType.ORIGINAL, query1,
-                Query.QueryType.WILDCARD, query2,
-                Query.QueryType.SUGGESTED, query3
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
         );
         RankingConfig rankingConfig = new RankingConfig(Set.of(
                 new RankingPhase(TYPO, true, 0, ASCENDING, null),
@@ -124,13 +125,13 @@ class RankingExecutorTest {
         long timeThreshold = 50/*ms*/;
         int offset = 0;
         int limit = 10;
-        Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
-        Query query2 = new Query("dodge charter*", Query.QueryType.WILDCARD);
-        Query query3 = new Query("dodge charger", Query.QueryType.SUGGESTED);
-        Map<Query.QueryType, Query> queries = Map.of(
-                Query.QueryType.ORIGINAL, query1,
-                Query.QueryType.WILDCARD, query2,
-                Query.QueryType.SUGGESTED, query3
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
         );
         RankingConfig rankingConfig = new RankingConfig(Set.of(
                 new RankingPhase(TYPO, true, 0, ASCENDING, null),
@@ -152,13 +153,13 @@ class RankingExecutorTest {
     void executeRanking_resultSize() throws IOException {
         int offset = 0;
         int limit = 10;
-        Query query1 = new Query("dodge charter", Query.QueryType.ORIGINAL);
-        Query query2 = new Query("dodge charter*", Query.QueryType.WILDCARD);
-        Query query3 = new Query("dodge charger", Query.QueryType.SUGGESTED);
-        Map<Query.QueryType, Query> queries = Map.of(
-                Query.QueryType.ORIGINAL, query1,
-                Query.QueryType.WILDCARD, query2,
-                Query.QueryType.SUGGESTED, query3
+        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
+        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
+        Query query3 = new Query("dodge charger", QueryType.SUGGESTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.SUGGESTED, query3
         );
         RankingConfig rankingConfig = new RankingConfig(Set.of(
                 new RankingPhase(TYPO, true, 0, ASCENDING, null),
@@ -179,13 +180,13 @@ class RankingExecutorTest {
         List<Record> records = TestUtil.createRealRecords();
         int offset = 0;
         int limit = 10;
-        Query query1 = new Query("معرفی فیل", Query.QueryType.ORIGINAL);
-        Query query2 = new Query("معرفی فیل*", Query.QueryType.WILDCARD);
-        Query query3 = new Query("معرفی فیلم", Query.QueryType.CORRECTED);
-        Map<Query.QueryType, Query> queries = Map.of(
-                Query.QueryType.ORIGINAL, query1,
-                Query.QueryType.WILDCARD, query2,
-                Query.QueryType.CORRECTED, query3
+        Query query1 = new Query("معرفی فیل", QueryType.ORIGINAL);
+        Query query2 = new Query("معرفی فیل*", QueryType.WILDCARD);
+        Query query3 = new Query("معرفی فیلم", QueryType.CORRECTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.CORRECTED, query3
         );
         RankingConfig rankingConfig = new RankingConfig(Set.of(
                 new RankingPhase(TYPO, true, 0, ASCENDING, null),
@@ -208,13 +209,13 @@ class RankingExecutorTest {
         List<Record> records = TestUtil.createRealRecords();
         int offset = 0;
         int limit = 10;
-        Query query1 = new Query("معرفی فیل", Query.QueryType.ORIGINAL);
-        Query query2 = new Query("معرفی فیل*", Query.QueryType.WILDCARD);
-        Query query3 = new Query("معرفی فیلم", Query.QueryType.CORRECTED);
-        Map<Query.QueryType, Query> queries = Map.of(
-                Query.QueryType.ORIGINAL, query1,
-                Query.QueryType.WILDCARD, query2,
-                Query.QueryType.CORRECTED, query3
+        Query query1 = new Query("معرفی فیل", QueryType.ORIGINAL);
+        Query query2 = new Query("معرفی فیل*", QueryType.WILDCARD);
+        Query query3 = new Query("معرفی فیلم", QueryType.CORRECTED);
+        Map<QueryType, Query> queries = Map.of(
+                QueryType.ORIGINAL, query1,
+                QueryType.WILDCARD, query2,
+                QueryType.CORRECTED, query3
         );
 
         RankingConfig rankingConfig = new RankingConfig(Set.of(

@@ -1,5 +1,6 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.config.RankingPhaseType;
@@ -29,7 +30,7 @@ public class RankingExecutor {
     );
 
     public static List<Record> executeRanking(
-            Map<Query.QueryType, Query> queries,
+            Map<QueryType, Query> queries,
             List<Record> records,
             List<Promotion> promotions,
             RankingConfig rankingConfig,

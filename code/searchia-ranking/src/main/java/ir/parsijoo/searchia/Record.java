@@ -1,5 +1,7 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +10,9 @@ public class Record implements Comparable<Record> {
 
     public static class MinDistance {
         public final int value;
-        public final Query.QueryType query;
+        public final QueryType query;
 
-        public MinDistance(int value, Query.QueryType query) {
+        public MinDistance(int value, QueryType query) {
             this.value = value;
             this.query = query;
         }

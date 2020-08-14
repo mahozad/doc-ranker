@@ -1,5 +1,6 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.processor.QueryProcessor;
 import ir.parsijoo.searchia.processor.RecordProcessor;
 import org.junit.jupiter.api.AfterEach;
@@ -165,8 +166,8 @@ class RecordProcessorTest {
     @Test
     void getNumberOfMatches() throws IOException {
         Record record = records.stream().filter(d -> d.getId() == 1).findFirst().get();
-        Query query = new Query("dodge charter", Query.QueryType.ORIGINAL);
-        QueryProcessor.processQueries(Map.of(Query.QueryType.ORIGINAL, query));
+        Query query = new Query("dodge charter", QueryType.ORIGINAL);
+        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
         RecordProcessor.processRecord(record);
 
         int numberOfMatches = RecordProcessor.getNumberOfMatches(record, query);
@@ -177,8 +178,8 @@ class RecordProcessorTest {
     @Test
     void getNumberOfMatches_wildCardQuery() throws IOException {
         Record record = records.stream().filter(d -> d.getId() == 8).findFirst().get();
-        Query query = new Query("lamborghini aventado*", Query.QueryType.WILDCARD);
-        QueryProcessor.processQueries(Map.of(Query.QueryType.WILDCARD, query));
+        Query query = new Query("lamborghini aventado*", QueryType.WILDCARD);
+        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
         RecordProcessor.processRecord(record);
 
         int numberOfMatches = RecordProcessor.getNumberOfMatches(record, query);
