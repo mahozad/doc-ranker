@@ -15,15 +15,16 @@ dependencies {
     implementation(files("lib/parsi-analyzer-1.2.0.jar"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.elasticsearch:elasticsearch:7.1.1")
+    implementation("com.github.mfathi91:persian-date-time:4.0.0")
 
-    testImplementation("org.hamcrest:hamcrest:2.2")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.6.2")
-    testImplementation("org.junit.platform:junit-platform-engine:1.6.2")
-    testImplementation("org.junit.platform:junit-platform-commons:1.6.2")
     testImplementation("com.opencsv:opencsv:5.2")
+    testImplementation("org.junit.platform:junit-platform-commons:1.6.2")
+    testImplementation("org.junit.platform:junit-platform-engine:1.6.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.6.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
+    testImplementation("org.hamcrest:hamcrest:2.2")
 }
 
 configure<JavaPluginConvention> {
