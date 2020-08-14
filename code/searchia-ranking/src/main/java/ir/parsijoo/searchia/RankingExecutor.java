@@ -11,9 +11,10 @@ import ir.parsijoo.searchia.ranker.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static ir.parsijoo.searchia.config.RankingPhaseType.*;
+import static ir.parsijoo.searchia.config.SortDirection.DESCENDING;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 public class RankingExecutor {
@@ -58,7 +59,7 @@ public class RankingExecutor {
                                                              Function<Doc, T> function,
                                                              SortDirection sortDirection) {
         Comparator<Doc> comparator = Comparator.comparing(function);
-        if (sortDirection == SortDirection.DESCENDING) {
+        if (sortDirection == DESCENDING) {
             comparator = comparator.reversed();
         }
 
@@ -80,7 +81,7 @@ public class RankingExecutor {
     }
 
     public static SortedMap<Integer, List<Doc>> groupDocsByRank(List<Doc> docs) {
-        Map<Integer, List<Doc>> map = docs.stream().collect(Collectors.groupingBy(Doc::getRank));
+        Map<Integer, List<Doc>> map = docs.stream().collect(groupingBy(Doc::getRank));
         return new TreeMap<>(map);
     }
 }
