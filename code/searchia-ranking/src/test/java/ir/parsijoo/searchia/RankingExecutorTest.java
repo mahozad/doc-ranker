@@ -191,7 +191,9 @@ class RankingExecutorTest {
                 new RankingPhase(OPTIONAL_WORDS, true, 1, DESCENDING, null),
                 new RankingPhase(WORDS_DISTANCE, true, 2, ASCENDING, null),
                 new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
-                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null)
+                new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
+                new RankingPhase(CUSTOM, true, 5, DESCENDING, "score"),
+                new RankingPhase(CUSTOM, true, 6, DESCENDING, "clicks")
         ));
 
         long timeThreshold = 20/*ms*/;

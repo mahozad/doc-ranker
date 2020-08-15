@@ -15,6 +15,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -54,7 +55,7 @@ public class TestUtil {
 
         return records.stream()
                 .map(fields -> {
-                    Map<String, String> attributes = Arrays.stream(fields)
+                    Map<String, String> searchableAttributes = Arrays.stream(fields)
                             .filter(field -> field.startsWith("{\"anchorText\":") || field.startsWith("\"title\":\""))
                             .map(field -> {
                                 if (field.startsWith("{\"")) {
@@ -69,7 +70,13 @@ public class TestUtil {
                                 return new SimpleEntry<>(attrName, attrValue);
                             })
                             .collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
-                    return new Record(0, Map.of(), 0, attributes);
+
+                    Map<String, ? extends Comparable<?>> customAttributes = Map.of(
+                            "clicks", (double) new Random().nextInt(100),
+                            "score", new Random().nextDouble() * 5
+                    );
+
+                    return new Record(0, customAttributes, 0, searchableAttributes);
                 })
                 .collect(toList());
 
