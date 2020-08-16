@@ -5,11 +5,8 @@ import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.config.RankingPhaseType;
 import ir.parsijoo.searchia.config.SortDirection;
-import ir.parsijoo.searchia.processor.QueryProcessor;
-import ir.parsijoo.searchia.processor.RecordProcessor;
 import ir.parsijoo.searchia.ranker.*;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 
@@ -34,17 +31,13 @@ public class RankingExecutor {
             List<Record> records,
             List<Promotion> promotions,
             RankingConfig rankingConfig,
-            int offset, int limit) throws IOException {
+            int offset, int limit) {
 
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
-
-        rankingConfig
-                .getPhases()
-                .stream()
-                .filter(RankingPhase::isEnabled)
-                .sorted()
-                .forEach(phase -> rankers.get(phase.getType()).rank(queries, records, phase));
+        for (RankingPhase phase : rankingConfig.getPhases()) {
+            if (phase.isEnabled() && phase.getType() == CUSTOM) {
+                rankers.get(phase.getType()).rank(queries, records, phase);
+            }
+        }
 
         records.sort(Record::compareTo);
         return records.subList(offset, limit);
