@@ -35,11 +35,12 @@ public class RankingExecutor {
             RankingConfig rankingConfig,
             int offset, int limit) {
 
-        for (RankingPhase phase : rankingConfig.getPhases()) {
-            if (phase.isEnabled() && phase.getType() == CUSTOM) {
-                rankers.get(phase.getType()).rank(queries, records, phase);
-            }
-        }
+        rankingConfig.getPhases()
+                .stream()
+                .sorted()
+                .filter(RankingPhase::isEnabled)
+                .filter(phase -> phase.getType() == CUSTOM)
+                .forEach(phase -> rankers.get(phase.getType()).rank(queries, records, phase));
 
         records.sort(Record::compareTo);
         return records.subList(offset, limit);
