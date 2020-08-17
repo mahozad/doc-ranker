@@ -10,13 +10,14 @@ import ir.parsijoo.searchia.processor.RecordProcessor;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
 import static java.util.stream.Collectors.toSet;
 
 public class ExactMatchRanker implements Ranker {
 
-    private static final Set<QueryType> queryTypes = Set.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT);
+    private static final Set<QueryType> queryTypes = Stream.of(ORIGINAL, WILDCARD, SPACED, EQUIVALENT).collect(toSet());
 
     @Override
     public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {

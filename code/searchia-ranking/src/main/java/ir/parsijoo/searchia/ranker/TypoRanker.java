@@ -9,6 +9,8 @@ import ir.parsijoo.searchia.processor.RecordProcessor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ir.parsijoo.searchia.Query.QueryType.*;
 import static java.util.Comparator.comparingInt;
@@ -17,7 +19,7 @@ public class TypoRanker implements Ranker {
 
     @Override
     public void rank(Map<QueryType, Query> queries, List<Record> records, RankingPhase phase) {
-        List<Query> neededQueries = List.of(queries.get(ORIGINAL), queries.get(WILDCARD));
+        List<Query> neededQueries = Stream.of(queries.get(ORIGINAL), queries.get(WILDCARD)).collect(Collectors.toList());
         boolean queriesContainCorrectedOrSuggested = queriesContainCorrectedOrSuggested(queries);
 
         for (Record record : records) {

@@ -11,19 +11,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 public class TestUtil {
 
-    private static final Path sampleRecordsPath = Path.of("src/test/resources/sample-records.txt");
-    private static final Path realRecordsPath = Path.of("src/test/resources/real-records.csv");
+    private static final Path sampleRecordsPath = Paths.get("src/test/resources/sample-records.txt");
+    private static final Path realRecordsPath = Paths.get("src/test/resources/real-records.csv");
 
     public static List<Record> createSampleRecords() throws IOException {
         return Files
@@ -37,8 +39,14 @@ public class TestUtil {
                     double viewCount = Long.parseLong(attrs[2].split("=")[1]);
                     String title = attrs[3].split("=")[1];
                     String description = attrs[4].split("=")[1];
-                    Map<String, String> searchableAttrs = Map.of("title", title, "description", description);
-                    Map<String, Double> customAttrs = Map.of("viewCount", viewCount, "creationDate", creationDate);
+                    Map<String, String> searchableAttrs = Stream.of(
+                            new SimpleEntry<>("title", title),
+                            new SimpleEntry<>("description", description)
+                    ).collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    Map<String, Double> customAttrs = Stream.of(
+                            new SimpleEntry<>("viewCount", viewCount),
+                            new SimpleEntry<>("creationDate", creationDate)
+                    ).collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
                     return new Record(id, customAttrs, score, searchableAttrs);
                 })
                 .collect(toList());
@@ -71,10 +79,10 @@ public class TestUtil {
                             })
                             .collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
 
-                    Map<String, ? extends Comparable<?>> customAttributes = Map.of(
-                            "clicks", (double) new Random().nextInt(100),
-                            "score", new Random().nextDouble() * 5
-                    );
+                    Map<String, ? extends Comparable<?>> customAttributes = Stream.of(
+                            new SimpleEntry<>("clicks", (double) new Random().nextInt(100)),
+                            new SimpleEntry<>( "score", new Random().nextDouble() * 5)
+                    ).collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
                     return new Record(0, customAttributes, 0, searchableAttributes);
                 })

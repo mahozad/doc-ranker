@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,11 +33,11 @@ public class CommitLogExtractor {
         Process process = Runtime.getRuntime().exec(command);
 
         Locale locale = Locale.forLanguageTag("fa");
-        DateTimeFormatter formatter = ofPattern("yyyy-MM-dd").localizedBy(locale).withDecimalStyle(DecimalStyle.of(locale));
+        DateTimeFormatter formatter = ofPattern("yyyy-MM-dd").withLocale(locale).withDecimalStyle(DecimalStyle.of(locale));
         PersianDate persianDate = PersianDate.fromGregorian(LocalDate.from(targetDay));
         String date = formatter.format(persianDate);
         String fileName = date + ".txt";
-        Path outputPath = Path.of(OUTPUT_DIRECTORY + fileName);
+        Path outputPath = Paths.get(OUTPUT_DIRECTORY + fileName);
 
         String logs = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))
                 .lines()
@@ -44,6 +45,6 @@ public class CommitLogExtractor {
 
         Files.deleteIfExists(outputPath);
         Files.createFile(outputPath);
-        Files.writeString(outputPath, logs);
+        Files.write(outputPath, logs.getBytes());
     }
 }

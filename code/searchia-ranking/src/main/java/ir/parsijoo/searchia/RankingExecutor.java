@@ -7,24 +7,26 @@ import ir.parsijoo.searchia.config.RankingPhaseType;
 import ir.parsijoo.searchia.config.SortDirection;
 import ir.parsijoo.searchia.ranker.*;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static ir.parsijoo.searchia.config.RankingPhaseType.*;
 import static ir.parsijoo.searchia.config.SortDirection.DESCENDING;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class RankingExecutor {
 
-    private static final Map<RankingPhaseType, Ranker> rankers = Map.of(
-            TYPO, new TypoRanker(),
-            OPTIONAL_WORDS, new OptionalWordRanker(),
-            WORDS_DISTANCE, new DistanceRanker(),
-            WORDS_POSITION, new PositionRanker(),
-            EXACT_MATCH, new ExactMatchRanker(),
-            CUSTOM, new CustomRanker()
-    );
+    private static final Map<RankingPhaseType, Ranker> rankers = Stream.of(
+            new SimpleEntry<>(TYPO, new TypoRanker()),
+            new SimpleEntry<>(OPTIONAL_WORDS, new OptionalWordRanker()),
+            new SimpleEntry<>(WORDS_DISTANCE, new DistanceRanker()),
+            new SimpleEntry<>(WORDS_POSITION, new PositionRanker()),
+            new SimpleEntry<>(EXACT_MATCH, new ExactMatchRanker()),
+            new SimpleEntry<>(CUSTOM, new CustomRanker())
+    ).collect(toMap(Entry::getKey, Entry::getValue));
 
     public static List<Record> executeRanking(
             Map<QueryType, Query> queries,

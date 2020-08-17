@@ -2,6 +2,7 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class Record implements Comparable<Record> {
         this.customRankingAttrs = customRankingAttrs;
         this.elasticScore = elasticScore;
         this.searchableAttrs = searchableAttrs;
-        this.filterableAttrs = Map.of();
+        this.filterableAttrs = Collections.emptyMap();
     }
 
     public int getId() {
