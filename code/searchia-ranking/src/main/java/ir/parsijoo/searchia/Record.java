@@ -41,6 +41,7 @@ public class Record implements Comparable<Record> {
     private int numberOfMatches;
     private int numberOfExactMatches;
     private int rank = 0;
+    private String source;
 
     public Record(int id, Map<String, ? extends Comparable<?>> customRankingAttrs, double elasticScore, Map<String, String> searchableAttrs) {
         this.id = id;
@@ -128,6 +129,14 @@ public class Record implements Comparable<Record> {
 
     public void setCustomRankingAttrs(Map<String, ? extends Comparable<?>> customRankingAttrs) {
         this.customRankingAttrs = customRankingAttrs;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     @Override
