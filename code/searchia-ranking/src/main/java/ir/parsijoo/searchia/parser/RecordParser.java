@@ -1,4 +1,4 @@
-package ir.parsijoo.searchia.processor;
+package ir.parsijoo.searchia.parser;
 
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Record;
@@ -12,22 +12,22 @@ import java.util.Map.Entry;
 
 import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
 
-public class RecordProcessor {
+public class RecordParser {
 
     public static final int ATTRIBUTES_DISTANCE = 1_000_000;
     private static final ParsiAnalyzer parsiAnalyzer = new ParsiAnalyzer();
 
-    public static void processRecords(List<Record> records) {
+    public static void parseRecords(List<Record> records) {
         records.parallelStream().forEach(record -> {
             try {
-                processRecord(record);
+                parseRecord(record);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public static Record processRecord(Record record) throws IOException {
+    public static Record parseRecord(Record record) throws IOException {
         int offset = 0;
         for (String attr : record.getSearchableAttrs().values()) {
             Map<String, List<Integer>> tokens = tokenizeTextWithPosition(attr, offset);

@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.QueryProcessor;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.QueryParser;
+import ir.parsijoo.searchia.parser.RecordParser;
 import ir.parsijoo.searchia.ranker.OptionalWordRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,8 +45,8 @@ class OptionalWordRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         RankingPhase phase = new RankingPhase(OPTIONAL_WORDS, true, 0, DESCENDING, null);
 
         ranker.rank(queries, records, phase);
@@ -65,8 +65,8 @@ class OptionalWordRankerTest {
                 QueryType.SUGGESTED, query2,
                 QueryType.OPTIONAL, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         Set<Integer> expectedNonOptionalMatchIds = Set.of(1, 2, 3, 7, 9, 10, 11, 12, 16, 17);
         RankingPhase phase = new RankingPhase(OPTIONAL_WORDS, true, 0, DESCENDING, null);
 

@@ -5,8 +5,8 @@ import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.config.RankingPhaseType;
 import ir.parsijoo.searchia.config.SortDirection;
-import ir.parsijoo.searchia.processor.QueryProcessor;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.QueryParser;
+import ir.parsijoo.searchia.parser.RecordParser;
 import ir.parsijoo.searchia.ranker.*;
 
 import java.io.IOException;
@@ -35,8 +35,8 @@ public class RankingExecutor {
             RankingConfig rankingConfig,
             int offset, int limit) throws IOException {
 
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
 
         rankingConfig
                 .getPhases()

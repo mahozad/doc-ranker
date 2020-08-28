@@ -5,7 +5,7 @@ import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.RecordParser;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class TypoRanker implements Ranker {
     private static int computeNumberOfTypos(List<Query> queries, Record record) {
         int numberOfTypos = 0;
         for (Query query : queries) {
-            boolean isRecordMatched = RecordProcessor.isRecordMatchedWithQuery(record, query);
+            boolean isRecordMatched = RecordParser.isRecordMatchedWithQuery(record, query);
             if (isRecordMatched) {
                 return 0;
             } else {

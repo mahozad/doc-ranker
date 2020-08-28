@@ -10,7 +10,7 @@ import ir.parsijoo.searchia.config.RankingPhase;
 import java.util.List;
 import java.util.Map;
 
-import static ir.parsijoo.searchia.processor.RecordProcessor.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.parser.RecordParser.ATTRIBUTES_DISTANCE;
 
 public class DistanceRanker implements Ranker {
 

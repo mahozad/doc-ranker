@@ -5,7 +5,7 @@ import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.RecordParser;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class ExactMatchRanker implements Ranker {
         Set<Query> rankQueries = queries.values().stream().filter(q -> queryTypes.contains(q.getType())).collect(toSet());
         for (Record record : records) {
             for (Query query : rankQueries) {
-                int numberOfMatches = RecordProcessor.getNumberOfMatches(record, query);
+                int numberOfMatches = RecordParser.getNumberOfMatches(record, query);
                 numberOfMatches = Math.min(numberOfMatches, lengthOfOriginalQuery);
                 if (query.getType() == WILDCARD) {
                     record.setNumberOfExactMatches(Math.max(record.getNumberOfExactMatches(), numberOfMatches - 1));

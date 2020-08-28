@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static ir.parsijoo.searchia.processor.RecordProcessor.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.parser.RecordParser.ATTRIBUTES_DISTANCE;
 
 public class PositionRanker implements Ranker {
 

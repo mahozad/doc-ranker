@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.QueryProcessor;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.QueryParser;
+import ir.parsijoo.searchia.parser.RecordParser;
 import ir.parsijoo.searchia.ranker.PositionRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,8 +42,8 @@ class PositionRankerTest {
                 QueryType.CORRECTED, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         RankingPhase phase = new RankingPhase(WORDS_POSITION, true, 0, ASCENDING, null);
 
         ranker.rank(queries, records, phase);
@@ -59,8 +59,8 @@ class PositionRankerTest {
     void getRecordMinWordPositionByQuery() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Record record = records.stream().filter(d -> d.getId() == 2).findFirst().get();
-        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        RecordProcessor.processRecord(record);
+        QueryParser.parseQueries(Map.of(QueryType.ORIGINAL, query));
+        RecordParser.parseRecord(record);
 
         int minPosition = PositionRanker.getRecordMinWordPositionByQuery(record, query);
 
@@ -71,8 +71,8 @@ class PositionRankerTest {
     void getRecordMinWordPositionByQuery_recordHasMinPositionInSecondAttribute() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Record record = records.stream().filter(d -> d.getId() == 3).findFirst().get();
-        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        RecordProcessor.processRecord(record);
+        QueryParser.parseQueries(Map.of(QueryType.ORIGINAL, query));
+        RecordParser.parseRecord(record);
 
         int minPosition = PositionRanker.getRecordMinWordPositionByQuery(record, query);
 
@@ -83,8 +83,8 @@ class PositionRankerTest {
     void getRecordMinWordPositionByQuery_aWordIsRepeatedInMultipleAttributesWithDifferentPositions() throws IOException {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Record record = records.stream().filter(d -> d.getId() == 6).findFirst().get();
-        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        RecordProcessor.processRecord(record);
+        QueryParser.parseQueries(Map.of(QueryType.ORIGINAL, query));
+        RecordParser.parseRecord(record);
 
         int minPosition = PositionRanker.getRecordMinWordPositionByQuery(record, query);
 

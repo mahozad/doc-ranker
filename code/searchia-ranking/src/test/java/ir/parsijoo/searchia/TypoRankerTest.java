@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.QueryProcessor;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.QueryParser;
+import ir.parsijoo.searchia.parser.RecordParser;
 import ir.parsijoo.searchia.ranker.TypoRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,8 +56,8 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.OPTIONAL, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, records, phase);
@@ -76,8 +76,8 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.OPTIONAL, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, records, phase);
@@ -97,8 +97,8 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.OPTIONAL, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         Set<Integer> expectedIds = Set.of(2, 16, 17);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
@@ -118,8 +118,8 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, records, phase);
@@ -138,8 +138,8 @@ class TypoRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, query3
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         RankingPhase phase = new RankingPhase(TYPO, true, 0, ASCENDING, null);
 
         ranker.rank(queries, records, phase);

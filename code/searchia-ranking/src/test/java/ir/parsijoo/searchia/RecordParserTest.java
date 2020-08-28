@@ -1,8 +1,8 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.processor.QueryProcessor;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.QueryParser;
+import ir.parsijoo.searchia.parser.RecordParser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static ir.parsijoo.searchia.processor.RecordProcessor.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.parser.RecordParser.ATTRIBUTES_DISTANCE;
 import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class RecordProcessorTest {
+class RecordParserTest {
 
     List<Record> records;
 
@@ -34,35 +34,35 @@ class RecordProcessorTest {
     void tearDown() {}
 
     @Test
-    void processRecords() {
+    void parseRecords() {
         int initialSize = records.size();
 
-        RecordProcessor.processRecords(records);
+        RecordParser.parseRecords(records);
 
         assertThat(records.size(), is(equalTo(initialSize)));
         assertThat(records.get(0).getTokens(), is(notNullValue()));
     }
 
     @Test
-    void processRecord() throws IOException {
+    void parseRecord() throws IOException {
         Record record = new Record(1, null, 0, Map.of(
                 "title", "dodge charger",
                 "description", "new red dodge charger*"
         ));
         Set<String> expectedTokenStrings = Set.of("dodge", "charger", "new", "red");
 
-        Record result = RecordProcessor.processRecord(record);
+        Record result = RecordParser.parseRecord(record);
 
         assertThat(result.getTokens().size(), is(equalTo(4)));
         assertThat(result.getTokens().keySet(), is(equalTo(expectedTokenStrings)));
     }
 
     @Test
-    void processRecord_oneWordRepeatedInMultipleAttributes() throws IOException {
+    void parseRecord_oneWordRepeatedInMultipleAttributes() throws IOException {
         Record record = records.stream().filter(d -> d.getId() == 1).findFirst().get();
         String targetToken = "charger";
 
-        RecordProcessor.processRecord(record);
+        RecordParser.parseRecord(record);
         Set<Integer> expectedTokenPositions = record.getTokens().get(targetToken).stream().map(position -> position % ATTRIBUTES_DISTANCE).collect(toSet());
 
         assertThat(expectedTokenPositions, is(equalTo(Set.of(1, 4))));
@@ -71,7 +71,7 @@ class RecordProcessorTest {
     @ParameterizedTest
     @ValueSource(strings = {"Hello WoRld", "hElLo.world", "hello world.", "hello,world."})
     void tokenizeText_english(String text) throws IOException {
-        List<String> tokens = RecordProcessor.tokenizeTextWithoutAddingPositions(text);
+        List<String> tokens = RecordParser.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("hello", tokens.get(0));
@@ -81,7 +81,7 @@ class RecordProcessorTest {
     @ParameterizedTest
     @ValueSource(strings = {"hello world*", "hello.world*", "hElLo WoRld*", "hello,world*"})
     void tokenizeText_english_withWildcard(String text) throws IOException {
-        List<String> tokens = RecordProcessor.tokenizeTextWithoutAddingPositions(text);
+        List<String> tokens = RecordParser.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("hello", tokens.get(0));
@@ -91,7 +91,7 @@ class RecordProcessorTest {
     @ParameterizedTest
     @ValueSource(strings = {"سلام دنیا", "سلآم‌دنيآ", "سلام، دنيا", "سلآم، دنیأ."})
     void tokenizeText_farsi(String text) throws IOException {
-        List<String> tokens = RecordProcessor.tokenizeTextWithoutAddingPositions(text);
+        List<String> tokens = RecordParser.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("سلام", tokens.get(0));
@@ -101,7 +101,7 @@ class RecordProcessorTest {
     @ParameterizedTest
     @ValueSource(strings = {"سلام دنیا*", "سلام‌دنيآ*", "سلام، دنیأ*", "سلآم، دنیا*"})
     void tokenizeText_farsi_withWildcard(String text) throws IOException {
-        List<String> tokens = RecordProcessor.tokenizeTextWithoutAddingPositions(text);
+        List<String> tokens = RecordParser.tokenizeTextWithoutAddingPositions(text);
 
         assertEquals(2, tokens.size());
         assertEquals("سلام", tokens.get(0));
@@ -113,7 +113,7 @@ class RecordProcessorTest {
         String text = "آبي";
         List<String> expectedTokens = List.of("ابی");
 
-        List<String> normalizedTokens = RecordProcessor.tokenizeTextWithoutAddingPositions(text);
+        List<String> normalizedTokens = RecordParser.tokenizeTextWithoutAddingPositions(text);
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
@@ -123,7 +123,7 @@ class RecordProcessorTest {
         String text = "Dodge";
         List<String> expectedTokens = List.of("dodge");
 
-        List<String> normalizedTokens = RecordProcessor.tokenizeTextWithoutAddingPositions(text);
+        List<String> normalizedTokens = RecordParser.tokenizeTextWithoutAddingPositions(text);
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
@@ -133,7 +133,7 @@ class RecordProcessorTest {
         String text = "گل‌های آبي 1 ۲";
         List<String> expectedTokens = List.of("گل", "های", "ابی", "1", "2");
 
-        List<String> normalizedTokens = RecordProcessor.tokenizeTextWithoutAddingPositions(text);
+        List<String> normalizedTokens = RecordParser.tokenizeTextWithoutAddingPositions(text);
 
         assertThat(expectedTokens, is(equalTo(normalizedTokens)));
     }
@@ -144,7 +144,7 @@ class RecordProcessorTest {
         int positionOffset = 0;
         Set<String> expectedTokens = Set.of("doc", "is", "a", "that", "good", "document");
 
-        Map<String, List<Integer>> tokens = RecordProcessor.tokenizeTextWithPosition(text, positionOffset);
+        Map<String, List<Integer>> tokens = RecordParser.tokenizeTextWithPosition(text, positionOffset);
 
         assertThat(tokens.keySet(), is(equalTo(expectedTokens)));
         assertThat(tokens.get("doc"), is(equalTo(List.of(positionOffset, 3 + positionOffset))));
@@ -157,7 +157,7 @@ class RecordProcessorTest {
         int positionOffset = 1_000_000;
         Set<String> expectedTokens = Set.of("doc", "is", "a", "that", "good", "document");
 
-        Map<String, List<Integer>> tokens = RecordProcessor.tokenizeTextWithPosition(text, positionOffset);
+        Map<String, List<Integer>> tokens = RecordParser.tokenizeTextWithPosition(text, positionOffset);
 
         assertThat(tokens.keySet(), is(equalTo(expectedTokens)));
         assertThat(tokens.get("doc"), is(equalTo(List.of(positionOffset, 3 + positionOffset))));
@@ -169,9 +169,9 @@ class RecordProcessorTest {
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
         Record record = records.get(1);
         record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
-        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
+        QueryParser.parseQueries(Map.of(QueryType.ORIGINAL, query));
 
-        boolean isMatching = RecordProcessor.isRecordMatchedWithQuery(record, query);
+        boolean isMatching = RecordParser.isRecordMatchedWithQuery(record, query);
 
         assertTrue(isMatching);
     }
@@ -181,9 +181,9 @@ class RecordProcessorTest {
         Query query = new Query("dodge charter*", QueryType.WILDCARD);
         Record record = records.get(1);
         record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
-        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
+        QueryParser.parseQueries(Map.of(QueryType.WILDCARD, query));
 
-        boolean isMatching = RecordProcessor.isRecordMatchedWithQuery(record, query);
+        boolean isMatching = RecordParser.isRecordMatchedWithQuery(record, query);
 
         assertTrue(isMatching);
     }
@@ -193,9 +193,9 @@ class RecordProcessorTest {
         Query query = new Query("dodge charter", QueryType.WILDCARD);
         Record record = records.get(1);
         record.setTokens(Map.of("dodge", List.of(), "charter", List.of()));
-        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
+        QueryParser.parseQueries(Map.of(QueryType.WILDCARD, query));
 
-        boolean isMatching = RecordProcessor.isRecordMatchedWithQuery(record, query);
+        boolean isMatching = RecordParser.isRecordMatchedWithQuery(record, query);
 
         assertTrue(isMatching);
     }
@@ -204,10 +204,10 @@ class RecordProcessorTest {
     void getNumberOfMatches() throws IOException {
         Record record = records.stream().filter(d -> d.getId() == 1).findFirst().get();
         Query query = new Query("dodge charter", QueryType.ORIGINAL);
-        QueryProcessor.processQueries(Map.of(QueryType.ORIGINAL, query));
-        RecordProcessor.processRecord(record);
+        QueryParser.parseQueries(Map.of(QueryType.ORIGINAL, query));
+        RecordParser.parseRecord(record);
 
-        int numberOfMatches = RecordProcessor.getNumberOfMatches(record, query);
+        int numberOfMatches = RecordParser.getNumberOfMatches(record, query);
 
         assertEquals(1, numberOfMatches);
     }
@@ -216,10 +216,10 @@ class RecordProcessorTest {
     void getNumberOfMatches_wildCardQuery() throws IOException {
         Record record = records.stream().filter(d -> d.getId() == 8).findFirst().get();
         Query query = new Query("lamborghini aventado*", QueryType.WILDCARD);
-        QueryProcessor.processQueries(Map.of(QueryType.WILDCARD, query));
-        RecordProcessor.processRecord(record);
+        QueryParser.parseQueries(Map.of(QueryType.WILDCARD, query));
+        RecordParser.parseRecord(record);
 
-        int numberOfMatches = RecordProcessor.getNumberOfMatches(record, query);
+        int numberOfMatches = RecordParser.getNumberOfMatches(record, query);
 
         assertEquals(2, numberOfMatches);
     }

@@ -2,8 +2,8 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingPhase;
-import ir.parsijoo.searchia.processor.QueryProcessor;
-import ir.parsijoo.searchia.processor.RecordProcessor;
+import ir.parsijoo.searchia.parser.QueryParser;
+import ir.parsijoo.searchia.parser.RecordParser;
 import ir.parsijoo.searchia.ranker.ExactMatchRanker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,8 +45,8 @@ class ExactMatchRankerTest {
                 QueryType.ORIGINAL, query1,
                 QueryType.WILDCARD, query2
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
@@ -70,8 +70,8 @@ class ExactMatchRankerTest {
                 QueryType.WILDCARD, query2,
                 QueryType.SUGGESTED, unusedQuery
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         Set<Integer> expectedGroup1Ids = Set.of(2, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 3, 6, 7, 8, 9, 10, 11, 12, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 5, 13, 14, 15);
@@ -92,8 +92,8 @@ class ExactMatchRankerTest {
                 QueryType.ORIGINAL, query1,
                 QueryType.EQUIVALENT, query2
         );
-        QueryProcessor.processQueries(queries);
-        RecordProcessor.processRecords(records);
+        QueryParser.parseQueries(queries);
+        RecordParser.parseRecords(records);
         Set<Integer> expectedGroup1Ids = Set.of(2, 3, 16);
         Set<Integer> expectedGroup2Ids = Set.of(1, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17);
         Set<Integer> expectedGroup3Ids = Set.of(4, 13);

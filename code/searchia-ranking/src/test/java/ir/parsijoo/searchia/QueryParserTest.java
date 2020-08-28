@@ -1,7 +1,7 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.processor.QueryProcessor;
+import ir.parsijoo.searchia.parser.QueryParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-class QueryProcessorTest {
+class QueryParserTest {
 
     @Test
-    void processQueries() throws IOException {
+    void parseQueries() throws IOException {
         Query query1 = new Query("Dodge charter", ORIGINAL);
         Query query2 = new Query("dodge charter*", WILDCARD);
         Query query3 = new Query("Red dodge Charger", SUGGESTED);
@@ -29,7 +29,7 @@ class QueryProcessorTest {
         List<String> expectedQ2Tokens = List.of("dodge", "charter");
         List<String> expectedQ3Tokens = List.of("red", "dodge", "charger");
 
-        QueryProcessor.processQueries(queries);
+        QueryParser.parseQueries(queries);
 
         assertThat(queries.get(ORIGINAL).getTokens(), is(equalTo(expectedQ1Tokens)));
         assertThat(queries.get(WILDCARD).getTokens(), is(equalTo(expectedQ2Tokens)));
