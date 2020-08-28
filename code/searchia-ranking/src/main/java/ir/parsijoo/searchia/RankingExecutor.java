@@ -11,7 +11,6 @@ import ir.parsijoo.searchia.ranker.*;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
 
 import static ir.parsijoo.searchia.config.RankingPhaseType.*;
 import static ir.parsijoo.searchia.config.SortDirection.DESCENDING;
@@ -51,9 +50,9 @@ public class RankingExecutor {
     }
 
     public static <T extends Comparable<T>> void updateRanks(List<Record> records,
-                                                             Function<Record, T> function,
+                                                             Selector<T> selector,
                                                              SortDirection sortDirection) {
-        Comparator<Record> comparator = Comparator.comparing(function);
+        Comparator<Record> comparator = Comparator.comparing(selector::get);
         if (sortDirection == DESCENDING) {
             comparator = comparator.reversed();
         }
@@ -62,9 +61,9 @@ public class RankingExecutor {
         SortedMap<Integer, List<Record>> groups = groupRecordsByRank(records);
         for (List<Record> group : groups.values()) {
             List<Record> sortedGroup = group.stream().sorted(comparator).collect(toList());
-            T currentValue = function.apply(sortedGroup.get(0));
+            T currentValue = selector.get(sortedGroup.get(0));
             for (Record record : sortedGroup) {
-                T attributeValue = function.apply(record);
+                T attributeValue = selector.get(record);
                 if (attributeValue.compareTo(currentValue) != 0) {
                     rank++;
                     currentValue = attributeValue;
