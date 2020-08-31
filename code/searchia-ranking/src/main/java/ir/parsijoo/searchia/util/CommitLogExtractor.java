@@ -1,4 +1,4 @@
-package ir.parsijoo.searchia;
+package ir.parsijoo.searchia.util;
 
 import com.github.mfathi91.time.PersianDate;
 
