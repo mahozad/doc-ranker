@@ -160,7 +160,7 @@ class RankingExecutorTest {
                 new RankingPhase(CUSTOM, true, 6, DESCENDING, "clicks")
         ));
 
-        long timeThreshold = 20/*ms*/;
+        long timeThreshold = 200/*ms*/;
         Instant startTime = Instant.now();
         RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
