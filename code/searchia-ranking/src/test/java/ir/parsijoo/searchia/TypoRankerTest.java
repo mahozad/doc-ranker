@@ -37,18 +37,6 @@ class TypoRankerTest {
     @AfterEach
     void tearDown() {}
 
-    // @Test
-    // void rankByTypo_allQueryTypes() {
-    //     Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
-    //     Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
-    //     Query query3 = new Query("dodge charger", QueryType.CORRECTED);
-    //     Query query4 = new Query("dodge challenger", QueryType.SUGGESTED);
-    //     Query query5 = new Query("dodge challenger", QueryType.OPTIONAL);
-    //     List<Query> queries = List.of(query1, query2, query3, query4, query5);
-    //
-    //     List<Record> result = TypoRanker.rankByTypo(queries, records);
-    // }
-
     @Test
     void rankByTypo_emptyCorrectQueryAndSuggestQuery_resultShouldBe1Group() throws IOException {
         Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
