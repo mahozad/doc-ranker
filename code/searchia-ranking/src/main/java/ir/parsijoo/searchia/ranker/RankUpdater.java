@@ -10,7 +10,7 @@ import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
-public class RankUpdater<T extends Comparable<T>> {
+class RankUpdater<T extends Comparable<T>> {
 
     private final List<Record> records;
     private final Selector<T> AttributeSelector;
@@ -19,7 +19,7 @@ public class RankUpdater<T extends Comparable<T>> {
     private T previousAttributeValue;
     private int rank;
 
-    public RankUpdater(List<Record> records, Selector<T> AttributeSelector, SortDirection sortDirection) {
+    RankUpdater(List<Record> records, Selector<T> AttributeSelector, SortDirection sortDirection) {
         this.rank = 0; // Rank starts from 0 (i.e. top record has rank of 0)
         this.records = records;
         this.AttributeSelector = AttributeSelector;
@@ -27,7 +27,7 @@ public class RankUpdater<T extends Comparable<T>> {
         this.comparator = createComparator();
     }
 
-    public void updateRanks() {
+    void updateRanks() {
         SortedMap<Integer, List<Record>> groups = groupRecordsByRank();
         for (List<Record> group : groups.values()) {
             updateGroupRanks(group);
