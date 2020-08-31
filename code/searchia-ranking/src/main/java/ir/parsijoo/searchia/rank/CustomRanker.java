@@ -22,7 +22,13 @@ public class CustomRanker implements Ranker {
             Selector<Double> selector = record -> (Double) record.getCustomRankingAttrs().get(attributeName);
             new RankUpdater<>(records, selector, phase.getSortDirection()).updateRanks();
         } else {
-            throw new RuntimeException("The attribute \"" + attributeName + "\" provided for custom ranking is not of type Boolean or Double");
+            throw new UnsupportedAttributeTypeException(attributeName);
+        }
+    }
+
+    public static class UnsupportedAttributeTypeException extends RuntimeException {
+        public UnsupportedAttributeTypeException(String attributeName) {
+            super(String.format("The attribute \"%s\" is not of type Boolean or Double", attributeName));
         }
     }
 }
