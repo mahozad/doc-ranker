@@ -1,6 +1,6 @@
-package ir.parsijoo.searchia;
+package ir.parsijoo.searchia.model;
 
-import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.model.Query.QueryType;
 
 import java.util.HashMap;
 import java.util.List;

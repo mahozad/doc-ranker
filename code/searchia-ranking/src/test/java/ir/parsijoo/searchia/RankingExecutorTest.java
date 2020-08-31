@@ -1,9 +1,11 @@
 package ir.parsijoo.searchia;
 
 import com.opencsv.exceptions.CsvException;
-import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
+import ir.parsijoo.searchia.model.Query;
+import ir.parsijoo.searchia.model.Query.QueryType;
+import ir.parsijoo.searchia.model.Record;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

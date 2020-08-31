@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.config.RankingPhase;
+import ir.parsijoo.searchia.model.Record;
 import ir.parsijoo.searchia.parser.RecordParser;
 import ir.parsijoo.searchia.ranker.CustomRanker;
 import org.junit.jupiter.api.AfterEach;

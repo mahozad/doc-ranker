@@ -5,6 +5,7 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
+import ir.parsijoo.searchia.model.Record;
 
 import java.io.File;
 import java.io.FileReader;

@@ -1,6 +1,7 @@
 package ir.parsijoo.searchia;
 
-import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.model.Query;
+import ir.parsijoo.searchia.model.Query.QueryType;
 import ir.parsijoo.searchia.parser.QueryParser;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static ir.parsijoo.searchia.Query.QueryType.*;
+import static ir.parsijoo.searchia.model.Query.QueryType.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

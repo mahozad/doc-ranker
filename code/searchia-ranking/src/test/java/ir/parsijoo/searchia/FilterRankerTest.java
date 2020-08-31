@@ -1,5 +1,6 @@
 package ir.parsijoo.searchia;
 
+import ir.parsijoo.searchia.model.Record;
 import ir.parsijoo.searchia.ranker.FilterRanker;
 import ir.parsijoo.searchia.ranker.FilterRanker.Filter;
 import ir.parsijoo.searchia.ranker.FilterRanker.Operator;

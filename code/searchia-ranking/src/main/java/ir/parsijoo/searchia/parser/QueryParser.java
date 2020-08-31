@@ -1,7 +1,7 @@
 package ir.parsijoo.searchia.parser;
 
-import ir.parsijoo.searchia.Query;
-import ir.parsijoo.searchia.Query.QueryType;
+import ir.parsijoo.searchia.model.Query;
+import ir.parsijoo.searchia.model.Query.QueryType;
 
 import java.io.IOException;
 import java.util.List;

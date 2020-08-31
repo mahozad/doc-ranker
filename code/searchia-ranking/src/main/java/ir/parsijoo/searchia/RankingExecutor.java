@@ -1,9 +1,12 @@
 package ir.parsijoo.searchia;
 
-import ir.parsijoo.searchia.Query.QueryType;
 import ir.parsijoo.searchia.config.RankingConfig;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.config.RankingPhaseType;
+import ir.parsijoo.searchia.model.Promotion;
+import ir.parsijoo.searchia.model.Query;
+import ir.parsijoo.searchia.model.Query.QueryType;
+import ir.parsijoo.searchia.model.Record;
 import ir.parsijoo.searchia.parser.QueryParser;
 import ir.parsijoo.searchia.parser.RecordParser;
 import ir.parsijoo.searchia.ranker.*;

@@ -1,8 +1,8 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.Selector;
 import ir.parsijoo.searchia.config.SortDirection;
+import ir.parsijoo.searchia.model.Record;
 
 import java.util.*;
 

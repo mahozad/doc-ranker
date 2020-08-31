@@ -1,10 +1,10 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Query;
-import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.Selector;
 import ir.parsijoo.searchia.config.RankingPhase;
+import ir.parsijoo.searchia.model.Query;
+import ir.parsijoo.searchia.model.Query.QueryType;
+import ir.parsijoo.searchia.model.Record;
 
 import java.util.List;
 import java.util.Map;

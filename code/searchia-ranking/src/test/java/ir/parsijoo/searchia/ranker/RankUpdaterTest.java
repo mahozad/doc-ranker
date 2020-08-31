@@ -1,7 +1,7 @@
 package ir.parsijoo.searchia.ranker;
 
-import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.TestUtil;
+import ir.parsijoo.searchia.model.Record;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

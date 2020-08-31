@@ -1,7 +1,7 @@
 package ir.parsijoo.searchia.parser;
 
-import ir.parsijoo.searchia.Query;
-import ir.parsijoo.searchia.Record;
+import ir.parsijoo.searchia.model.Query;
+import ir.parsijoo.searchia.model.Record;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.elasticsearch.analyzer.ParsiAnalyzer;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static ir.parsijoo.searchia.Query.QueryType.WILDCARD;
+import static ir.parsijoo.searchia.model.Query.QueryType.WILDCARD;
 
 public class RecordParser {
 
