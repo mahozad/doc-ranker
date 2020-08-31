@@ -45,7 +45,7 @@ public class TypoRanker implements Ranker {
         return numberOfTypos;
     }
 
-    public static boolean queriesContainCorrectedOrSuggested(Map<QueryType, Query> queries) {
+    private static boolean queriesContainCorrectedOrSuggested(Map<QueryType, Query> queries) {
         return queries.containsKey(CORRECTED) || queries.containsKey(SUGGESTED);
     }
 }

@@ -20,7 +20,8 @@ import static ir.parsijoo.searchia.config.RankingPhaseType.TYPO;
 import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TypoRankerTest {
 
@@ -151,21 +152,5 @@ class TypoRankerTest {
         Set<Integer> group2Ranks = records.subList(3, records.size()).stream().map(Record::getRank).collect(toSet());
         assertEquals(1, group1Ranks.size());
         assertEquals(1, group2Ranks.size());
-    }
-
-    @Test
-    void queriesContainCorrectedOrSuggested() {
-        Query query1 = new Query("dodge charter", QueryType.ORIGINAL);
-        Query query2 = new Query("dodge charter*", QueryType.WILDCARD);
-        Query query3 = new Query("dodge challenger", QueryType.OPTIONAL);
-        Map<QueryType, Query> queries = Map.of(
-                QueryType.ORIGINAL, query1,
-                QueryType.WILDCARD, query2,
-                QueryType.OPTIONAL, query3
-        );
-
-        boolean containsCorrectedOrSuggested = TypoRanker.queriesContainCorrectedOrSuggested(queries);
-
-        assertFalse(containsCorrectedOrSuggested);
     }
 }
