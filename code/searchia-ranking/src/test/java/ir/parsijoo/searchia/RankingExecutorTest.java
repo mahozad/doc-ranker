@@ -73,11 +73,11 @@ class RankingExecutorTest {
                 new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
                 new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
                 new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
-        ));
+        ), null, offset, limit);
         List<Integer> expectedRecordIdOrder =
                 List.of(17, 2, 16, 10, 7, 1, 9, 12, 3, 11, 14, 15, 6, 5, 8, 13, 4).subList(offset, offset + limit);
 
-        List<Record> result = RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
+        List<Record> result = RankingExecutor.executeRanking(queries, records, rankingConfig);
 
         assertThat(result.stream().map(Record::getId).collect(toList()), is(equalTo(expectedRecordIdOrder)));
     }
@@ -101,9 +101,9 @@ class RankingExecutorTest {
                 new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
                 new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
                 new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
-        ));
+        ), null, offset, limit);
 
-        List<Record> result = RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
+        List<Record> result = RankingExecutor.executeRanking(queries, records, rankingConfig);
 
         assertEquals(limit, result.size());
     }
@@ -128,10 +128,10 @@ class RankingExecutorTest {
                 new RankingPhase(WORDS_POSITION, true, 3, ASCENDING, null),
                 new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
                 new RankingPhase(CUSTOM, true, 5, DESCENDING, "viewCount")
-        ));
+        ), null, offset, limit);
 
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
+        RankingExecutor.executeRanking(queries, records, rankingConfig);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
@@ -158,11 +158,11 @@ class RankingExecutorTest {
                 new RankingPhase(EXACT_MATCH, true, 4, DESCENDING, null),
                 new RankingPhase(CUSTOM, true, 5, DESCENDING, "score"),
                 new RankingPhase(CUSTOM, true, 6, DESCENDING, "clicks")
-        ));
+        ), null, offset, limit);
 
         long timeThreshold = 200/*ms*/;
         Instant startTime = Instant.now();
-        RankingExecutor.executeRanking(queries, records, null, rankingConfig, offset, limit);
+        RankingExecutor.executeRanking(queries, records, rankingConfig);
         long duration = Duration.between(startTime, Instant.now()).toMillis();
 
         assertThat(duration, is(lessThan(timeThreshold)));
