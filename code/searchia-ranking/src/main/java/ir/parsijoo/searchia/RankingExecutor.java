@@ -7,9 +7,9 @@ import ir.parsijoo.searchia.model.Promotion;
 import ir.parsijoo.searchia.model.Query;
 import ir.parsijoo.searchia.model.Query.QueryType;
 import ir.parsijoo.searchia.model.Record;
-import ir.parsijoo.searchia.parser.QueryParser;
-import ir.parsijoo.searchia.parser.RecordParser;
-import ir.parsijoo.searchia.ranker.*;
+import ir.parsijoo.searchia.parse.QueryParser;
+import ir.parsijoo.searchia.parse.RecordParser;
+import ir.parsijoo.searchia.rank.*;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ir.parsijoo.searchia.ranker;
+package ir.parsijoo.searchia.rank;
 
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.model.Query;
@@ -9,7 +9,7 @@ import ir.parsijoo.searchia.model.Record.MinDistance;
 import java.util.List;
 import java.util.Map;
 
-import static ir.parsijoo.searchia.parser.RecordParser.ATTRIBUTES_DISTANCE;
+import static ir.parsijoo.searchia.parse.RecordParser.ATTRIBUTES_DISTANCE;
 
 public class DistanceRanker implements Ranker {
 

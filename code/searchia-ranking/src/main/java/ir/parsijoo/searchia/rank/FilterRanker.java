@@ -1,4 +1,4 @@
-package ir.parsijoo.searchia.ranker;
+package ir.parsijoo.searchia.rank;
 
 import ir.parsijoo.searchia.model.Record;
 

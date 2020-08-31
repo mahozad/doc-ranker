@@ -2,7 +2,7 @@ package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.model.Query;
 import ir.parsijoo.searchia.model.Query.QueryType;
-import ir.parsijoo.searchia.parser.QueryParser;
+import ir.parsijoo.searchia.parse.QueryParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

@@ -1,9 +1,9 @@
 package ir.parsijoo.searchia;
 
 import ir.parsijoo.searchia.model.Record;
-import ir.parsijoo.searchia.ranker.FilterRanker;
-import ir.parsijoo.searchia.ranker.FilterRanker.Filter;
-import ir.parsijoo.searchia.ranker.FilterRanker.Operator;
+import ir.parsijoo.searchia.rank.FilterRanker;
+import ir.parsijoo.searchia.rank.FilterRanker.Filter;
+import ir.parsijoo.searchia.rank.FilterRanker.Operator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package ir.parsijoo.searchia.parser;
+package ir.parsijoo.searchia.parse;
 
 import ir.parsijoo.searchia.model.Query;
 import ir.parsijoo.searchia.model.Record;

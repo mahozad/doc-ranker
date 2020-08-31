@@ -1,4 +1,4 @@
-package ir.parsijoo.searchia.ranker;
+package ir.parsijoo.searchia.rank;
 
 import ir.parsijoo.searchia.Selector;
 import ir.parsijoo.searchia.config.SortDirection;
