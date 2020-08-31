@@ -14,7 +14,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 
 import static ir.parsijoo.searchia.config.RankingPhaseType.*;
 import static ir.parsijoo.searchia.config.SortDirection.ASCENDING;
@@ -24,7 +23,6 @@ import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RankingExecutorTest {
 
@@ -52,42 +50,6 @@ class RankingExecutorTest {
         assertEquals(4, records.get(records.size()-3).getRank());
         assertEquals(3, records.get(records.size()-4).getRank());
         assertEquals(1, records.subList(0, records.size()-5).stream().map(Record::getRank).collect(toSet()).size());
-    }
-
-    @Test
-    void groupRecordsByRank() {
-        // Set rank of two records to size - 2 and the rest have default rank of 0 (so two rank groups)
-        records.get(1).setRank(records.size() - 2);
-        records.get(11).setRank(records.size() - 2);
-        Set<Integer> expectedGroupSizes = Set.of(2, records.size() - 2);
-
-        SortedMap<Integer, List<Record>> groups = RankingExecutor.groupRecordsByRank(records);
-
-        Set<Integer> groupSizes = groups.values().stream().map(List::size).collect(toSet());
-        assertTrue(groupSizes.containsAll(expectedGroupSizes));
-    }
-
-    @Test
-    void updateRanks() {
-        records.stream().filter(record -> record.getId() < 5).forEach(record -> record.setRank(1));
-        records.stream().filter(record -> record.getId() % 2 == 0).forEach(record -> record.setNumberOfMatches(1));
-        List<Integer> expectedRanks = List.of(3, 2, 3, 2, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1);
-
-        RankingExecutor.updateRanks(records, Record::getNumberOfMatches, DESCENDING);
-
-        assertThat(records.stream().map(Record::getRank).collect(toList()), is(equalTo(expectedRanks)));
-    }
-
-    @Test // see https://stackoverflow.com/a/3637974
-    void updateRanks_ensureComparingBoxedTypesWithEqualValuesProducesCorrectResult() {
-        records.stream().filter(record -> record.getId() < 5).forEach(record -> record.setRank(1));
-        records.stream().filter(record -> record.getId() % 2 == 0).forEach(record -> record.setNumberOfMatches(1));
-        records.stream().filter(record -> record.getId() > 10).forEach(record -> record.setNumberOfMatches(Integer.MAX_VALUE));
-        List<Integer> expectedRanks = List.of(4, 3, 4, 3, 2, 1, 2, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0);
-
-        RankingExecutor.updateRanks(records, Record::getNumberOfMatches, DESCENDING);
-
-        assertThat(records.stream().map(Record::getRank).collect(toList()), is(equalTo(expectedRanks)));
     }
 
     @Test

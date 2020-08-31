@@ -2,7 +2,6 @@ package ir.parsijoo.searchia.ranker;
 
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.parser.RecordParser;
@@ -26,7 +25,7 @@ public class TypoRanker implements Ranker {
         }
 
         if (queriesContainCorrectedOrSuggested) {
-            RankingExecutor.updateRanks(records, Record::getNumberOfTypos, phase.getSortDirection());
+            new RankUpdater<>(records, Record::getNumberOfTypos, phase.getSortDirection()).updateRanks();
         } else {
             records.sort(comparingInt(Record::getNumberOfTypos));
             records.forEach(record -> record.setNumberOfTypos(0));

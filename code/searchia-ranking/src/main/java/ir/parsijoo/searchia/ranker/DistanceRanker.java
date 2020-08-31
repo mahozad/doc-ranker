@@ -2,7 +2,6 @@ package ir.parsijoo.searchia.ranker;
 
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.Record.MinDistance;
 import ir.parsijoo.searchia.config.RankingPhase;
@@ -23,7 +22,7 @@ public class DistanceRanker implements Ranker {
             MinDistance minDistance = getRecordMinDistanceFromQueries(record, queries);
             record.setMinDistance(minDistance);
         }
-        RankingExecutor.updateRanks(records, record -> record.getMinDistance().value, phase.getSortDirection());
+        new RankUpdater<>(records, record -> record.getMinDistance().value, phase.getSortDirection()).updateRanks();
     }
 
     public static MinDistance getRecordMinDistanceFromQueries(Record record, Map<QueryType, Query> queries) {

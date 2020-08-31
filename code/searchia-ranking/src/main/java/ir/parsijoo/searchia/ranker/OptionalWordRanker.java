@@ -2,7 +2,6 @@ package ir.parsijoo.searchia.ranker;
 
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.parser.RecordParser;
@@ -42,7 +41,7 @@ public class OptionalWordRanker implements Ranker {
                     }
                 }
             }
-            RankingExecutor.updateRanks(records, Record::getNumberOfMatches, phase.getSortDirection());
+            new RankUpdater<>(records, Record::getNumberOfMatches, phase.getSortDirection()).updateRanks();
         } else {
             records.forEach(record -> record.setNumberOfMatches(lengthOfOriginalQuery));
         }

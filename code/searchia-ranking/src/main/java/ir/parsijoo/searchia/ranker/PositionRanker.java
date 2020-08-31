@@ -2,7 +2,6 @@ package ir.parsijoo.searchia.ranker;
 
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
 
@@ -28,7 +27,7 @@ public class PositionRanker implements Ranker {
             // FIXME: The attribute name is set to a constant value
             record.setMinPosition(new Record.MinPosition(minPosition, "title"));
         }
-        RankingExecutor.updateRanks(records, record -> record.getMinPosition().value, phase.getSortDirection());
+        new RankUpdater<>(records, record -> record.getMinPosition().value, phase.getSortDirection()).updateRanks();
     }
 
     public static int getRecordMinWordPositionByQuery(Record record, Query query) {

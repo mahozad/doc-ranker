@@ -2,7 +2,6 @@ package ir.parsijoo.searchia.ranker;
 
 import ir.parsijoo.searchia.Query;
 import ir.parsijoo.searchia.Query.QueryType;
-import ir.parsijoo.searchia.RankingExecutor;
 import ir.parsijoo.searchia.Record;
 import ir.parsijoo.searchia.config.RankingPhase;
 import ir.parsijoo.searchia.parser.RecordParser;
@@ -36,6 +35,6 @@ public class ExactMatchRanker implements Ranker {
                 }
             }
         }
-        RankingExecutor.updateRanks(records, Record::getNumberOfExactMatches, phase.getSortDirection());
+        new RankUpdater<>(records, Record::getNumberOfExactMatches, phase.getSortDirection()).updateRanks();
     }
 }
